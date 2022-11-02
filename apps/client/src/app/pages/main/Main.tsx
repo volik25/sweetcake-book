@@ -6,12 +6,12 @@ import styles from './Main.module.scss';
 
 export const Main = (): ReactElement => {
   return (
-    <div className="container">
+    <div className="page-container">
       <div className={styles.main__header}>
         <Header className={styles.header} />
       </div>
       <div className={styles.main__body}>
-        <NavLink to="/category/1">Категория 1</NavLink>
+        <NavLink to="/category/1">Категория 2</NavLink>
       </div>
       <div className={styles.main__footer}>
         <Footer className={styles.footer} />

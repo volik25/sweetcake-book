@@ -10,7 +10,7 @@ import {
 import { AccessTokenEntity } from './access.token.entity';
 
 @Entity('user', {
-  schema: 'security',
+  schema: 'user',
 })
 export class UserEntity extends BaseEntity {
   @Generated('increment')

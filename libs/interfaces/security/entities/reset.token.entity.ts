@@ -10,12 +10,12 @@ import {
 import { UserEntity } from './user.entity';
 
 @Entity('reset_token', {
-  schema: 'security',
+  schema: 'reset_token',
 })
 export class ResetTokenEntity extends BaseEntity {
   @Generated('increment')
   @PrimaryColumn({
-    type: 'bigint',
+    type: 'int',
     transformer: {
       to: (entityValue: number) => entityValue,
       from: (databaseValue: string): number => parseInt(databaseValue, 10),
@@ -23,20 +23,20 @@ export class ResetTokenEntity extends BaseEntity {
   })
   id: number;
 
-  @Column('text', {
+  @Column('varchar', {
     name: 'token',
     nullable: false,
   })
   token: string;
 
   @Column('int', {
-    nullable: true,
+    nullable: false,
   })
   expires: number;
 
-  @Column('timestamp without time zone', {
-    nullable: true,
-    default: () => "(now() at time zone 'Europe/Moscow')",
+  @Column('datetime', {
+    nullable: false,
+    default: () => '(CURRENT_TIMESTAMP)',
   })
   created: Date;
 

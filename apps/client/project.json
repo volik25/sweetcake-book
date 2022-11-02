@@ -1,7 +1,7 @@
 {
   "name": "client",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/client/src",
+  "sourceRoot": "apps/client",
   "projectType": "application",
   "targets": {
     "build": {
@@ -11,13 +11,12 @@
       "options": {
         "compiler": "babel",
         "outputPath": "dist/apps/client",
-        "index": "apps/client/src/index.html",
+        "index": "apps/client/public/index.html",
         "baseHref": "/",
         "main": "apps/client/src/main.tsx",
-        "polyfills": "apps/client/src/polyfills.ts",
         "tsConfig": "apps/client/tsconfig.app.json",
-        "assets": ["apps/client/src/favicon.ico", "apps/client/src/assets"],
-        "styles": ["apps/client/src/styles.scss"],
+        "assets": ["apps/client/public/favicon.ico", "apps/client/src/assets"],
+        "styles": ["apps/client/src/app"],
         "scripts": [],
         "webpackConfig": "@nrwl/react/plugins/webpack"
       },

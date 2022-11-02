@@ -1,5 +1,5 @@
 import { IsDefined } from 'class-validator';
-import { baseDtoMessage } from '../../../const/base-dto-message';
+import { baseDtoMessage } from '../../../constants/base-dto-message';
 
 export class UpdateCakeDto {
   @IsDefined(baseDtoMessage)

@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CategoryEntity } from '@sweetcake/interfaces/category/entities/category.entity';
-import { baseException } from '@sweetcake/api/core/base-exception';
-import { UpdateCategoryDto } from '@sweetcake/interfaces/category/dtos/update.category.dto';
-import { CreateCategoryDto } from '@sweetcake/interfaces/category/dtos/create.category.dto';
-import { getRepository } from 'typeorm';
-import { dataSource } from '@sweetcake/api/core/data-source';
+import { CategoryEntity } from '@interfaces/category/entities/category.entity';
+import { baseException } from '@api/core/base-exception';
+import { UpdateCategoryDto } from '@interfaces/category/dtos/update.category.dto';
+import { CreateCategoryDto } from '@interfaces/category/dtos/create.category.dto';
+import { getDataSource } from '@api/core/data-source';
 
 @Injectable()
 export class CategoryService {
@@ -26,7 +25,7 @@ export class CategoryService {
 
   async create(category: CreateCategoryDto): Promise<CategoryEntity> {
     try {
-      const repo = dataSource.getRepository(CategoryEntity);
+      const repo = getDataSource().getRepository(CategoryEntity);
       const entity = repo.create({ ...category });
       return await repo.save(entity);
     } catch (error) {

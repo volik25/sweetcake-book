@@ -8,19 +8,19 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
-import * as path from 'path';
 import { DeepPartial } from 'typeorm';
 import jwt = require('jsonwebtoken');
-import { ApplicationRequest } from '@sweetcake/api/core/request';
-import { CreateUserDTO } from '@sweetcake/interfaces/security/dtos/create.user.dto';
-import { UserCryptoService } from '@sweetcake/api/core/user.crypto.service';
-import { logger } from '@sweetcake/interfaces/logger/logger';
-import { UserLoginDTO } from '@sweetcake/interfaces/security/dtos/login.user.dto';
-import { UserEntity } from '@sweetcake/interfaces/security/entities/user.entity';
-import { AccessTokenEntity } from '@sweetcake/interfaces/security/entities/access.token.entity';
-import { ResetTokenEntity } from '@sweetcake/interfaces/security/entities/reset.token.entity';
-import { dataSource } from '@sweetcake/api/core/data-source';
-import { baseException } from '@sweetcake/api/core/base-exception';
+import { ApplicationRequest } from '@api/core/request';
+import { CreateUserDTO } from '@interfaces/security/dtos/create.user.dto';
+import { UserCryptoService } from '@api/core/user.crypto.service';
+import { logger } from '@interfaces/logger/logger';
+import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
+import { UserEntity } from '@interfaces/security/entities/user.entity';
+import { AccessTokenEntity } from '@interfaces/security/entities/access.token.entity';
+import { getDataSource } from '@api/core/data-source';
+import { baseException } from '@api/core/base-exception';
+import { ResetTokenEntity } from '@interfaces/security/entities/reset.token.entity';
+import path = require('path');
 
 @Injectable()
 export class UserService {
@@ -32,7 +32,7 @@ export class UserService {
     user.password = UserCryptoService.encrypt(user.password);
 
     try {
-      const repo = dataSource.getRepository(UserEntity);
+      const repo = getDataSource().getRepository(UserEntity);
       const entity = repo.create({ ...user });
       return await repo.save(entity);
     } catch (err) {
@@ -208,79 +208,79 @@ export class UserService {
     }
   }
 
-  // public async reset(request, email) {
-  //   logger.info('Password reset requested with email: ' + email);
-  //
-  //   let foundUser: UserEntity;
-  //   try {
-  //     foundUser = await UserEntity.findOne({ where: { email } });
-  //   } catch (err) {
-  //     logger.error(err);
-  //     throw new BadRequestException(err.message);
-  //   }
-  //
-  //   if (!foundUser) {
-  //     throw new NotFoundException(
-  //       'Пользователь с указанным Вами email не найден'
-  //     );
-  //   }
-  //
-  //   const expiration = Math.floor(Date.now() / 1000) + 60 * 60 * 3;
-  //
-  //   const tokenData = {
-  //     exp: expiration,
-  //     username: foundUser.name,
-  //     email: foundUser.email,
-  //     id: foundUser.id,
-  //   };
-  //
-  //   const token = jwt.sign(tokenData, 'zaoblako');
-  //
-  //   const t: any = {
-  //     token,
-  //     expires: tokenData.exp,
-  //     created: new Date(),
-  //     user: foundUser,
-  //   };
-  //
-  //   await ResetTokenEntity.save(t);
-  //
-  //   const resetUrl =
-  //     request.protocol +
-  //     '://' +
-  //     path.join(request.get('host'), 'reset-password', '?token=' + token);
-  //
-  //   return;
-  // }
-  //
-  // public async resetPassword(token, password) {
-  //   try {
-  //     jwt.verify(token, 'ZaOblako_KIT');
-  //   } catch (err) {
-  //     throw new ForbiddenException({ message: 'Token expired' });
-  //   }
-  //
-  //   const resetToken = await ResetTokenEntity.findOne({
-  //     where: { token },
-  //     relations: ['user'],
-  //   });
-  //
-  //   if (resetToken && resetToken.user) {
-  //     const user: UserEntity = resetToken.user;
-  //
-  //     user.password = password;
-  //
-  //     await this.update(user.id, user);
-  //
-  //     logger.verbose(
-  //       `Successfully reset the password for user with ID: ${user.id}`
-  //     );
-  //
-  //     return user;
-  //   } else {
-  //     throw new ForbiddenException({ message: 'Token not found' });
-  //   }
-  // }
+  public async reset(request, email) {
+    logger.info('Password reset requested with email: ' + email);
+
+    let foundUser: UserEntity;
+    try {
+      foundUser = await UserEntity.findOne({ where: { email } });
+    } catch (err) {
+      logger.error(err);
+      throw new BadRequestException(err.message);
+    }
+
+    if (!foundUser) {
+      throw new NotFoundException(
+        'Пользователь с указанным Вами email не найден'
+      );
+    }
+
+    const expiration = Math.floor(Date.now() / 1000) + 60 * 60 * 3;
+
+    const tokenData = {
+      exp: expiration,
+      username: foundUser.name,
+      email: foundUser.email,
+      id: foundUser.id,
+    };
+
+    const token = jwt.sign(tokenData, 'zaoblako');
+
+    const t: any = {
+      token,
+      expires: tokenData.exp,
+      created: new Date(),
+      user: foundUser,
+    };
+
+    await ResetTokenEntity.save(t);
+
+    const resetUrl =
+      request.protocol +
+      '://' +
+      path.join(request.get('host'), 'reset-password', '?token=' + token);
+
+    return;
+  }
+
+  public async resetPassword(token, password) {
+    try {
+      jwt.verify(token, 'ZaOblako_KIT');
+    } catch (err) {
+      throw new ForbiddenException({ message: 'Token expired' });
+    }
+
+    const resetToken = await ResetTokenEntity.findOne({
+      where: { token },
+      relations: ['user'],
+    });
+
+    if (resetToken && resetToken.user) {
+      const user: UserEntity = resetToken.user;
+
+      user.password = password;
+
+      await this.update(user.id, user);
+
+      logger.verbose(
+        `Successfully reset the password for user with ID: ${user.id}`
+      );
+
+      return user;
+    } else {
+      throw new ForbiddenException({ message: 'Token not found' });
+    }
+  }
 
   async checkEmail(email) {
     let user;

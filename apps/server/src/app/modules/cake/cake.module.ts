@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CakeController } from './controllers/cake.controller';
-import { CakeService } from './services/cake.service';
+import { CakeService } from '@api/modules/cake/services/cake.service';
+import { CakeController } from '@api/modules/cake/controllers/cake.controller';
 
 @Module({
   providers: [CakeService],

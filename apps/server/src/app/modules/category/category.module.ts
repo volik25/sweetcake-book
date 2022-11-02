@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CategoryService } from '@sweetcake/api/modules/category/services/category.service';
-import { CategoryController } from '@sweetcake/api/modules/category/controllers/category.controller';
+import { CategoryService } from '@api/modules/category/services/category.service';
+import { CategoryController } from '@api/modules/category/controllers/category.controller';
 
 @Module({
   providers: [CategoryService],

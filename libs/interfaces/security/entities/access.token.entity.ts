@@ -7,16 +7,15 @@ import {
   ManyToOne,
   PrimaryColumn,
 } from 'typeorm';
-import {UserEntity} from "./user.entity";
+import { UserEntity } from './user.entity';
 
 @Entity('access_token', {
-  schema: 'security'
+  schema: 'access_token',
 })
 class AccessTokenEntity extends BaseEntity {
-
   @Generated('increment')
   @PrimaryColumn({
-    type: 'bigint',
+    type: 'int',
     transformer: {
       to: (entityValue: number) => entityValue,
       from: (databaseValue: string): number => parseInt(databaseValue, 10),
@@ -24,25 +23,24 @@ class AccessTokenEntity extends BaseEntity {
   })
   id: number;
 
-  @Column('character varying', {
+  @Column('varchar', {
     name: 'token',
-    nullable: false
+    nullable: false,
   })
   token: string;
 
   @Column('int', {
     nullable: true,
-    select: false
+    select: false,
   })
   expires: number;
 
-  @ManyToOne(() => UserEntity, user => user.tokens)
+  @ManyToOne(() => UserEntity, (user) => user.tokens)
   @JoinColumn({
     name: 'user_id',
-    referencedColumnName: 'id'
+    referencedColumnName: 'id',
   })
   user: UserEntity;
-
 }
 
 export { AccessTokenEntity };

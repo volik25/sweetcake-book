@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { getMetadataArgsStorage } from 'typeorm';
-import { QueryLogger } from '@sweetcake/interfaces/logger/query.logger';
-import { CakeModule } from '@sweetcake/api/modules/cake/cake.module';
-import { CategoryModule } from '@sweetcake/api/modules/category/category.module';
-import { dataSource } from '@sweetcake/api/core/data-source';
+import { CakeModule } from '@api/modules/cake/cake.module';
+import { CategoryModule } from '@api/modules/category/category.module';
+import { SecurityModule } from '@api/modules/security/security.module';
+import { getDataSource } from '@api/core/data-source';
 
 @Module({
   imports: [
     CakeModule,
     CategoryModule,
+    SecurityModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         return AppModule.getDatabaseConfig();
@@ -20,7 +20,7 @@ import { dataSource } from '@sweetcake/api/core/data-source';
 export class AppModule {
   public static getDatabaseConfig(): unknown {
     return {
-      ...dataSource.options,
+      ...getDataSource().options,
       autoLoadEntities: true,
     };
   }

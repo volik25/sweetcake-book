@@ -9,11 +9,11 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { CategoryService } from '@sweetcake/api/modules/category/services/category.service';
-import { CategoryEntity } from '@sweetcake/interfaces/category/entities/category.entity';
-import { CreateCategoryDto } from '@sweetcake/interfaces/category/dtos/create.category.dto';
-import { UpdateCategoryDto } from '@sweetcake/interfaces/category/dtos/update.category.dto';
-import { JwtGuard } from '@sweetcake/api/guards/jwt.guard';
+import { CategoryService } from '@api/modules/category/services/category.service';
+import { CategoryEntity } from '@interfaces/category/entities/category.entity';
+import { CreateCategoryDto } from '@interfaces/category/dtos/create.category.dto';
+import { UpdateCategoryDto } from '@interfaces/category/dtos/update.category.dto';
+import { JwtGuard } from '@api/guards/jwt.guard';
 
 @Controller('category')
 export class CategoryController {

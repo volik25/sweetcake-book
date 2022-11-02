@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { CategoryService } from '@sweetcake/web/_services/category.service';
-import { CategoryEntity } from '@sweetcake/interfaces/category/entities/category.entity';
+import { CategoryService } from '@web/_services/category.service';
+import { CategoryEntity } from '@interfaces/category/entities/category.entity';
 
 export const Category = (): ReactElement => {
   const { id } = useParams();

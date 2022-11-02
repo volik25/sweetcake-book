@@ -9736,3 +9736,463 @@
 8448 02.11.2022 15:29:16 [KMG] debug: [
   1
 ]
+4644 02.11.2022 16:46:38 [KMG] debug: SELECT VERSION() AS `version`
+4644 02.11.2022 16:46:38 [KMG] debug: START TRANSACTION
+4644 02.11.2022 16:46:38 [KMG] debug: SELECT DATABASE() AS `db_name`
+4644 02.11.2022 16:46:38 [KMG] debug: SELECT `TABLE_SCHEMA`, `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sweetcake' AND `TABLE_NAME` = 'cake' UNION SELECT `TABLE_SCHEMA`, `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sweetcake' AND `TABLE_NAME` = 'category'
+4644 02.11.2022 16:46:38 [KMG] debug: 
+                SELECT
+                    *
+                FROM
+                    `INFORMATION_SCHEMA`.`COLUMNS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+                 UNION 
+                SELECT
+                    *
+                FROM
+                    `INFORMATION_SCHEMA`.`COLUMNS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+                
+4644 02.11.2022 16:46:38 [KMG] debug: SELECT * FROM (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'category'
+            ) `kcu` WHERE `CONSTRAINT_NAME` = 'PRIMARY'
+4644 02.11.2022 16:46:38 [KMG] debug: 
+            SELECT
+                `SCHEMA_NAME`,
+                `DEFAULT_CHARACTER_SET_NAME` as `CHARSET`,
+                `DEFAULT_COLLATION_NAME` AS `COLLATION`
+            FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+            
+4644 02.11.2022 16:46:38 [KMG] debug: 
+            SELECT
+                `s`.*
+            FROM (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`STATISTICS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`STATISTICS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+            ) `s`
+            LEFT JOIN (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+            ) `rc`
+                ON
+                    `s`.`INDEX_NAME` = `rc`.`CONSTRAINT_NAME`
+                    AND
+                    `s`.`TABLE_SCHEMA` = `rc`.`CONSTRAINT_SCHEMA`
+            WHERE
+                `s`.`INDEX_NAME` != 'PRIMARY'
+                AND
+                `rc`.`CONSTRAINT_NAME` IS NULL
+            
+4644 02.11.2022 16:46:38 [KMG] debug: 
+            SELECT
+                `kcu`.`TABLE_SCHEMA`,
+                `kcu`.`TABLE_NAME`,
+                `kcu`.`CONSTRAINT_NAME`,
+                `kcu`.`COLUMN_NAME`,
+                `kcu`.`REFERENCED_TABLE_SCHEMA`,
+                `kcu`.`REFERENCED_TABLE_NAME`,
+                `kcu`.`REFERENCED_COLUMN_NAME`,
+                `rc`.`DELETE_RULE` `ON_DELETE`,
+                `rc`.`UPDATE_RULE` `ON_UPDATE`
+            FROM (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'category'
+            ) `kcu`
+            INNER JOIN (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+            ) `rc`
+                ON
+                    `rc`.`CONSTRAINT_SCHEMA` = `kcu`.`CONSTRAINT_SCHEMA`
+                    AND
+                    `rc`.`TABLE_NAME` = `kcu`.`TABLE_NAME`
+                    AND
+                    `rc`.`CONSTRAINT_NAME` = `kcu`.`CONSTRAINT_NAME`
+            
+4644 02.11.2022 16:46:38 [KMG] debug: SELECT VERSION() AS `version`
+4644 02.11.2022 16:46:38 [KMG] debug: SELECT * FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA` = 'sweetcake' AND `TABLE_NAME` = 'typeorm_metadata'
+4644 02.11.2022 16:46:38 [KMG] debug: COMMIT
+4644 02.11.2022 16:46:53 [KMG] debug: SELECT `CategoryEntity`.`id` AS `CategoryEntity_id`, `CategoryEntity`.`name` AS `CategoryEntity_name` FROM `category` `CategoryEntity` WHERE (`CategoryEntity`.`id` = ?) LIMIT 1
+4644 02.11.2022 16:46:53 [KMG] debug: [
+  1
+]
+4644 02.11.2022 16:46:53 [KMG] debug: SELECT `CategoryEntity`.`id` AS `CategoryEntity_id`, `CategoryEntity`.`name` AS `CategoryEntity_name` FROM `category` `CategoryEntity` WHERE (`CategoryEntity`.`id` = ?) LIMIT 1
+4644 02.11.2022 16:46:53 [KMG] debug: [
+  1
+]
+320 02.11.2022 16:49:46 [KMG] debug: SELECT VERSION() AS `version`
+320 02.11.2022 16:49:46 [KMG] debug: START TRANSACTION
+320 02.11.2022 16:49:46 [KMG] debug: SELECT DATABASE() AS `db_name`
+320 02.11.2022 16:49:46 [KMG] debug: SELECT `TABLE_SCHEMA`, `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sweetcake' AND `TABLE_NAME` = 'cake' UNION SELECT `TABLE_SCHEMA`, `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sweetcake' AND `TABLE_NAME` = 'category'
+320 02.11.2022 16:49:46 [KMG] debug: 
+                SELECT
+                    *
+                FROM
+                    `INFORMATION_SCHEMA`.`COLUMNS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+                 UNION 
+                SELECT
+                    *
+                FROM
+                    `INFORMATION_SCHEMA`.`COLUMNS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+                
+320 02.11.2022 16:49:46 [KMG] debug: SELECT * FROM (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'category'
+            ) `kcu` WHERE `CONSTRAINT_NAME` = 'PRIMARY'
+320 02.11.2022 16:49:46 [KMG] debug: 
+            SELECT
+                `SCHEMA_NAME`,
+                `DEFAULT_CHARACTER_SET_NAME` as `CHARSET`,
+                `DEFAULT_COLLATION_NAME` AS `COLLATION`
+            FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+            
+320 02.11.2022 16:49:46 [KMG] debug: 
+            SELECT
+                `s`.*
+            FROM (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`STATISTICS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`STATISTICS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+            ) `s`
+            LEFT JOIN (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+            ) `rc`
+                ON
+                    `s`.`INDEX_NAME` = `rc`.`CONSTRAINT_NAME`
+                    AND
+                    `s`.`TABLE_SCHEMA` = `rc`.`CONSTRAINT_SCHEMA`
+            WHERE
+                `s`.`INDEX_NAME` != 'PRIMARY'
+                AND
+                `rc`.`CONSTRAINT_NAME` IS NULL
+            
+320 02.11.2022 16:49:46 [KMG] debug: 
+            SELECT
+                `kcu`.`TABLE_SCHEMA`,
+                `kcu`.`TABLE_NAME`,
+                `kcu`.`CONSTRAINT_NAME`,
+                `kcu`.`COLUMN_NAME`,
+                `kcu`.`REFERENCED_TABLE_SCHEMA`,
+                `kcu`.`REFERENCED_TABLE_NAME`,
+                `kcu`.`REFERENCED_COLUMN_NAME`,
+                `rc`.`DELETE_RULE` `ON_DELETE`,
+                `rc`.`UPDATE_RULE` `ON_UPDATE`
+            FROM (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'category'
+            ) `kcu`
+            INNER JOIN (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+            ) `rc`
+                ON
+                    `rc`.`CONSTRAINT_SCHEMA` = `kcu`.`CONSTRAINT_SCHEMA`
+                    AND
+                    `rc`.`TABLE_NAME` = `kcu`.`TABLE_NAME`
+                    AND
+                    `rc`.`CONSTRAINT_NAME` = `kcu`.`CONSTRAINT_NAME`
+            
+320 02.11.2022 16:49:46 [KMG] debug: SELECT VERSION() AS `version`
+320 02.11.2022 16:49:46 [KMG] debug: SELECT * FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA` = 'sweetcake' AND `TABLE_NAME` = 'typeorm_metadata'
+320 02.11.2022 16:49:46 [KMG] debug: COMMIT
+5964 02.11.2022 17:07:09 [KMG] debug: SELECT VERSION() AS `version`
+5964 02.11.2022 17:07:09 [KMG] debug: START TRANSACTION
+5964 02.11.2022 17:07:09 [KMG] debug: SELECT DATABASE() AS `db_name`
+5964 02.11.2022 17:07:09 [KMG] debug: SELECT `TABLE_SCHEMA`, `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sweetcake' AND `TABLE_NAME` = 'cake' UNION SELECT `TABLE_SCHEMA`, `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sweetcake' AND `TABLE_NAME` = 'category'
+5964 02.11.2022 17:07:09 [KMG] debug: 
+                SELECT
+                    *
+                FROM
+                    `INFORMATION_SCHEMA`.`COLUMNS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+                 UNION 
+                SELECT
+                    *
+                FROM
+                    `INFORMATION_SCHEMA`.`COLUMNS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+                
+5964 02.11.2022 17:07:09 [KMG] debug: SELECT * FROM (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'category'
+            ) `kcu` WHERE `CONSTRAINT_NAME` = 'PRIMARY'
+5964 02.11.2022 17:07:09 [KMG] debug: 
+            SELECT
+                `SCHEMA_NAME`,
+                `DEFAULT_CHARACTER_SET_NAME` as `CHARSET`,
+                `DEFAULT_COLLATION_NAME` AS `COLLATION`
+            FROM `INFORMATION_SCHEMA`.`SCHEMATA`
+            
+5964 02.11.2022 17:07:09 [KMG] debug: 
+            SELECT
+                `s`.*
+            FROM (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`STATISTICS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`STATISTICS`
+                WHERE
+                    `TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+            ) `s`
+            LEFT JOIN (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+            ) `rc`
+                ON
+                    `s`.`INDEX_NAME` = `rc`.`CONSTRAINT_NAME`
+                    AND
+                    `s`.`TABLE_SCHEMA` = `rc`.`CONSTRAINT_SCHEMA`
+            WHERE
+                `s`.`INDEX_NAME` != 'PRIMARY'
+                AND
+                `rc`.`CONSTRAINT_NAME` IS NULL
+            
+5964 02.11.2022 17:07:09 [KMG] debug: 
+            SELECT
+                `kcu`.`TABLE_SCHEMA`,
+                `kcu`.`TABLE_NAME`,
+                `kcu`.`CONSTRAINT_NAME`,
+                `kcu`.`COLUMN_NAME`,
+                `kcu`.`REFERENCED_TABLE_SCHEMA`,
+                `kcu`.`REFERENCED_TABLE_NAME`,
+                `kcu`.`REFERENCED_COLUMN_NAME`,
+                `rc`.`DELETE_RULE` `ON_DELETE`,
+                `rc`.`UPDATE_RULE` `ON_UPDATE`
+            FROM (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`KEY_COLUMN_USAGE` `kcu`
+                WHERE
+                    `kcu`.`TABLE_SCHEMA` = 'sweetcake'
+                    AND
+                    `kcu`.`TABLE_NAME` = 'category'
+            ) `kcu`
+            INNER JOIN (
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'cake'
+             UNION 
+                SELECT
+                    *
+                FROM `INFORMATION_SCHEMA`.`REFERENTIAL_CONSTRAINTS`
+                WHERE
+                    `CONSTRAINT_SCHEMA` = 'sweetcake'
+                    AND
+                    `TABLE_NAME` = 'category'
+            ) `rc`
+                ON
+                    `rc`.`CONSTRAINT_SCHEMA` = `kcu`.`CONSTRAINT_SCHEMA`
+                    AND
+                    `rc`.`TABLE_NAME` = `kcu`.`TABLE_NAME`
+                    AND
+                    `rc`.`CONSTRAINT_NAME` = `kcu`.`CONSTRAINT_NAME`
+            
+5964 02.11.2022 17:07:09 [KMG] debug: SELECT VERSION() AS `version`
+5964 02.11.2022 17:07:09 [KMG] debug: SELECT * FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA` = 'sweetcake' AND `TABLE_NAME` = 'typeorm_metadata'
+5964 02.11.2022 17:07:09 [KMG] debug: COMMIT
+5964 02.11.2022 17:07:14 [KMG] debug: SELECT `CategoryEntity`.`id` AS `CategoryEntity_id`, `CategoryEntity`.`name` AS `CategoryEntity_name` FROM `category` `CategoryEntity` WHERE (`CategoryEntity`.`id` = ?) LIMIT 1
+5964 02.11.2022 17:07:14 [KMG] debug: [
+  1
+]
+5964 02.11.2022 17:07:14 [KMG] debug: SELECT `CategoryEntity`.`id` AS `CategoryEntity_id`, `CategoryEntity`.`name` AS `CategoryEntity_name` FROM `category` `CategoryEntity` WHERE (`CategoryEntity`.`id` = ?) LIMIT 1
+5964 02.11.2022 17:07:14 [KMG] debug: [
+  1
+]

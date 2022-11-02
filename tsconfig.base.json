@@ -15,9 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@sweetcake/api/*": ["apps/server/src/app/*"],
-      "@sweetcake/interfaces/*": ["libs/interfaces/*"],
-      "@sweetcake/web/*": ["apps/client/src/app/*"]
+      "@api/*": ["apps/server/src/app/*"],
+      "@interfaces/*": ["libs/interfaces/*"],
+      "@enums/*": ["libs/enums/*"],
+      "@constants/*": ["libs/constants/*"],
+      "@web/*": ["apps/client/src/app/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

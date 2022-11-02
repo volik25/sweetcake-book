@@ -1,5 +1,5 @@
 import { DataSource, getMetadataArgsStorage } from 'typeorm';
-import { QueryLogger } from '@sweetcake/interfaces/logger/query.logger';
+import { QueryLogger } from '@interfaces/logger/query.logger';
 
 export const dataSource = new DataSource({
   name: 'default',

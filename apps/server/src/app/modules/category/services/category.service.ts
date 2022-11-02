@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CategoryEntity } from '@sweetcake/interfaces/category/entities/category.entity';
-import { baseException } from '@sweetcake/api/core/base-exception';
-import { UpdateCategoryDto } from '@sweetcake/interfaces/category/dtos/update.category.dto';
-import { CreateCategoryDto } from '@sweetcake/interfaces/category/dtos/create.category.dto';
-import { dataSource } from '@sweetcake/api/core/data-source';
+import { CategoryEntity } from '@interfaces/category/entities/category.entity';
+import { baseException } from '@api/core/base-exception';
+import { UpdateCategoryDto } from '@interfaces/category/dtos/update.category.dto';
+import { CreateCategoryDto } from '@interfaces/category/dtos/create.category.dto';
+import { dataSource } from '@api/core/data-source';
 
 @Injectable()
 export class CategoryService {

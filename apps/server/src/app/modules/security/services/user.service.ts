@@ -4,23 +4,20 @@ import {
   ForbiddenException,
   Inject,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
-import * as path from 'path';
 import { DeepPartial } from 'typeorm';
 import jwt = require('jsonwebtoken');
-import { ApplicationRequest } from '@sweetcake/api/core/request';
-import { CreateUserDTO } from '@sweetcake/interfaces/security/dtos/create.user.dto';
-import { UserCryptoService } from '@sweetcake/api/core/user.crypto.service';
-import { logger } from '@sweetcake/interfaces/logger/logger';
-import { UserLoginDTO } from '@sweetcake/interfaces/security/dtos/login.user.dto';
-import { UserEntity } from '@sweetcake/interfaces/security/entities/user.entity';
-import { AccessTokenEntity } from '@sweetcake/interfaces/security/entities/access.token.entity';
-import { ResetTokenEntity } from '@sweetcake/interfaces/security/entities/reset.token.entity';
-import { dataSource } from '@sweetcake/api/core/data-source';
-import { baseException } from '@sweetcake/api/core/base-exception';
+import { ApplicationRequest } from '@api/core/request';
+import { CreateUserDTO } from '@interfaces/security/dtos/create.user.dto';
+import { UserCryptoService } from '@api/core/user.crypto.service';
+import { logger } from '@interfaces/logger/logger';
+import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
+import { UserEntity } from '@interfaces/security/entities/user.entity';
+import { AccessTokenEntity } from '@interfaces/security/entities/access.token.entity';
+import { dataSource } from '@api/core/data-source';
+import { baseException } from '@api/core/base-exception';
 
 @Injectable()
 export class UserService {

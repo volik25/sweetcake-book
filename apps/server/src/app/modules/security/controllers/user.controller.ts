@@ -13,12 +13,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
-import { UserService } from '@sweetcake/api/modules/security/services/user.service';
-import { JwtGuard } from '@sweetcake/api/guards/jwt.guard';
-import { UserLoginDTO } from '@sweetcake/interfaces/security/dtos/login.user.dto';
-import { CreateUserDTO } from '@sweetcake/interfaces/security/dtos/create.user.dto';
-import { ApplicationRequest } from '@sweetcake/api/core/request';
-import { UserEntity } from '@sweetcake/interfaces/security/entities/user.entity';
+import { UserService } from '@api/modules/security/services/user.service';
+import { JwtGuard } from '@api/guards/jwt.guard';
+import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
+import { CreateUserDTO } from '@interfaces/security/dtos/create.user.dto';
+import { ApplicationRequest } from '@api/core/request';
+import { UserEntity } from '@interfaces/security/entities/user.entity';
 
 @Controller('user')
 export class UserController {

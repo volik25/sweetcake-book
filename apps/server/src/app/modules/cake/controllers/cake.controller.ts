@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import { CakeEntity } from '@sweetcake/interfaces/cake/entities/cake.entity';
 import { CakeService } from '../services/cake.service';
+import { CakeEntity } from '@interfaces/cake/entities/cake.entity';
 
 @Controller('cake')
 export class CakeController {

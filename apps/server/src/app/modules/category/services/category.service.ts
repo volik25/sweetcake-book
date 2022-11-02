@@ -3,7 +3,6 @@ import { CategoryEntity } from '@sweetcake/interfaces/category/entities/category
 import { baseException } from '@sweetcake/api/core/base-exception';
 import { UpdateCategoryDto } from '@sweetcake/interfaces/category/dtos/update.category.dto';
 import { CreateCategoryDto } from '@sweetcake/interfaces/category/dtos/create.category.dto';
-import { getRepository } from 'typeorm';
 import { dataSource } from '@sweetcake/api/core/data-source';
 
 @Injectable()

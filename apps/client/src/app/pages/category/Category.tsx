@@ -1,21 +1,16 @@
-import { ReactElement, useEffect } from 'react';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import styles from './Category.module.scss';
-import { environment } from '../../../environments/environment';
+import { CategoryService } from '@sweetcake/web/_services/category.service';
+import { CategoryEntity } from '@sweetcake/interfaces/category/entities/category.entity';
 
 export const Category = (): ReactElement => {
   const { id } = useParams();
-  console.log(id);
+  const categoryService = useMemo(() => new CategoryService(), []);
   useEffect(() => {
-    fetch(environment.baseUrl + '/category' + `/${id}`)
-      .then((res) => res.text())
-      .then((res) => {
-        console.log(res ? JSON.parse(res) : '');
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  });
+    categoryService.findById<CategoryEntity>(Number(id)).then((res) => {
+      console.log(res);
+    });
+  }, [categoryService]);
   return (
     <div>
       Категория

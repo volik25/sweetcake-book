@@ -19,7 +19,8 @@
       "@interfaces/*": ["libs/interfaces/*"],
       "@enums/*": ["libs/enums/*"],
       "@constants/*": ["libs/constants/*"],
-      "@web/*": ["apps/client/src/app/*"]
+      "@web/*": ["apps/client/src/app/*"],
+      "@assets/*": ["apps/client/src/assets/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

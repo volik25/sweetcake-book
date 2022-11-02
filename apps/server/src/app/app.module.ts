@@ -2,12 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CakeModule } from '@api/modules/cake/cake.module';
 import { CategoryModule } from '@api/modules/category/category.module';
-import { dataSource } from '@api/core/data-source';
+import { SecurityModule } from '@api/modules/security/security.module';
+import { getDataSource } from '@api/core/data-source';
 
 @Module({
   imports: [
     CakeModule,
     CategoryModule,
+    SecurityModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         return AppModule.getDatabaseConfig();
@@ -18,7 +20,7 @@ import { dataSource } from '@api/core/data-source';
 export class AppModule {
   public static getDatabaseConfig(): unknown {
     return {
-      ...dataSource.options,
+      ...getDataSource().options,
       autoLoadEntities: true,
     };
   }

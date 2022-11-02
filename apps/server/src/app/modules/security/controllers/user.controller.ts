@@ -1,0 +1,99 @@
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Inject,
+  Param,
+  ParseIntPipe,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
+import { UserService } from '@sweetcake/api/modules/security/services/user.service';
+import { JwtGuard } from '@sweetcake/api/guards/jwt.guard';
+import { UserLoginDTO } from '@sweetcake/interfaces/security/dtos/login.user.dto';
+import { CreateUserDTO } from '@sweetcake/interfaces/security/dtos/create.user.dto';
+import { ApplicationRequest } from '@sweetcake/api/core/request';
+import { UserEntity } from '@sweetcake/interfaces/security/entities/user.entity';
+
+@Controller('user')
+export class UserController {
+  constructor(
+    private readonly userService: UserService,
+    @Inject(REQUEST) private readonly request: ApplicationRequest
+  ) {}
+
+  @Get()
+  @UseGuards(JwtGuard)
+  async find() {
+    return await this.userService.find();
+  }
+
+  @Get(':id')
+  @UseGuards(JwtGuard)
+  async findOne(@Param('id', ParseIntPipe) id) {
+    return await this.userService.findOne(id);
+  }
+
+  @Post()
+  @UseGuards(JwtGuard)
+  async create(@Body() user: CreateUserDTO) {
+    return this.userService.create(user);
+  }
+
+  // @Put(':id')
+  // @UseGuards(JwtGuard)
+  // async update(@Param('id', ParseIntPipe) id, @Body() user: UpdateUserDTO) {
+  //   return await this.userService.update(id, user);
+  // }
+
+  @Post('login')
+  async login(
+    @Body() login: UserLoginDTO,
+    @Req() req,
+    @Res() res
+  ): Promise<{ user: UserEntity; token: string }> {
+    const service = await this.userService.login(login);
+    req.user = service.user;
+    req.token = service.token;
+
+    req.session.user = await UserEntity.findOne(service.user.id);
+    req.session.token = service.token;
+    return res.send(service);
+  }
+
+  @Get('check')
+  @UseGuards(JwtGuard)
+  async check(@Req() req) {
+    return await this.userService.check(req);
+  }
+
+  @Post('check-email')
+  async checkEmail(@Body() email: { email: string }) {
+    return await this.userService.checkEmail(email);
+  }
+
+  // @Post('reset')
+  // async reset(@Req() request, @Body('email') email: UserResetDto) {
+  //   return await this.userService.reset(request, email);
+  // }
+
+  // @Post('change')
+  // async resetPassword(@Body() resetData: UserResetPasswordDto) {
+  //   return await this.userService.resetPassword(
+  //     resetData.token,
+  //     resetData.password
+  //   );
+  // }
+
+  @UseGuards(JwtGuard)
+  @Get('logout')
+  @HttpCode(HttpStatus.CREATED)
+  async logout(@Req() req: ApplicationRequest) {
+    return await this.userService.logout(req);
+  }
+}

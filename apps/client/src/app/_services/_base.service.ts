@@ -6,7 +6,7 @@
 import axios from 'axios';
 import { environment } from '../../environments/environment';
 
-export class BaseService {
+export class BaseService<T> {
   private host = environment.base_url;
   private tokenKey = environment.tokenKey;
   /**
@@ -26,7 +26,7 @@ export class BaseService {
    * Получение массива объектов
    * @returns {Promise<[T]>}
    */
-  find<T>(options?: any): Promise<T[]> {
+  find(options?: any): Promise<T[]> {
     const params: Record<string, unknown> = {};
     if (options) {
       Object.entries(options).map((o) => {
@@ -47,7 +47,7 @@ export class BaseService {
    * @param {number} id
    * @returns {Promise<T>}
    */
-  public findById<T>(id: number): Promise<T> {
+  public findById(id: number): Promise<T> {
     return axios
       .get<T>(this.host + this.serviceUrl + '/' + id, {
         withCredentials: true,
@@ -61,7 +61,7 @@ export class BaseService {
    * @param {BaseEntity} model
    * @returns {Promise<T>}
    */
-  create<T>(model: T): Promise<T> {
+  create(model: T): Promise<T> {
     return axios
       .post<T>(this.host + this.serviceUrl, model, {
         withCredentials: true,
@@ -75,7 +75,7 @@ export class BaseService {
    * @param {BaseEntity} model
    * @returns {Promise<T>}
    */
-  update<T>(model: any): Promise<T> {
+  update(model: any): Promise<T> {
     return axios
       .put<T>(this.host + this.serviceUrl + '/' + model.id, model, {
         withCredentials: true,
@@ -89,7 +89,7 @@ export class BaseService {
    * @returns {Promise<T>}
    * @param id
    */
-  deleteById<T>(id: number): Promise<T> {
+  deleteById(id: number): Promise<T> {
     return axios
       .delete<T>(this.host + this.serviceUrl + '/' + id, {
         withCredentials: true,

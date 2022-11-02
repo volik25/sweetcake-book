@@ -37,9 +37,7 @@ export class BaseService {
       .get<T[]>(this.host + this.serviceUrl, {
         params,
         withCredentials: true,
-        headers: {
-          Authorization: localStorage.getItem(this.tokenKey) || '',
-        },
+        headers: this.headers,
       })
       .then(({ data }) => data);
   }
@@ -53,9 +51,7 @@ export class BaseService {
     return axios
       .get<T>(this.host + this.serviceUrl + '/' + id, {
         withCredentials: true,
-        headers: {
-          Authorization: localStorage.getItem(this.tokenKey) || '',
-        },
+        headers: this.headers,
       })
       .then(({ data }) => data);
   }
@@ -69,9 +65,7 @@ export class BaseService {
     return axios
       .post<T>(this.host + this.serviceUrl, model, {
         withCredentials: true,
-        headers: {
-          Authorization: localStorage.getItem(this.tokenKey) || '',
-        },
+        headers: this.headers,
       })
       .then(({ data }) => data);
   }
@@ -85,9 +79,7 @@ export class BaseService {
     return axios
       .put<T>(this.host + this.serviceUrl + '/' + model.id, model, {
         withCredentials: true,
-        headers: {
-          Authorization: localStorage.getItem(this.tokenKey) || '',
-        },
+        headers: this.headers,
       })
       .then(({ data }) => data);
   }
@@ -101,7 +93,7 @@ export class BaseService {
     return axios
       .delete<T>(this.host + this.serviceUrl + '/' + id, {
         withCredentials: true,
-        headers: { Authorization: localStorage.getItem(this.tokenKey) },
+        headers: this.headers,
       })
       .then(({ data }) => data);
   }

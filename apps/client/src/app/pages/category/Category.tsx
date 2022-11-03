@@ -15,9 +15,9 @@ export const Category = (): ReactElement => {
   }, [categoryService]);
   return (
     <div className="page-container">
-      <h3 style={{ textAlign: 'center' }}>{category?.name}</h3>
-      {category?.cakes?.map((cake) => (
-        <Cake cake={cake} />
+      <h1 style={{ textAlign: 'center' }}>{category?.name}</h1>
+      {category?.cakes?.map((cake, index) => (
+        <Cake key={index} cake={cake} />
       ))}
     </div>
   );

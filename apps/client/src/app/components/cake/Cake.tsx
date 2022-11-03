@@ -4,11 +4,12 @@ import styles from './Cake.module.scss';
 import * as cakeImg from '@images/cake.jpg';
 import { weightTransformPipe } from '@web/utils/pipes/weight-transform.pipe';
 import { currencyPipe } from '@web/utils/pipes/currency.pipe';
-import { Button } from '@shared/button/Button';
+import { PillBtn } from '@shared/pill-btn/PillBtn';
+import { NavLink } from 'react-router-dom';
 
 export const Cake = ({ cake, ...props }: CakeProps): ReactElement => {
   return (
-    <div>
+    <div style={{ marginBottom: '30px' }}>
       <div className={styles.cake} {...props}>
         <div
           className={styles.cake__image}
@@ -28,11 +29,9 @@ export const Cake = ({ cake, ...props }: CakeProps): ReactElement => {
           </div>
         </div>
       </div>
-      <Button
-        label={`Заказать ${cake.name}`}
-        navTo={'/order-form'}
-        hostStyles={{ marginBottom: '30px' }}
-      />
+      <NavLink to={'/order-form'}>
+        <PillBtn className={'button-yellow'}>{`Заказать ${cake.name}`}</PillBtn>
+      </NavLink>
     </div>
   );
 };

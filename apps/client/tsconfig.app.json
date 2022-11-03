@@ -10,7 +10,7 @@
       "@fonts/*": ["apps/client/src/assets/fonts/*"],
       "@interfaces/*": ["libs/interfaces/*"],
       "@enums/*": ["libs/enums/*"],
-      "@constants/*": ["libs/constants/*"]
+      "@constants/*": ["libs/constants/*"],
     }
   },
   "files": [

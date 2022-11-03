@@ -10,8 +10,8 @@ export const PillBtn = ({
   children,
 }: PillBtnProps): ReactElement => {
   return (
-    <div className={cn(className, styles['pill-btn'])}>
-      {img && <img className={cn({[styles.sm]: smImg})} src={img} />}
+    <div className={cn(styles['pill-btn'], className)}>
+      {img && <img className={cn({ [styles.sm]: smImg })} src={img} />}
       <span className={styles['pill-btn__text']}>{children}</span>
     </div>
   );

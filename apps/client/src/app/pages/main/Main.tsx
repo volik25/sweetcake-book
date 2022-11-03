@@ -6,8 +6,8 @@ import { ReactElement, useContext, useEffect, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Header } from '../../layout/Header/Header';
 import styles from './Main.module.scss';
-import heart from '@assets/heart.svg';
-import inst from '@assets/instagram.svg';
+import heart from '@images/heart.svg';
+import inst from '@images/instagram.svg';
 import { TogglePanel } from '@web/components/toggle-panel/TogglePanel';
 
 export const Main = (): ReactElement => {

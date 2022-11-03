@@ -1,13 +1,16 @@
-import { ReactElement } from 'react';
+import { ReactElement, useContext } from 'react';
 import { CakeProps } from '@web/components/cake/Cake.props';
 import styles from './Cake.module.scss';
 import * as cakeImg from '@images/cake.jpg';
 import { weightTransformPipe } from '@web/utils/pipes/weight-transform.pipe';
 import { currencyPipe } from '@web/utils/pipes/currency.pipe';
-import { PillBtn } from '@shared/pill-btn/PillBtn';
 import { NavLink } from 'react-router-dom';
+import { PillBtn } from '../pill-btn/PillBtn';
+import { AuthContext } from '@web/_contexts/AuthContext';
+import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
 
 export const Cake = ({ cake, ...props }: CakeProps): ReactElement => {
+  const { isAdmin } = useContext(AuthContext);
   return (
     <div style={{ marginBottom: '30px' }}>
       <div className={styles.cake} {...props}>
@@ -30,7 +33,9 @@ export const Cake = ({ cake, ...props }: CakeProps): ReactElement => {
         </div>
       </div>
       <NavLink to={'/order-form'}>
-        <PillBtn className={'button-yellow'}>{`Заказать ${cake.name}`}</PillBtn>
+        <PillBtn
+          className={styles['button-yellow']}
+        >{`Заказать ${cake.name}`}</PillBtn>
       </NavLink>
     </div>
   );

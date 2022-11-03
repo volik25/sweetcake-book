@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useMemo, useState } from 'react';
+import { ReactElement, useContext, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CategoryService } from '@web/_services/category.service';
 import { CategoryEntity } from '@interfaces/category/entities/category.entity';

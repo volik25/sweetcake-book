@@ -7,17 +7,34 @@ import axios from 'axios';
 import { environment } from '../../environments/environment';
 
 export class BaseService<T> {
-  private host = environment.base_url;
-  private tokenKey = environment.tokenKey;
   /**
    * Базовый url сервиса
+   */
+  private _host = environment.base_url;
+  private tokenKey = environment.tokenKey;
+
+  protected get host() {
+    return this._host;
+  }
+
+  public get token() {
+    return localStorage.getItem(this.tokenKey);
+  }
+  /**
+   * Расширение url сервиса
    */
   protected serviceUrl = '';
 
   get headers() {
-    return {
-      Authorization: localStorage.getItem(this.tokenKey) || '',
-    };
+    return this.token ? { Authorization: this.token } : {};
+  }
+
+  protected setToken(token: string) {
+    localStorage.setItem(this.tokenKey, token);
+  }
+
+  public removeToken() {
+    localStorage.removeItem(this.tokenKey);
   }
 
   /**

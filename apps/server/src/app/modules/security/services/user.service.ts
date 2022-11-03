@@ -32,9 +32,7 @@ export class UserService {
     user.password = UserCryptoService.encrypt(user.password);
 
     try {
-      const repo = getDataSource().getRepository(UserEntity);
-      const entity = repo.create({ ...user });
-      return await repo.save(entity);
+      return await UserEntity.create({ ...user }).save();
     } catch (err) {
       baseException('[UserService]: create: ', err);
     }
@@ -114,7 +112,7 @@ export class UserService {
       throw new UnauthorizedException('Неверный пароль');
     }
 
-    const expiration = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 5;
+    const expiration = Math.floor(Date.now() / 1000) + 60 * 60 * 24;
 
     const tokenData = {
       exp: expiration,
@@ -147,7 +145,7 @@ export class UserService {
         token: req.session.token,
       }).catch(console.error);
 
-      req.destroySession((err) => {
+      req.session.destroy((err) => {
         if (err) {
           console.log(err);
         }
@@ -178,11 +176,13 @@ export class UserService {
     } else {
       logger.verbose('User has no session');
 
-      await req.session.regenerate();
-
       try {
         jwt.verify(accessToken, this.key);
       } catch (err) {
+        const token = await AccessTokenEntity.findOne({
+          where: { token: accessToken },
+        });
+        if (token) await AccessTokenEntity.delete({ id: token.id });
         throw new ForbiddenException({ message: 'Token expired' });
       }
 
@@ -234,7 +234,7 @@ export class UserService {
       id: foundUser.id,
     };
 
-    const token = jwt.sign(tokenData, 'zaoblako');
+    const token = jwt.sign(tokenData, this.key);
 
     const t: any = {
       token,

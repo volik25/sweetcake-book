@@ -1,55 +1,54 @@
-import { ReactElement, useMemo, useState } from 'react';
+import { ReactElement, useContext } from 'react';
 import styles from './Login.module.scss';
-import { PillBtn } from '@shared/pill-btn/PillBtn';
 import cn from 'classnames';
+import { AuthContext } from '@web/_contexts/AuthContext';
+import { useForm } from 'react-hook-form';
 
 export const LoginForm = (): ReactElement => {
-  const [formData, setFormData] = useState<any>({});
-  const [isLogin, setIsLogin] = useState(true);
-  const setData = (field: string, value: string) => {
-    setFormData({ ...formData, [field]: value });
-  };
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const { login, logout, isAdmin } = useContext(AuthContext);
 
-  const onSubmit = async () => {
-    if (isLogin) {
-      const { login: loginValue, password } = formData;
-      // login && login({ login: loginValue, password });
-      return;
-    }
-
-    // signin && signin(formData);
+  const onSubmit = (data: any) => {
+    isAdmin ? logout() : login(data);
+    return;
   };
 
   return (
-    <div className={'page-container'}>
+    <div className="page-container">
       <div className={styles['login-form-container']}>
-        <div className={styles['login-form-container__login']}>
-          <div className={'form-floating'}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className={styles['login-form-container__login']}
+        >
+          <div className="form-floating">
             <input
-              type={'email'}
-              className={'form-control'}
-              itemID={'floatingInput'}
-              onInput={({ currentTarget }) =>
-                setData('email', currentTarget.value)
-              }
+              {...register('email', { required: true })}
+              type="text"
+              className="form-control"
+              placeholder="name@example.com"
+              id="floatingInput"
+              readOnly={isAdmin}
             />
-            <label htmlFor={'floatingInput'}>Логин</label>
+            <label htmlFor="floatingInput">Логин</label>
           </div>
           <div className={cn('form-floating', 'my-3')}>
             <input
-              type={'password'}
-              className={'form-control'}
-              itemID={'floatingInput'}
-              onInput={({ currentTarget }) =>
-                setData('password', currentTarget.value)
-              }
+              {...register('password', { required: true })}
+              type="password"
+              className="form-control"
+              itemID="floatingInput"
+              placeholder="Password"
+              readOnly={isAdmin}
             />
-            <label htmlFor={'floatingInput'}>Пароль</label>
+            <label htmlFor="floatingInput">Пароль</label>
           </div>
-          <PillBtn onClick={() => (isLogin ? onSubmit() : setIsLogin(true))}>
-            Войти
-          </PillBtn>
-        </div>
+          <button type="submit">{isAdmin ? 'Выйти' : 'Войти'}</button>
+        </form>
       </div>
     </div>
   );

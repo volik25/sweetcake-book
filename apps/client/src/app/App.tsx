@@ -6,14 +6,17 @@ import { Main } from './pages/main/Main';
 import { OrderForm } from './pages/order-form/OrderForm';
 import { Category } from './pages/category/Category';
 import { AuthContextProvider } from './_contexts/AuthContext';
+import { Layout } from './layout/Layout';
 
 function App() {
   return (
     <AuthContextProvider>
       <Routes>
-        <Route index element={<Main />} />
-        <Route path="order-form" element={<OrderForm />} />
-        <Route path="category/:id" element={<Category />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Main />} />
+          <Route path="order-form" element={<OrderForm />} />
+          <Route path="category/:id" element={<Category />} />
+        </Route>
       </Routes>
     </AuthContextProvider>
   );

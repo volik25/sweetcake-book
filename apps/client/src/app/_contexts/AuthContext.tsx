@@ -10,9 +10,17 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
 import { UserService } from '@web/_services/user.service';
+import { ConfigControl } from '@web/utils/admin-config.builder';
 
 export interface IAuthContext {
   isAdmin: boolean;
+  isPanelOpened: boolean;
+  panelControls: ConfigControl[];
+  openPanel: (
+    config: ConfigControl[],
+    values: { [key: string]: string }
+  ) => void;
+  closePanel: () => void;
   login: (data: UserLoginDTO) => void;
   logout: () => void;
 }
@@ -22,7 +30,9 @@ export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const authService = useMemo(() => new UserService(), []);
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(true);
+  const [panelControls, setControls] = useState<ConfigControl[]>([]);
+  const [isPanelOpened, setIsPanelOpened] = useState<boolean>(false);
 
   useEffect(() => {
     // const tokens = getTokens();
@@ -30,7 +40,6 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
     //   authService.getAuthorInfo().then((author) => {
     //     setAuthor(author);
     //     setIsAuthReady(true);
-
     //     if (location.pathname === '/login') {
     //       navigate(`/profile/${author.login}`, { replace: true });
     //     }
@@ -56,12 +65,32 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
     // navigate('/login');
   };
 
+  const openPanel = (
+    config: ConfigControl[],
+    values: { [key: string]: string }
+  ) => {
+    config.forEach((field) => {
+      field.value = values[field.name];
+    });
+    setIsPanelOpened(true);
+    setControls(config);
+  };
+
+  const closePanel = () => {
+    setIsPanelOpened(false);
+    setControls([]);
+  };
+
   return (
     <AuthContext.Provider
       value={{
         isAdmin,
+        isPanelOpened,
+        panelControls,
         login,
         logout,
+        openPanel,
+        closePanel,
       }}
     >
       {children}

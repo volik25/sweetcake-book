@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { FieldValues, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
 export class AdminConfigBuilder {
   private controls: ConfigControl[] = [];
@@ -38,14 +39,26 @@ export class ConfigControl {
     private type: 'text' | 'img' | 'textarea'
   ) {}
 
-  public getControl(value: string): ReactElement {
+  public getControl(register: UseFormRegister<FieldValues>): ReactElement {
     switch (this.type) {
       case 'text': {
-        return <input defaultValue={value} className="form-control" type="text" />;
+        return (
+          <input
+            defaultValue={this.value}
+            className="form-control"
+            {...register(this.name)}
+            type="text"
+          />
+        );
       }
       case 'textarea': {
         return (
-          <textarea defaultValue={value} className="form-control" rows={3}></textarea>
+          <textarea
+            defaultValue={this.value}
+            className="form-control"
+            {...register(this.name)}
+            rows={3}
+          ></textarea>
         );
       }
       default: {

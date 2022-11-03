@@ -59,7 +59,10 @@ export const Main = (): ReactElement => {
                 className="btn btn-link"
                 onClick={(event) => {
                   event.preventDefault();
-                  openPanel(categoryConfig, { name: c.name });
+                  openPanel(categoryConfig(), { name: c.name }, (value) => {
+                    c.name = value.name;
+                    setCategories([...categories]);
+                  });
                 }}
               >
                 Изменить
@@ -88,7 +91,7 @@ export const Main = (): ReactElement => {
       <div className={styles.main__footer}>
         {questions.map((q) => (
           <TogglePanel
-            onEdit={() => openPanel(questionConfig, q)}
+            onEdit={() => openPanel(questionConfig(), q)}
             title={q.question}
             key={q.question}
           >

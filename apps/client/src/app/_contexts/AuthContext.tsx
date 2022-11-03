@@ -15,10 +15,14 @@ import { ConfigControl } from '@web/utils/admin-config.builder';
 export interface IAuthContext {
   isAdmin: boolean;
   isPanelOpened: boolean;
-  panelControls: ConfigControl[];
+  panelConfig: {
+    controls: ConfigControl[];
+    handler?: (value: { [key: string]: string }) => void;
+  } | null;
   openPanel: (
     config: ConfigControl[],
-    values: { [key: string]: string }
+    values: { [key: string]: string },
+    handler?: (value: { [key: string]: string }) => void
   ) => void;
   closePanel: () => void;
   login: (data: UserLoginDTO) => void;
@@ -31,7 +35,10 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const authService = useMemo(() => new UserService(), []);
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState<boolean>(true);
-  const [panelControls, setControls] = useState<ConfigControl[]>([]);
+  const [panelConfig, setConfig] = useState<{
+    controls: ConfigControl[];
+    handler?: (value: { [key: string]: string }) => void;
+  } | null>({ controls: [] });
   const [isPanelOpened, setIsPanelOpened] = useState<boolean>(false);
 
   useEffect(() => {
@@ -67,18 +74,19 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
 
   const openPanel = (
     config: ConfigControl[],
-    values: { [key: string]: string }
+    values: { [key: string]: string },
+    handler?: (value: { [key: string]: string }) => void
   ) => {
     config.forEach((field) => {
       field.value = values[field.name];
     });
     setIsPanelOpened(true);
-    setControls(config);
+    setConfig({ controls: config, handler });
   };
 
   const closePanel = () => {
     setIsPanelOpened(false);
-    setControls([]);
+    setConfig(null);
   };
 
   return (
@@ -86,7 +94,7 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
       value={{
         isAdmin,
         isPanelOpened,
-        panelControls,
+        panelConfig: panelConfig,
         login,
         logout,
         openPanel,

@@ -1,12 +1,27 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement, useContext, useEffect } from 'react';
 import styles from './AdminPanel.module.scss';
 import cn from 'classnames';
 import logo from '@images/logo.png';
 import { AuthContext } from '@web/_contexts/AuthContext';
+import { useForm } from 'react-hook-form';
 
 export const AdminPanel = (): ReactElement => {
-  const { isPanelOpened, closePanel, isAdmin, panelControls } =
+  const { isPanelOpened, closePanel, isAdmin, panelConfig } =
     useContext(AuthContext);
+  const { register, watch, reset } = useForm({ mode: 'onChange' });
+
+  useEffect(() => {
+    const values = panelConfig?.controls?.reduce((prev, cur) => {
+      prev[cur.name] = cur.value;
+      return prev;
+    }, {} as { [x: string]: string });
+    reset(values);
+    const subscription = watch((value) => {
+      panelConfig?.handler && panelConfig.handler(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [panelConfig]);
+
   return (
     <>
       {isAdmin && (
@@ -28,10 +43,10 @@ export const AdminPanel = (): ReactElement => {
             </div>
           </div>
           <div className={styles.panel__form}>
-            {panelControls.map((control) => (
+            {panelConfig?.controls.map((control) => (
               <div className="mb-3" key={control.name}>
                 <label>{control.displayName}</label>
-                {control.getControl(control.value)}
+                {control.getControl(register)}
               </div>
             ))}
           </div>

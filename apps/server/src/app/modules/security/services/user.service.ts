@@ -17,7 +17,6 @@ import { logger } from '@interfaces/logger/logger';
 import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
 import { UserEntity } from '@interfaces/security/entities/user.entity';
 import { AccessTokenEntity } from '@interfaces/security/entities/access.token.entity';
-import { getDataSource } from '@api/core/data-source';
 import { baseException } from '@api/core/base-exception';
 import { ResetTokenEntity } from '@interfaces/security/entities/reset.token.entity';
 import path = require('path');
@@ -77,14 +76,7 @@ export class UserService {
   async login(login: UserLoginDTO) {
     const hash = UserCryptoService.encrypt(login.password);
 
-    logger.info(
-      'User request login (login): ' +
-        login.email +
-        ', ' +
-        login.password +
-        ', ' +
-        hash
-    );
+    logger.info('User request login (login): ' + login.email + ', ' + hash);
 
     let foundUser;
     try {

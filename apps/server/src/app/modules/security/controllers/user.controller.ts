@@ -29,7 +29,6 @@ export class UserController {
 
   @Get('check')
   async check(@Req() req) {
-    console.log('check');
     return await this.userService.check(req);
   }
 

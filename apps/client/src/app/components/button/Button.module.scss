@@ -1,0 +1,24 @@
+.button_container {
+  &__link {
+    width: 100%;
+    text-decoration: none;
+    :hover {
+      cursor: pointer;
+    }
+  }
+  &__button {
+    width: 100%;
+    font-size: 1.3rem;
+    font-family: 'Raleway', sans-serif;
+    background-color: #ffe066;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    border-radius: 25px;
+    border: none;
+    text-decoration: none;
+    :hover {
+      cursor: pointer;
+    }
+  }
+}

@@ -2,7 +2,16 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "@web/*": ["apps/client/src/app/*"],
+      "@shared/*": ["apps/client/src/app/components/*"],
+      "@images/*": ["apps/client/src/assets/images/*"],
+      "@fonts/*": ["apps/client/src/assets/fonts/*"],
+      "@interfaces/*": ["libs/interfaces/*"],
+      "@enums/*": ["libs/enums/*"],
+      "@constants/*": ["libs/constants/*"]
+    }
   },
   "files": [
     "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",

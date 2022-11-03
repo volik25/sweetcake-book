@@ -10,7 +10,7 @@ import {
 import { UserEntity } from './user.entity';
 
 @Entity('access_token', {
-  schema: 'access_token',
+  schema: 'security',
 })
 class AccessTokenEntity extends BaseEntity {
   @Generated('increment')
@@ -37,7 +37,7 @@ class AccessTokenEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.tokens)
   @JoinColumn({
-    name: 'user_id',
+    name: 'userId',
     referencedColumnName: 'id',
   })
   user: UserEntity;

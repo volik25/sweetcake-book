@@ -1,0 +1,36 @@
+.cake {
+  width: 100%;
+  min-height: 100px;
+  vertical-align: top;
+  display: inline-block;
+  border-radius: 20px;
+  background-color: white;
+  margin-bottom: 30px;
+  &__image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding-top: 100%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+  &__text {
+    font-family: 'Raleway', sans-serif;
+    padding: 1rem;
+    font-size: 1.3rem;
+    &_header {
+      line-height: 1.2;
+      color: black;
+    }
+    &_components {
+      font-size: 1rem;
+      color: rgba(0, 0, 0, 0.7);
+      padding-top: 10px;
+      padding-bottom: 20px;
+    }
+    &_price {
+      font-size: 1rem;
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+}

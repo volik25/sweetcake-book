@@ -3,15 +3,17 @@ import {
   Column,
   Entity,
   Generated,
-  OneToMany,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
   PrimaryColumn,
 } from 'typeorm';
-import { CakeEntity } from '../../cake/entities/cake.entity';
+import { CakeEntity } from './cake.entity';
 
-@Entity('category', {
-  schema: 'category',
+@Entity('component', {
+  schema: 'cake',
 })
-export class CategoryEntity extends BaseEntity {
+export class CakeComponentEntity extends BaseEntity {
   @Generated('increment')
   @PrimaryColumn({
     type: 'int',
@@ -22,18 +24,8 @@ export class CategoryEntity extends BaseEntity {
   })
   id: number;
 
-  // @Column('varchar', {
-  //   nullable: true,
-  //   length: 128,
-  // })
-  // image: string;
-
   @Column('varchar', {
     nullable: false,
-    length: 128,
   })
   name: string;
-
-  @OneToMany(() => CakeEntity, (cake) => cake.category)
-  cakes: CakeEntity[];
 }

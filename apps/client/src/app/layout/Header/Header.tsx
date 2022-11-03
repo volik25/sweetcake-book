@@ -2,7 +2,7 @@ import React, { ReactElement, useContext } from 'react';
 import styles from './Header.module.scss';
 import cn from 'classnames';
 import { HeaderProps } from './Header.props';
-import logo from '../../../assets/logo.png';
+import logo from '@images/logo.png';
 
 export const Header = ({ className }: HeaderProps): ReactElement => {
   return (

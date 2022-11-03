@@ -40,7 +40,7 @@ export class UserController {
   }
 
   @Post()
-  @UseGuards(JwtGuard)
+  // @UseGuards(JwtGuard)
   async create(@Body() user: CreateUserDTO) {
     return this.userService.create(user);
   }

@@ -10,7 +10,7 @@ import {
 import { UserEntity } from './user.entity';
 
 @Entity('reset_token', {
-  schema: 'reset_token',
+  schema: 'security',
 })
 export class ResetTokenEntity extends BaseEntity {
   @Generated('increment')
@@ -43,7 +43,7 @@ export class ResetTokenEntity extends BaseEntity {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @ManyToOne((type) => UserEntity)
   @JoinColumn({
-    name: 'user_id',
+    name: 'userId',
     referencedColumnName: 'id',
   })
   user: UserEntity;

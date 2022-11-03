@@ -4,9 +4,12 @@ import { baseException } from '@api/core/base-exception';
 import { UpdateCategoryDto } from '@interfaces/category/dtos/update.category.dto';
 import { CreateCategoryDto } from '@interfaces/category/dtos/create.category.dto';
 import { getDataSource } from '@api/core/data-source';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class CategoryService {
+  constructor(private manager: EntityManager) {}
+
   async find(): Promise<CategoryEntity[]> {
     try {
       return await CategoryEntity.find();
@@ -17,7 +20,10 @@ export class CategoryService {
 
   async findOne(id): Promise<CategoryEntity> {
     try {
-      return await CategoryEntity.findOneBy({ id });
+      return await this.manager.findOne(CategoryEntity, {
+        where: { id },
+        relations: ['cakes', 'cakes.components'],
+      });
     } catch (error) {
       baseException('[CategoryService] findOneBy: ', error);
     }

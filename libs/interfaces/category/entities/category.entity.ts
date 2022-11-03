@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, Generated, PrimaryColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Generated,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
+import { CakeEntity } from '../../cake/entities/cake.entity';
 
 @Entity('category', {
   schema: 'category',
@@ -25,4 +33,7 @@ export class CategoryEntity extends BaseEntity {
     length: 128,
   })
   name: string;
+
+  @OneToMany(() => CakeEntity, (cake) => cake.category)
+  cakes: CakeEntity[];
 }

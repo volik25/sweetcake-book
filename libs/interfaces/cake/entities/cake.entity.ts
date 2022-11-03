@@ -1,4 +1,16 @@
-import { BaseEntity, Column, Entity, Generated, PrimaryColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Generated,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
+import { CategoryEntity } from '../../category/entities/category.entity';
+import { CakeComponentEntity } from './component.entity';
 
 @Entity('cake', {
   schema: 'cake',
@@ -16,19 +28,35 @@ export class CakeEntity extends BaseEntity {
 
   // @Column('varchar', {
   //   nullable: true,
-  //   length: 128,
   // })
   // image: string;
 
   @Column('varchar', {
     nullable: false,
-    length: 128,
   })
   name: string;
 
-  @Column('varchar', {
+  @Column('int', {
     nullable: false,
-    length: 128,
   })
-  price: string;
+  price: number;
+
+  @Column('float', {
+    nullable: false,
+    scale: 1,
+  })
+  weight: number;
+
+  @ManyToOne(() => CategoryEntity, (category) => category.cakes)
+  @JoinColumn({
+    name: 'categoryId',
+    referencedColumnName: 'id',
+  })
+  category: CategoryEntity;
+
+  @ManyToMany(() => CakeComponentEntity, { cascade: true })
+  @JoinTable({
+    name: 'cake_components',
+  })
+  components: CakeComponentEntity[];
 }

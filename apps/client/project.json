@@ -16,7 +16,6 @@
         "main": "apps/client/src/app/index.tsx",
         "tsConfig": "apps/client/tsconfig.app.json",
         "assets": ["apps/client/public/favicon.ico", "apps/client/src/assets"],
-        "styles": ["apps/client/src/app"],
         "scripts": [],
         "webpackConfig": "@nrwl/react/plugins/webpack"
       },

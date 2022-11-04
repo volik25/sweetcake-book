@@ -17,13 +17,13 @@ export interface IAuthContext {
   panelConfig: {
     controls: ConfigControl[];
     submitHandler: (value: { [key: string]: string }) => Promise<void>;
-    handler?: (value: { [key: string]: string }) => void;
+    handler?: (value: { [key: string]: string }, isCanceled?: boolean) => void;
   } | null;
   openPanel: (
     config: ConfigControl[],
-    values: { [key: string]: string },
     submitHandler: (value: { [key: string]: string }) => Promise<void>,
-    handler?: (value: { [key: string]: string }) => void
+    handler?: (value: { [key: string]: string }, isCanceled?: boolean) => void,
+    values?: { [key: string]: string }
   ) => void;
   closePanel: () => void;
   login: (data: UserLoginDTO) => void;
@@ -39,7 +39,7 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const [panelConfig, setConfig] = useState<{
     controls: ConfigControl[];
     submitHandler: (value: { [key: string]: string }) => Promise<void>;
-    handler?: (value: { [key: string]: string }) => void;
+    handler?: (value: { [key: string]: string }, isCanceled?: boolean) => void;
   } | null>(null);
 
   useEffect(() => {
@@ -75,13 +75,16 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
 
   const openPanel = (
     config: ConfigControl[],
-    values: { [key: string]: string },
     submitHandler: (value: { [key: string]: string }) => Promise<void>,
-    handler?: (value: { [key: string]: string }) => void
+    handler?: (value: { [key: string]: string }, isCanceled?: boolean) => void,
+    values?: { [key: string]: string }
   ) => {
-    config.forEach((field) => {
-      field.value = values[field.name];
-    });
+    if (values) {
+      config.forEach((field) => {
+        field.value = values[field.name];
+      });
+    }
+
     setConfig({ controls: config, handler, submitHandler });
   };
 

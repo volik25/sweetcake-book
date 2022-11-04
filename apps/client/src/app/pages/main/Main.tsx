@@ -32,8 +32,8 @@ const questions = [
 
 export const Main = (): ReactElement => {
   const categoryService = useMemo(() => new CategoryService(), []);
-  const [categories, setCategories] = useState<CategoryEntity[]>([]);
-  const { openPanel } = useContext(AuthContext);
+  const [categories, setCategories] = useState<any[]>([]);
+  const { openPanel, panelConfig } = useContext(AuthContext);
   useEffect(() => {
     categoryService.find().then((res) => {
       setCategories(res);
@@ -43,6 +43,31 @@ export const Main = (): ReactElement => {
   const onCategorySave = async (category: CategoryEntity) => {
     await categoryService.update(category.id, { name: category.name });
   };
+
+  const onCategoryCreate = async (category: CategoryEntity) => {
+    await categoryService.create({ name: category.name });
+  };
+
+  const onCreateCategoryClick = () => {
+    const category = { id: categories.at(-1).id + 1, name: '' };
+    categories.push(category);
+    setCategories([...categories]);
+    openPanel(
+      categoryConfig(),
+      async (value) => {
+        category.name = value.name;
+        await onCategoryCreate(category as any);
+      },
+      (value, isCanceled) => {
+        if (isCanceled) {
+          setCategories([...categories.filter((c) => c.id !== category.id)]);
+          return;
+        }
+        category.name = value.name;
+        setCategories([...categories]);
+      }
+    );
+  };
   return (
     <div className="page-container py-5">
       <div className={styles.main__header}>
@@ -51,7 +76,7 @@ export const Main = (): ReactElement => {
       <Separator img={heart}></Separator>
       <div className={styles.main__body}>
         <p>Наш ассортимент 👇🏻</p>
-        {categories.map((c) => (
+        {categories.map((c, index) => (
           <NavLink to={`/category/${c.id}`} key={c.id}>
             <PillBtn
               img="https://taplink.st/p/c/6/0/5/35279297.jpg?0"
@@ -59,26 +84,41 @@ export const Main = (): ReactElement => {
             >
               {c.name}
 
-              <button
-                className="btn btn-link"
-                onClick={(event) => {
-                  event.preventDefault();
-                  openPanel(
-                    categoryConfig(),
-                    { name: c.name },
-                    async (value) => {
-                      c.name = value.name;
-                      await onCategorySave(c);
-                    },
-                    (value) => {
-                      c.name = value.name;
-                      setCategories([...categories]);
-                    }
-                  );
-                }}
-              >
-                Изменить
-              </button>
+              {!panelConfig && (
+                <>
+                  <button
+                    className="btn btn-link"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      openPanel(
+                        categoryConfig(),
+                        async (value) => {
+                          c.name = value.name;
+                          await onCategorySave(c);
+                        },
+                        (value) => {
+                          c.name = value.name;
+                          setCategories([...categories]);
+                        },
+                        { name: c.name }
+                      );
+                    }}
+                  >
+                    Изменить
+                  </button>
+                  {index == categories.length - 1 && (
+                    <button
+                      className="btn btn-link"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        onCreateCategoryClick();
+                      }}
+                    >
+                      Добавить
+                    </button>
+                  )}
+                </>
+              )}
             </PillBtn>
           </NavLink>
         ))}

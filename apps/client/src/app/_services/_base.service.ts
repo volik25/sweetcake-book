@@ -61,7 +61,7 @@ export class BaseService<ItemEntity, UpdateDto> {
    * @param {BaseEntity} model
    * @returns {Promise<ItemEntity>}
    */
-  create(model: ItemEntity): Promise<ItemEntity> {
+  create(model: any): Promise<ItemEntity> {
     return axios
       .post<ItemEntity>(this.host + this.serviceUrl, model, {
         withCredentials: true,

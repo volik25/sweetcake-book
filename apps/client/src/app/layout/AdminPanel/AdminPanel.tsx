@@ -36,7 +36,7 @@ export const AdminPanel = (): ReactElement => {
         prev[cur.name] = cur.value;
         return prev;
       }, {} as { [x: string]: string });
-      panelConfig.handler(oldValue);
+      panelConfig.handler(oldValue, true);
     }
 
     closePanel();

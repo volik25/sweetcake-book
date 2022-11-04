@@ -1,5 +1,12 @@
+import { ImgInput } from '@web/components/img-input/ImgInput';
 import { ReactElement } from 'react';
-import { FieldValues, UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import {
+  Control,
+  Controller,
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+} from 'react-hook-form';
 
 export class AdminConfigBuilder {
   private controls: ConfigControl[] = [];
@@ -39,7 +46,10 @@ export class ConfigControl {
     private type: 'text' | 'img' | 'textarea'
   ) {}
 
-  public getControl(register: UseFormRegister<FieldValues>): ReactElement {
+  public getControl(
+    register: UseFormRegister<FieldValues>,
+    control: Control<FieldValues, any>
+  ): ReactElement {
     switch (this.type) {
       case 'text': {
         return (
@@ -59,6 +69,22 @@ export class ConfigControl {
             {...register(this.name)}
             rows={3}
           ></textarea>
+        );
+      }
+      case 'img': {
+        return (
+          <Controller
+            control={control}
+            name={this.name}
+            defaultValue={{ imgSrc: this.value }}
+            render={({ field: { onChange, value } }) => (
+              <ImgInput
+                className="mb-3"
+                onChange={onChange}
+                imgSrc={value?.imgSrc}
+              />
+            )}
+          />
         );
       }
       default: {

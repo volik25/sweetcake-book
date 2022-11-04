@@ -9,7 +9,11 @@ export class JwtGuard implements CanActivate {
       return false;
     }
     const accessToken = request.headers.authorization || request.query.token;
-    if (request.session && request.session.token === accessToken && request.session.user) {
+    if (
+      request.session &&
+      request.session.token === accessToken &&
+      request.session.user
+    ) {
       return true;
     }
   }

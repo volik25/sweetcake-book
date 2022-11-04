@@ -2,7 +2,6 @@
 import {
   createContext,
   PropsWithChildren,
-  ReactElement,
   useEffect,
   useMemo,
   useState,
@@ -17,13 +16,13 @@ export interface IAuthContext {
   isAdmin: boolean;
   panelConfig: {
     controls: ConfigControl[];
-    submitHandler: (value: { [key: string]: string }) => Promise<void>;
-    handler?: (value: { [key: string]: string }, isCanceled?: boolean) => void;
+    submitHandler: (value: { [key: string]: any }) => Promise<void>;
+    handler?: (value: { [key: string]: any }, isCanceled?: boolean) => void;
   } | null;
   openPanel: (
     config: ConfigControl[],
-    submitHandler: (value: { [key: string]: string }) => Promise<void>,
-    handler?: (value: { [key: string]: string }, isCanceled?: boolean) => void,
+    submitHandler: (value: { [key: string]: any }) => Promise<void>,
+    handler?: (value: { [key: string]: any }, isCanceled?: boolean) => void,
     values?: { [key: string]: string }
   ) => void;
   closePanel: () => void;
@@ -36,14 +35,17 @@ export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const authService = useMemo(() => new UserService(), []);
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState<boolean>(true);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [panelConfig, setConfig] = useState<{
     controls: ConfigControl[];
-    submitHandler: (value: { [key: string]: string }) => Promise<void>;
-    handler?: (value: { [key: string]: string }, isCanceled?: boolean) => void;
+    submitHandler: (value: { [key: string]: any }) => Promise<void>;
+    handler?: (value: { [key: string]: any }, isCanceled?: boolean) => void;
   } | null>(null);
 
   useEffect(() => {
+    if (!authService.token) {
+      return;
+    }
     authService
       .check()
       .then(() => {
@@ -58,6 +60,7 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const login = async (data: UserLoginDTO) => {
     try {
       await authService.login(data);
+      setIsAdmin(true);
       navigate(`/`, { replace: true });
     } catch (error) {
       console.log(error);

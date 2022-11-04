@@ -7,14 +7,20 @@ import { useForm } from 'react-hook-form';
 
 export const AdminPanel = (): ReactElement => {
   const { closePanel, isAdmin, panelConfig } = useContext(AuthContext);
-  const { register, watch, reset, getValues } = useForm({ mode: 'onChange' });
+  const {
+    register,
+    watch,
+    reset,
+    getValues,
+    control: formControl,
+  } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
     const values = panelConfig?.controls?.reduce((prev, cur) => {
       prev[cur.name] = cur.value;
       return prev;
     }, {} as { [x: string]: string });
-    reset(values);
+    reset();
     const subscription = watch((value) => {
       panelConfig?.handler && panelConfig.handler(value);
     });
@@ -68,7 +74,7 @@ export const AdminPanel = (): ReactElement => {
             {panelConfig?.controls.map((control) => (
               <div className="mb-3" key={control.name}>
                 <label>{control.displayName}</label>
-                {control.getControl(register)}
+                {control.getControl(register, formControl)}
               </div>
             ))}
           </div>

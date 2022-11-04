@@ -33,7 +33,7 @@ const questions = [
 export const Main = (): ReactElement => {
   const categoryService = useMemo(() => new CategoryService(), []);
   const [categories, setCategories] = useState<any[]>([]);
-  const { openPanel, panelConfig } = useContext(AuthContext);
+  const { openPanel, panelConfig, isAdmin } = useContext(AuthContext);
   useEffect(() => {
     categoryService.find().then((res) => {
       setCategories(res);
@@ -45,24 +45,26 @@ export const Main = (): ReactElement => {
   };
 
   const onCategoryCreate = async (category: CategoryEntity) => {
-    await categoryService.create({ name: category.name });
+    return await categoryService.create({ name: category.name });
   };
 
   const onCreateCategoryClick = () => {
-    const category = { id: categories.at(-1).id + 1, name: '' };
+    const category = { id: categories.at(-1).id + 1, name: '', img: '' };
     categories.push(category);
     setCategories([...categories]);
     openPanel(
       categoryConfig(),
       async (value) => {
         category.name = value.name;
-        await onCategoryCreate(category as any);
+        const { id } = await onCategoryCreate(category as any);
+        category.id = id;
       },
       (value, isCanceled) => {
         if (isCanceled) {
           setCategories([...categories.filter((c) => c.id !== category.id)]);
           return;
         }
+        category.img = value.img?.imgSrc;
         category.name = value.name;
         setCategories([...categories]);
       }
@@ -79,12 +81,12 @@ export const Main = (): ReactElement => {
         {categories.map((c, index) => (
           <NavLink to={`/category/${c.id}`} key={c.id}>
             <PillBtn
-              img="https://taplink.st/p/c/6/0/5/35279297.jpg?0"
+              img={c.img || 'https://taplink.st/p/c/6/0/5/35279297.jpg?0'}
               className={styles.category}
             >
               {c.name}
 
-              {!panelConfig && (
+              {!panelConfig && isAdmin && (
                 <>
                   <button
                     className="btn btn-link"
@@ -97,6 +99,7 @@ export const Main = (): ReactElement => {
                           await onCategorySave(c);
                         },
                         (value) => {
+                          c.img = value.img?.imgSrc;
                           c.name = value.name;
                           setCategories([...categories]);
                         },

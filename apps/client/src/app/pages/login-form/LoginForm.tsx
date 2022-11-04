@@ -8,7 +8,6 @@ export const LoginForm = (): ReactElement => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
   const { login, logout, isAdmin } = useContext(AuthContext);
@@ -47,7 +46,7 @@ export const LoginForm = (): ReactElement => {
             />
             <label htmlFor="floatingInput">Пароль</label>
           </div>
-          <button type="submit">{isAdmin ? 'Выйти' : 'Войти'}</button>
+          <button className='btn btn-primary' type="submit">{isAdmin ? 'Выйти' : 'Войти'}</button>
         </form>
       </div>
     </div>

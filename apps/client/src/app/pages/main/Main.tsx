@@ -39,6 +39,10 @@ export const Main = (): ReactElement => {
       setCategories(res);
     });
   }, [categoryService]);
+
+  const onCategorySave = async (category: CategoryEntity) => {
+    await categoryService.update(category.id, { name: category.name });
+  };
   return (
     <div className="page-container py-5">
       <div className={styles.main__header}>
@@ -59,10 +63,18 @@ export const Main = (): ReactElement => {
                 className="btn btn-link"
                 onClick={(event) => {
                   event.preventDefault();
-                  openPanel(categoryConfig(), { name: c.name }, (value) => {
-                    c.name = value.name;
-                    setCategories([...categories]);
-                  });
+                  openPanel(
+                    categoryConfig(),
+                    { name: c.name },
+                    async (value) => {
+                      c.name = value.name;
+                      await onCategorySave(c);
+                    },
+                    (value) => {
+                      c.name = value.name;
+                      setCategories([...categories]);
+                    }
+                  );
                 }}
               >
                 Изменить
@@ -74,7 +86,7 @@ export const Main = (): ReactElement => {
         <a href="https://instagram.com/sweetcake.book?igshid=YmMyMTA2M2Y=">
           <PillBtn smImg={true} img={inst}>
             Instagram
-            <button
+            {/* <button
               className="btn btn-link"
               onClick={(event) => {
                 event.preventDefault();
@@ -84,14 +96,14 @@ export const Main = (): ReactElement => {
               }}
             >
               Изменить
-            </button>
+            </button> */}
           </PillBtn>
         </a>
       </div>
       <div className={styles.main__footer}>
         {questions.map((q) => (
           <TogglePanel
-            onEdit={() => openPanel(questionConfig(), q)}
+            // onEdit={() => openPanel(questionConfig(), q)}
             title={q.question}
             key={q.question}
           >

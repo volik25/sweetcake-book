@@ -6,7 +6,7 @@
 import axios from 'axios';
 import { environment } from '../../environments/environment';
 
-export class BaseService<T> {
+export class BaseService<ItemEntity, UpdateDto> {
   private host = environment.base_url;
   private tokenKey = environment.tokenKey;
   /**
@@ -24,9 +24,9 @@ export class BaseService<T> {
    * Параметры запроса
    * @options {}
    * Получение массива объектов
-   * @returns {Promise<[T]>}
+   * @returns {Promise<[ItemEntity]>}
    */
-  find(options?: any): Promise<T[]> {
+  find(options?: any): Promise<ItemEntity[]> {
     const params: Record<string, unknown> = {};
     if (options) {
       Object.entries(options).map((o) => {
@@ -34,7 +34,7 @@ export class BaseService<T> {
       });
     }
     return axios
-      .get<T[]>(this.host + this.serviceUrl, {
+      .get<ItemEntity[]>(this.host + this.serviceUrl, {
         params,
         withCredentials: true,
         headers: this.headers,
@@ -45,11 +45,11 @@ export class BaseService<T> {
   /**
    * Получение объекта по идентификатору
    * @param {number} id
-   * @returns {Promise<T>}
+   * @returns {Promise<ItemEntity>}
    */
-  public findById(id: number): Promise<T> {
+  public findById(id: number): Promise<ItemEntity> {
     return axios
-      .get<T>(this.host + this.serviceUrl + '/' + id, {
+      .get<ItemEntity>(this.host + this.serviceUrl + '/' + id, {
         withCredentials: true,
         headers: this.headers,
       })
@@ -59,11 +59,11 @@ export class BaseService<T> {
   /**
    * Создание объекта
    * @param {BaseEntity} model
-   * @returns {Promise<T>}
+   * @returns {Promise<ItemEntity>}
    */
-  create(model: T): Promise<T> {
+  create(model: ItemEntity): Promise<ItemEntity> {
     return axios
-      .post<T>(this.host + this.serviceUrl, model, {
+      .post<ItemEntity>(this.host + this.serviceUrl, model, {
         withCredentials: true,
         headers: this.headers,
       })
@@ -73,11 +73,11 @@ export class BaseService<T> {
   /**
    * Изменение объекта
    * @param {BaseEntity} model
-   * @returns {Promise<T>}
+   * @returns {Promise<ItemEntity>}
    */
-  update(model: any): Promise<T> {
+  update(id: number, model: UpdateDto): Promise<unknown> {
     return axios
-      .put<T>(this.host + this.serviceUrl + '/' + model.id, model, {
+      .put<ItemEntity>(this.host + this.serviceUrl + '/' + id, model, {
         withCredentials: true,
         headers: this.headers,
       })
@@ -86,12 +86,12 @@ export class BaseService<T> {
 
   /**
    * Удаление объекта
-   * @returns {Promise<T>}
+   * @returns {Promise<ItemEntity>}
    * @param id
    */
-  deleteById(id: number): Promise<T> {
+  deleteById(id: number): Promise<ItemEntity> {
     return axios
-      .delete<T>(this.host + this.serviceUrl + '/' + id, {
+      .delete<ItemEntity>(this.host + this.serviceUrl + '/' + id, {
         withCredentials: true,
         headers: this.headers,
       })

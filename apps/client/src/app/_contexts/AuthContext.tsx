@@ -14,14 +14,15 @@ import { ConfigControl } from '@web/utils/admin-config.builder';
 
 export interface IAuthContext {
   isAdmin: boolean;
-  isPanelOpened: boolean;
   panelConfig: {
     controls: ConfigControl[];
+    submitHandler: (value: { [key: string]: string }) => Promise<void>;
     handler?: (value: { [key: string]: string }) => void;
   } | null;
   openPanel: (
     config: ConfigControl[],
     values: { [key: string]: string },
+    submitHandler: (value: { [key: string]: string }) => Promise<void>,
     handler?: (value: { [key: string]: string }) => void
   ) => void;
   closePanel: () => void;
@@ -37,9 +38,9 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(true);
   const [panelConfig, setConfig] = useState<{
     controls: ConfigControl[];
+    submitHandler: (value: { [key: string]: string }) => Promise<void>;
     handler?: (value: { [key: string]: string }) => void;
-  } | null>({ controls: [] });
-  const [isPanelOpened, setIsPanelOpened] = useState<boolean>(false);
+  } | null>(null);
 
   useEffect(() => {
     // const tokens = getTokens();
@@ -75,17 +76,16 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const openPanel = (
     config: ConfigControl[],
     values: { [key: string]: string },
+    submitHandler: (value: { [key: string]: string }) => Promise<void>,
     handler?: (value: { [key: string]: string }) => void
   ) => {
     config.forEach((field) => {
       field.value = values[field.name];
     });
-    setIsPanelOpened(true);
-    setConfig({ controls: config, handler });
+    setConfig({ controls: config, handler, submitHandler });
   };
 
   const closePanel = () => {
-    setIsPanelOpened(false);
     setConfig(null);
   };
 
@@ -93,8 +93,7 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
     <AuthContext.Provider
       value={{
         isAdmin,
-        isPanelOpened,
-        panelConfig: panelConfig,
+        panelConfig,
         login,
         logout,
         openPanel,

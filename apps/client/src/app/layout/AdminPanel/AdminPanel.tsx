@@ -6,9 +6,8 @@ import { AuthContext } from '@web/_contexts/AuthContext';
 import { useForm } from 'react-hook-form';
 
 export const AdminPanel = (): ReactElement => {
-  const { isPanelOpened, closePanel, isAdmin, panelConfig } =
-    useContext(AuthContext);
-  const { register, watch, reset } = useForm({ mode: 'onChange' });
+  const { closePanel, isAdmin, panelConfig } = useContext(AuthContext);
+  const { register, watch, reset, getValues } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
     const values = panelConfig?.controls?.reduce((prev, cur) => {
@@ -22,12 +21,33 @@ export const AdminPanel = (): ReactElement => {
     return () => subscription.unsubscribe();
   }, [panelConfig]);
 
+  const onSave = async () => {
+    try {
+      await panelConfig?.submitHandler(getValues());
+      closePanel();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onCancel = () => {
+    if (panelConfig?.handler) {
+      const oldValue = panelConfig?.controls?.reduce((prev, cur) => {
+        prev[cur.name] = cur.value;
+        return prev;
+      }, {} as { [x: string]: string });
+      panelConfig.handler(oldValue);
+    }
+
+    closePanel();
+  };
+
   return (
     <>
       {isAdmin && (
         <aside
           className={cn(styles.panel, {
-            [styles.opened]: isPanelOpened,
+            [styles.opened]: !!panelConfig,
           })}
         >
           <div className={styles.panel__actions}>
@@ -35,11 +55,13 @@ export const AdminPanel = (): ReactElement => {
             <div>
               <button
                 className={cn('btn', 'btn-outline-primary')}
-                onClick={() => closePanel()}
+                onClick={() => onCancel()}
               >
                 Отменить
               </button>
-              <button className="btn btn-primary ms-2">Опубликовать</button>
+              <button className="btn btn-primary ms-2" onClick={() => onSave()}>
+                Опубликовать
+              </button>
             </div>
           </div>
           <div className={styles.panel__form}>

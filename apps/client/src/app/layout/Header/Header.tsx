@@ -20,17 +20,17 @@ export const Header = ({ className }: HeaderProps): ReactElement => {
   const { openPanel } = useContext(AuthContext);
   return (
     <>
-      <button
+      {/* <button
         className="btn btn-primary"
         onClick={() => openPanel(headerConfig, headerValues)}
       >
         Изменить шапку
-      </button>
+      </button> */}
       <header className={cn(className, styles.header)}>
         <img className={styles.header__logo} src={headerValues.logo} alt="" />
         <p>{headerValues.title}</p>
         <p>{headerValues.product}</p>
-        <p style={{ 'whiteSpace': 'pre' }}>{headerValues.description}</p>
+        <p style={{ whiteSpace: 'pre' }}>{headerValues.description}</p>
         <b>{headerValues.delivary}</b>
       </header>
     </>

@@ -3,7 +3,7 @@ import { QueryLogger } from '@interfaces/logger/query.logger';
 
 let dataSource = null;
 
-export const getDataSource = () => {
+export const getDataSource = (): DataSource => {
   if (dataSource) return dataSource;
   dataSource = new DataSource({
     name: 'nomokoiw_cakes',

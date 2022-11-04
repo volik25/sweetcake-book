@@ -12,11 +12,11 @@ interface Session extends Record<string, any> {
   touch(): void;
 
   regenerate(): void;
+
+  destroy(callback: (err?: Error) => void): void;
 }
 
 export interface ApplicationRequest extends FastifyRequest {
   session: Session;
   sessionStore: FastifySessionPlugin.SessionStore;
-
-  destroySession(callback: (err?: Error) => void): void;
 }

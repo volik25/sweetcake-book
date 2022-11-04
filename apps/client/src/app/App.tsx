@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Main } from './pages/main/Main';
 import { OrderForm } from './pages/order-form/OrderForm';
 import { Category } from './pages/category/Category';
+import { LoginForm } from '@web/pages/login-form/LoginForm';
 import { AuthContextProvider } from './_contexts/AuthContext';
 import { Layout } from './layout/Layout';
 
@@ -16,6 +17,7 @@ function App() {
           <Route index element={<Main />} />
           <Route path="order-form" element={<OrderForm />} />
           <Route path="category/:id" element={<Category />} />
+          <Route path="admin" element={<LoginForm />} />
         </Route>
       </Routes>
     </AuthContextProvider>

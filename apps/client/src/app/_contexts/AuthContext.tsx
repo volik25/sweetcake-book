@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
 import { UserService } from '@web/_services/user.service';
 import { ConfigControl } from '@web/utils/admin-config.builder';
+import { UserEntity } from '@interfaces/security/entities/user.entity';
 
 export interface IAuthContext {
   isAdmin: boolean;
@@ -43,34 +44,33 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
   } | null>(null);
 
   useEffect(() => {
-    // const tokens = getTokens();
-    // if (tokens) {
-    //   authService.getAuthorInfo().then((author) => {
-    //     setAuthor(author);
-    //     setIsAuthReady(true);
-    //     if (location.pathname === '/login') {
-    //       navigate(`/profile/${author.login}`, { replace: true });
-    //     }
-    //   });
-    //   return;
-    // }
-    // setIsAuthReady(true);
-    // navigate('/login', { replace: true });
+    authService
+      .check()
+      .then(() => {
+        setIsAdmin(true);
+      })
+      .catch(() => {
+        authService.removeToken();
+        setIsAdmin(false);
+      });
   }, [authService]);
 
   const login = async (data: UserLoginDTO) => {
-    // try {
-    //   await authService.logIn(data);
-    //   navigate(`/`, { replace: true });
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await authService.login(data);
+      navigate(`/`, { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const logout = () => {
-    // saveTokens(null);
-    // setAuthor(null);
-    // navigate('/login');
+  const logout = async () => {
+    try {
+      await authService.logout();
+      navigate(`/`, { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const openPanel = (

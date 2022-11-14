@@ -1,0 +1,30 @@
+.panel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  background-color: #fff;
+  z-index: 2;
+  width: 100vw;
+  max-width: 0;
+  transition: 0.3s;
+  overflow: hidden;
+
+  &.opened {
+    padding: 1rem;
+    max-width: 25rem;
+  }
+
+  &__actions {
+    min-width: 23rem;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+
+    div {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+  }
+}

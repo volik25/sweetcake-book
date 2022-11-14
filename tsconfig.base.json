@@ -15,9 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@interfaces/*": ["libs/interfaces/*"],
+      "@constants/*": ["libs/constants/*"],
       "@enums/*": ["libs/enums/*"],
-      "@constants/*": ["libs/constants/*"]
+      "@interfaces/*": ["libs/interfaces/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

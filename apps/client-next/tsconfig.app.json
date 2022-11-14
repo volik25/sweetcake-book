@@ -1,0 +1,33 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../../dist/out-tsc",
+    "types": ["node"],
+    "paths": {
+      "@web/*": ["apps/client-next/*"],
+      "@shared/*": ["apps/client-next/components/*"],
+      "@images/*": ["apps/client-next/public/assets/images/*"],
+      "@fonts/*": ["apps/client-next/public/assets/fonts/*"],
+      "@interfaces/*": ["libs/interfaces/*"],
+      "@enums/*": ["libs/enums/*"],
+      "@constants/*": ["libs/constants/*"],
+    }
+  },
+  "files": [
+    "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
+    "../../node_modules/@nrwl/react/typings/image.d.ts"
+  ],
+  "exclude": [
+    "jest.config.ts",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*.spec.tsx",
+    "**/*.test.tsx",
+    "**/*.spec.js",
+    "**/*.test.js",
+    "**/*.spec.jsx",
+    "**/*.test.jsx"
+  ],
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
+}

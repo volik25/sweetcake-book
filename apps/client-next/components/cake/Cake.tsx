@@ -1,13 +1,13 @@
 import { ReactElement, useContext } from 'react';
 import { CakeProps } from '@web/components/cake/Cake.props';
 import styles from './Cake.module.scss';
-import * as cakeImg from '@images/cake.jpg';
 import { weightTransformPipe } from '@web/utils/pipes/weight-transform.pipe';
 import { currencyPipe } from '@web/utils/pipes/currency.pipe';
 import { NavLink } from 'react-router-dom';
 import { PillBtn } from '../pill-btn/PillBtn';
 import { AuthContext } from '@web/_contexts/AuthContext';
 import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
+import Link from 'next/link';
 
 export const Cake = ({ cake, ...props }: CakeProps): ReactElement => {
   const { isAdmin } = useContext(AuthContext);
@@ -16,7 +16,7 @@ export const Cake = ({ cake, ...props }: CakeProps): ReactElement => {
       <div className={styles.cake} {...props}>
         <div
           className={styles.cake__image}
-          style={{ backgroundImage: `url(${cakeImg.default})` }}
+          style={{ backgroundImage: `url(/assets/images/cake.jpg)` }}
         ></div>
         <div className={styles.cake__text}>
           <div className={styles.cake__text_header}>{cake.name}</div>
@@ -32,11 +32,11 @@ export const Cake = ({ cake, ...props }: CakeProps): ReactElement => {
           </div>
         </div>
       </div>
-      <NavLink to={'/order-form'}>
+      <Link href={'/order-form'}>
         <PillBtn
           className={styles['button-yellow']}
         >{`Заказать ${cake.name}`}</PillBtn>
-      </NavLink>
+      </Link>
     </div>
   );
 };

@@ -2,6 +2,7 @@
 import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
 import { ConfigControl } from '@web/utils/admin-config.builder';
 import { UserService } from '@web/_services/user.service';
+import { useRouter } from 'next/router';
 import {
   createContext,
   PropsWithChildren,
@@ -9,7 +10,6 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export interface IAuthContext {
   isAdmin: boolean;
@@ -33,7 +33,7 @@ export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export const AuthContextProvider = ({ children }: PropsWithChildren<Record<string,unknown>>) => {
   const authService = useMemo(() => new UserService(), []);
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [panelConfig, setConfig] = useState<{
     controls: ConfigControl[];
@@ -60,7 +60,7 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<Record<strin
     try {
       await authService.login(data);
       setIsAdmin(true);
-      navigate(`/`, { replace: true });
+      router.replace(`/`);
     } catch (error) {
       console.log(error);
     }
@@ -69,7 +69,7 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<Record<strin
   const logout = async () => {
     try {
       await authService.logout();
-      navigate(`/`, { replace: true });
+      router.replace(`/`);
     } catch (error) {
       console.log(error);
     }

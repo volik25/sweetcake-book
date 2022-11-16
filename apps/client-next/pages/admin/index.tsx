@@ -46,9 +46,11 @@ export default function LoginForm(): ReactElement {
             />
             <label htmlFor="floatingInput">Пароль</label>
           </div>
-          <button className='btn btn-primary' type="submit">{isAdmin ? 'Выйти' : 'Войти'}</button>
+          <button className="btn btn-primary" type="submit">
+            {isAdmin ? 'Выйти' : 'Войти'}
+          </button>
         </form>
       </div>
     </div>
   );
-};
+}

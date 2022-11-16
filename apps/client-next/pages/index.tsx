@@ -9,6 +9,7 @@ import { categoryConfig } from '@web/utils/category.config';
 import { Header } from '@web/layout/Header/Header';
 import { Separator } from '@shared/separator/Separator';
 import { PillBtn } from '@shared/pill-btn/PillBtn';
+import Link from 'next/link';
 
 const questions = [
   {
@@ -77,52 +78,52 @@ export default function Home() {
       <div className={styles.main__body}>
         <p>Наш ассортимент 👇🏻</p>
         {categories.map((c, index) => (
-          // <NavLink to={`/category/${c.id}`} key={c.id}>
-          <PillBtn
-            key={c.id}
-            img={c.img || 'https://taplink.st/p/c/6/0/5/35279297.jpg?0'}
-            className={styles.category}
-          >
-            {c.name}
+          <Link href={`/category/${c.id}`} key={c.id}>
+            <PillBtn
+              key={c.id}
+              img={c.img || 'https://taplink.st/p/c/6/0/5/35279297.jpg?0'}
+              className={styles.category}
+            >
+              {c.name}
 
-            {!panelConfig && isAdmin && (
-              <>
-                <button
-                  className="btn btn-link"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    openPanel(
-                      categoryConfig(),
-                      async (value) => {
-                        c.name = value.name;
-                        await onCategorySave(c);
-                      },
-                      (value) => {
-                        c.img = value.img?.imgSrc;
-                        c.name = value.name;
-                        setCategories([...categories]);
-                      },
-                      { name: c.name }
-                    );
-                  }}
-                >
-                  Изменить
-                </button>
-                {index == categories.length - 1 && (
+              {!panelConfig && isAdmin && (
+                <>
                   <button
                     className="btn btn-link"
                     onClick={(event) => {
                       event.preventDefault();
-                      onCreateCategoryClick();
+                      openPanel(
+                        categoryConfig(),
+                        async (value) => {
+                          c.name = value.name;
+                          await onCategorySave(c);
+                        },
+                        (value) => {
+                          c.img = value.img?.imgSrc;
+                          c.name = value.name;
+                          setCategories([...categories]);
+                        },
+                        { name: c.name }
+                      );
                     }}
                   >
-                    Добавить
+                    Изменить
                   </button>
-                )}
-              </>
-            )}
-          </PillBtn>
-          // </NavLink>
+                  {index == categories.length - 1 && (
+                    <button
+                      className="btn btn-link"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        onCreateCategoryClick();
+                      }}
+                    >
+                      Добавить
+                    </button>
+                  )}
+                </>
+              )}
+            </PillBtn>
+          </Link>
         ))}
         <Separator img="/assets/images/heart.svg" hasFading></Separator>
         <a href="https://instagram.com/sweetcake.book?igshid=YmMyMTA2M2Y=">

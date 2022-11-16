@@ -1,14 +1,19 @@
 import { ReactElement, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { CategoryEntity } from '@interfaces/category/entities/category.entity';
 import { CategoryService } from '@web/_services/category.service';
 import { Cake } from '@shared/cake/Cake';
+import { useRouter } from 'next/router';
 
-export const Category = (): ReactElement => {
-  const { id } = useParams();
+export default function Category(): ReactElement {
+  const {
+    query: { id },
+  } = useRouter();
   const [category, setCategory] = useState<CategoryEntity>();
   const categoryService = useMemo(() => new CategoryService(), []);
   useEffect(() => {
+    if (!id) {
+      return;
+    }
     categoryService.findById(Number(id)).then((category) => {
       setCategory(category);
     });
@@ -21,4 +26,4 @@ export const Category = (): ReactElement => {
       ))}
     </div>
   );
-};
+}

@@ -13,6 +13,7 @@ import {
 
 export interface IAuthContext {
   isAdmin: boolean;
+  isPanelOpened: boolean;
   panelConfig: {
     controls: ConfigControl[];
     submitHandler: (value: { [key: string]: any }) => Promise<void>;
@@ -27,14 +28,18 @@ export interface IAuthContext {
   closePanel: () => void;
   login: (data: UserLoginDTO) => void;
   logout: () => void;
+  togglePanel: () => void;
 }
 
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
-export const AuthContextProvider = ({ children }: PropsWithChildren<Record<string,unknown>>) => {
+export const AuthContextProvider = ({
+  children,
+}: PropsWithChildren<Record<string, unknown>>) => {
   const authService = useMemo(() => new UserService(), []);
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isPanelOpened, setIsPanelOpened] = useState<boolean>(false);
   const [panelConfig, setConfig] = useState<{
     controls: ConfigControl[];
     submitHandler: (value: { [key: string]: any }) => Promise<void>;
@@ -88,21 +93,29 @@ export const AuthContextProvider = ({ children }: PropsWithChildren<Record<strin
     }
 
     setConfig({ controls: config, handler, submitHandler });
+    setIsPanelOpened(true);
+  };
+
+  const togglePanel = () => {
+    setIsPanelOpened(!isPanelOpened);
   };
 
   const closePanel = () => {
     setConfig(null);
+    setIsPanelOpened(false);
   };
 
   return (
     <AuthContext.Provider
       value={{
         isAdmin,
+        isPanelOpened,
         panelConfig,
         login,
         logout,
         openPanel,
         closePanel,
+        togglePanel,
       }}
     >
       {children}

@@ -20,6 +20,14 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'taplink.st',
+      },
+    ],
+  },
 };
 
 module.exports = withNx(nextConfig);

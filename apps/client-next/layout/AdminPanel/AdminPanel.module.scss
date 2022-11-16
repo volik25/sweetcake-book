@@ -8,7 +8,6 @@
   width: 100vw;
   max-width: 0;
   transition: 0.3s;
-  overflow: hidden;
 
   &.opened {
     padding: 1rem;
@@ -26,5 +25,33 @@
       display: flex;
       flex-wrap: nowrap;
     }
+  }
+}
+
+.toggle-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  background-color: #0d6efd;
+  color: white;
+  border-radius: 50%;
+  position: absolute;
+  right: -4rem;
+  top: 1rem;
+  cursor: pointer;
+
+  span {
+    color: #dc3545;
+    position: absolute;
+    height: 1rem;
+    top: 0;
+    right: 0.2rem;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

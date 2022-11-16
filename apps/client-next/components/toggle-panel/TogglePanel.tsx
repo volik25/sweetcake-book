@@ -7,6 +7,7 @@ export const TogglePanel = ({
   className,
   title,
   children,
+  showEdit,
   onEdit,
 }: TogglePanelProps): ReactElement => {
   const [isOpened, setIsOpened] = useState(false);
@@ -22,16 +23,18 @@ export const TogglePanel = ({
       >
         <span className={styles['toggle-panel__btn']}></span>
         <span>{title}</span>
-        <button
-          className="btn btn-link"
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            onEdit && onEdit();
-          }}
-        >
-          Изменить
-        </button>
+        {showEdit && (
+          <button
+            className="btn btn-link py-0"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              onEdit && onEdit();
+            }}
+          >
+            Изменить
+          </button>
+        )}
       </div>
       <div
         style={{ whiteSpace: 'pre' }}

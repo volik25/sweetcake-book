@@ -2,13 +2,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 
   &__logo {
     height: 4rem;
     width: auto;
   }
 
-  p, b{
+  p,
+  b {
     text-align: center;
+  }
+
+  button {
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 }

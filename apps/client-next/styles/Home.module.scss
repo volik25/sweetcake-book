@@ -1,5 +1,8 @@
 .category {
-  margin-bottom: 1rem;
+  display: block;
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
 }
 
 .main__body {

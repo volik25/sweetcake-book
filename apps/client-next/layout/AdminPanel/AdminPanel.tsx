@@ -1,25 +1,23 @@
 import React, { ReactElement, useContext, useEffect } from 'react';
 import styles from './AdminPanel.module.scss';
 import cn from 'classnames';
-import logo from '@images/logo.png';
 import { AuthContext } from '@web/_contexts/AuthContext';
 import { useForm } from 'react-hook-form';
+import { ExclamationCircleFill, GearFill } from 'react-bootstrap-icons';
 
 export const AdminPanel = (): ReactElement => {
-  const { closePanel, isAdmin, panelConfig } = useContext(AuthContext);
+  const { closePanel, isAdmin, panelConfig, isPanelOpened, togglePanel } =
+    useContext(AuthContext);
   const {
     register,
     watch,
     reset,
     getValues,
+    formState: { isDirty },
     control: formControl,
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
-    const values = panelConfig?.controls?.reduce((prev, cur) => {
-      prev[cur.name] = cur.value;
-      return prev;
-    }, {} as { [x: string]: string });
     reset();
     const subscription = watch((value) => {
       panelConfig?.handler && panelConfig.handler(value);
@@ -53,31 +51,50 @@ export const AdminPanel = (): ReactElement => {
       {isAdmin && (
         <aside
           className={cn(styles.panel, {
-            [styles.opened]: !!panelConfig,
+            [styles.opened]: !!isPanelOpened && panelConfig,
           })}
         >
-          <div className={styles.panel__actions}>
-            <button className={cn('btn', 'btn-outline-primary')}>Выйти</button>
-            <div>
-              <button
-                className={cn('btn', 'btn-outline-primary')}
-                onClick={() => onCancel()}
-              >
-                Отменить
-              </button>
-              <button className="btn btn-primary ms-2" onClick={() => onSave()}>
-                Опубликовать
-              </button>
+          {panelConfig && (
+            <div className={styles['toggle-btn']} onClick={togglePanel}>
+              <GearFill />
+              {isDirty && (
+                <span>
+                  <ExclamationCircleFill />
+                </span>
+              )}
             </div>
-          </div>
-          <div className={styles.panel__form}>
-            {panelConfig?.controls.map((control) => (
-              <div className="mb-3" key={control.name}>
-                <label>{control.displayName}</label>
-                {control.getControl(register, formControl)}
+          )}
+          {isPanelOpened && (
+            <div className="w-100 overflow-hidden">
+              <div className={styles.panel__actions}>
+                <button className={cn('btn', 'btn-outline-primary')}>
+                  Выйти
+                </button>
+                <div>
+                  <button
+                    className={cn('btn', 'btn-outline-primary')}
+                    onClick={() => onCancel()}
+                  >
+                    Отменить
+                  </button>
+                  <button
+                    className="btn btn-primary ms-2"
+                    onClick={() => onSave()}
+                  >
+                    Опубликовать
+                  </button>
+                </div>
               </div>
-            ))}
-          </div>
+              <div className={styles.panel__form}>
+                {panelConfig?.controls.map((control) => (
+                  <div className="mb-3" key={control.name}>
+                    <label>{control.displayName}</label>
+                    {control.getControl(register, formControl)}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </aside>
       )}
     </>

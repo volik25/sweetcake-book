@@ -11,8 +11,11 @@ import { Separator } from '@shared/separator/Separator';
 import { PillBtn } from '@shared/pill-btn/PillBtn';
 import Link from 'next/link';
 import { GetStaticProps } from 'next';
+import { PatchPlus } from 'react-bootstrap-icons';
+import { questionConfig } from '@web/utils/questions.config';
+import { linkConfig } from '@web/utils/link.config';
 
-const questions = [
+const questionsData = [
   {
     question: 'За сколько дней нужно сделать заказ?',
     answer:
@@ -27,6 +30,13 @@ const questions = [
   },
 ];
 
+const linksData = [
+  {
+    name: 'Instagram',
+    link: 'https://instagram.com/sweetcake.book?igshid=YmMyMTA2M2Y=',
+  },
+];
+
 export default function Home({
   categories: initCategories,
 }: {
@@ -34,6 +44,8 @@ export default function Home({
 }) {
   const categoryService = useMemo(() => new CategoryService(), []);
   const [categories, setCategories] = useState<any[]>(initCategories);
+  const [questions, setQuestions] = useState<any[]>(questionsData);
+  const [links, setLinks] = useState<any[]>(linksData);
   const { openPanel, panelConfig, isAdmin } = useContext(AuthContext);
 
   const onCategorySave = async (category: CategoryEntity) => {
@@ -78,77 +90,100 @@ export default function Home({
       <div className={styles.main__body}>
         <p>Наш ассортимент 👇🏻</p>
         {categories.map((c, index) => (
-          <Link href={`/category/${c.id}`} key={c.id}>
+          <Link
+            className={styles.category}
+            href={`/category/${c.id}`}
+            onClick={(event) => {
+              if (panelConfig) {
+                event.preventDefault();
+              }
+            }}
+            key={c.id}
+          >
             <PillBtn
               key={c.id}
               img={c.img || 'https://taplink.st/p/c/6/0/5/35279297.jpg?0'}
-              className={styles.category}
+              showEdit={!panelConfig && isAdmin}
+              onEdit={() => {
+                openPanel(
+                  categoryConfig(),
+                  async (value) => {
+                    c.name = value.name;
+                    await onCategorySave(c);
+                  },
+                  (value) => {
+                    c.img = value.img?.imgSrc;
+                    c.name = value.name;
+                    setCategories([...categories]);
+                  },
+                  { name: c.name }
+                );
+              }}
             >
               {c.name}
-
-              {!panelConfig && isAdmin && (
-                <>
-                  <button
-                    className="btn btn-link"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      openPanel(
-                        categoryConfig(),
-                        async (value) => {
-                          c.name = value.name;
-                          await onCategorySave(c);
-                        },
-                        (value) => {
-                          c.img = value.img?.imgSrc;
-                          c.name = value.name;
-                          setCategories([...categories]);
-                        },
-                        { name: c.name }
-                      );
-                    }}
-                  >
-                    Изменить
-                  </button>
-                  {index == categories.length - 1 && (
-                    <button
-                      className="btn btn-link"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        onCreateCategoryClick();
-                      }}
-                    >
-                      Добавить
-                    </button>
-                  )}
-                </>
-              )}
             </PillBtn>
           </Link>
         ))}
-        <Separator img="/assets/images/heart.svg" hasFading></Separator>
-        <a href="https://instagram.com/sweetcake.book?igshid=YmMyMTA2M2Y=">
-          <PillBtn smImg={true} img="/assets/images/instagram.svg">
-            Instagram
-            {/* <button
-            className="btn btn-link"
+        {isAdmin && (
+          <PillBtn
+            disabled={!!panelConfig}
             onClick={(event) => {
               event.preventDefault();
-              openPanel(linkConfig('Инстаграм'), {
-                link: 'https://instagram.com/sweetcake.book?igshid=YmMyMTA2M2Y=',
-              });
+              onCreateCategoryClick();
             }}
           >
-            Изменить
-          </button> */}
+            <PatchPlus className="me-2" /> Добавить категорию
           </PillBtn>
-        </a>
+        )}
+        <Separator img="/assets/images/heart.svg" hasFading></Separator>
+        {links.map((link) => (
+          <a href={link.link} key={link.name}>
+            <PillBtn
+              smImg={true}
+              img="/assets/images/instagram.svg"
+              showEdit={!panelConfig && isAdmin}
+              onEdit={() => {
+                openPanel(
+                  linkConfig(),
+                  async (value) => {
+                    link.name = value.name;
+                    link.link = value.link;
+                  },
+                  (value) => {
+                    link.name = value.name;
+                    link.link = value.link;
+                    setLinks([...links]);
+                  },
+                  link
+                );
+              }}
+            >
+              {link.name}
+            </PillBtn>
+          </a>
+        ))}
       </div>
       <div className={styles.main__footer}>
         {questions.map((q) => (
           <TogglePanel
-            // onEdit={() => openPanel(questionConfig(), q)}
+            onEdit={() =>
+              openPanel(
+                questionConfig(),
+                async (value) => {
+                  q.question = value.question;
+                  q.answer = value.answer;
+                },
+                (value) => {
+                  q.question = value.question;
+                  q.answer = value.answer;
+                  setQuestions([...questions]);
+                },
+                q
+              )
+            }
             title={q.question}
             key={q.question}
+            showEdit={!panelConfig}
           >
             {q.answer}
           </TogglePanel>

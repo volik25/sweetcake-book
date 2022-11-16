@@ -6,6 +6,9 @@
 }
 
 html {
+
+  height: 100%;
+  overflow: hidden;
   min-height: 100%;
   background: url('/assets/images/fon.jpeg');
   background-position: center 0;
@@ -32,9 +35,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: transparent;
 
+  height: 100%;
   min-height: 100%;
 
   background-color: unset;
+  overflow: auto;
 }
 
 code {

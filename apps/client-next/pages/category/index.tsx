@@ -1,8 +1,8 @@
-import { ReactElement, useContext, useEffect, useMemo, useState } from 'react';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { CategoryService } from '@web/_services/category.service';
 import { CategoryEntity } from '@interfaces/category/entities/category.entity';
-import { Cake } from '@web/components/cake/Cake';
+import { CategoryService } from '@web/_services/category.service';
+import { Cake } from '@shared/cake/Cake';
 
 export const Category = (): ReactElement => {
   const { id } = useParams();
@@ -12,7 +12,7 @@ export const Category = (): ReactElement => {
     categoryService.findById(Number(id)).then((category) => {
       setCategory(category);
     });
-  }, [categoryService]);
+  }, [id, categoryService]);
   return (
     <div className="page-container">
       <h1 style={{ textAlign: 'center' }}>{category?.name}</h1>

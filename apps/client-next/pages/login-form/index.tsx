@@ -1,10 +1,10 @@
 import { ReactElement, useContext } from 'react';
 import styles from './Login.module.scss';
 import cn from 'classnames';
-import { AuthContext } from '@web/_contexts/AuthContext';
 import { useForm } from 'react-hook-form';
+import { AuthContext } from 'apps/client-next/_contexts/AuthContext';
 
-export const LoginForm = (): ReactElement => {
+export default function LoginForm(): ReactElement {
   const {
     register,
     handleSubmit,

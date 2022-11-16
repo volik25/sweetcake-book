@@ -13,12 +13,7 @@
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@constants/*": ["libs/constants/*"],
-      "@enums/*": ["libs/enums/*"],
-      "@interfaces/*": ["libs/interfaces/*"]
-    }
+    "baseUrl": "."
   },
   "exclude": ["node_modules", "tmp"]
 }

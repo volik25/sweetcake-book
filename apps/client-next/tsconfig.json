@@ -16,7 +16,16 @@
     "types": [
       "jest",
       "node"
-    ]
+    ],
+    "paths": {
+      "@images/*": ["./public/assets/images/*"],
+      "@fonts/*": ["./public/assets/fonts/*"],
+      "@shared/*": ["apps/client-next/components/*"],
+      "@web/*": ["apps/client-next/*"],
+      "@interfaces/*": ["libs/interfaces/*"],
+      "@enums/*": ["libs/enums/*"],
+      "@constants/*": ["libs/constants/*"],
+    }
   },
   "references": [
     {
@@ -25,7 +34,7 @@
   ],
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
+    "./**/*.ts",
+    "./**/*.tsx"
   ]
 }

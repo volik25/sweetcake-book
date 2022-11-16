@@ -1,18 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "declaration": false,
+    "composite": true,
+    "declaration": true,
     "outDir": "../../dist/out-tsc",
     "types": ["node"],
-    "paths": {
-      // "@images/*": ["./public/assets/images/*"],
-      // "@fonts/*": ["./public/assets/fonts/*"],
-      // "@shared/*": ["./components/*"],
-      // "@web/*": ["./*"],
-      "@interfaces/*": ["libs/interfaces/*"],
-      "@enums/*": ["libs/enums/*"],
-      "@constants/*": ["libs/constants/*"],
-    }
   },
   "files": [
     "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
@@ -29,5 +21,5 @@
     "**/*.spec.jsx",
     "**/*.test.jsx"
   ],
-  "include": ["../../libs/**/*.ts", "**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
+  "include": ["../../libs/**/*.ts", "**/*.js", "**/*.jsx", "./**/*.ts", "./**/*.tsx"]
 }

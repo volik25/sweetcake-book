@@ -1,15 +1,14 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import styles from '../styles/Home.module.scss';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { CategoryEntity } from '@interfaces/category/entities/category.entity';
-import { ReactElement, useContext, useEffect, useMemo, useState } from 'react';
-import { categoryConfig } from './main/category.config';
-import { CategoryService } from '../_services/category.service';
-import { AuthContext } from '../_contexts/AuthContext';
-import { Separator } from '../components/separator/Separator';
-import { Header } from '../layout/Header/Header';
-import { PillBtn } from '../components/pill-btn/PillBtn';
-import { TogglePanel } from '../components/toggle-panel/TogglePanel';
+import { TogglePanel } from '@shared/toggle-panel/TogglePanel';
+import { AuthContext } from '@web/_contexts/AuthContext';
+import { CategoryService } from '@web/_services/category.service';
+import { categoryConfig } from '@web/utils/category.config';
+import { Header } from '@web/layout/Header/Header';
+import { Separator } from '@shared/separator/Separator';
+import { PillBtn } from '@shared/pill-btn/PillBtn';
 
 const questions = [
   {

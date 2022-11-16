@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
+import { ConfigControl } from '@web/utils/admin-config.builder';
+import { UserService } from '@web/_services/user.service';
 import {
   createContext,
   PropsWithChildren,
@@ -8,8 +10,6 @@ import {
   useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ConfigControl } from '../utils/admin-config.builder';
-import { UserService } from '../_services/user.service';
 
 export interface IAuthContext {
   isAdmin: boolean;

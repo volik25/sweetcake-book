@@ -112,7 +112,7 @@ export default function Home({
                     await onCategorySave(c);
                   },
                   (value) => {
-                    c.img = value.img?.imgSrc;
+                    c.img = value.img?.imgSrc || value.img;
                     c.name = value.name;
                     setCategories([...categories]);
                   },

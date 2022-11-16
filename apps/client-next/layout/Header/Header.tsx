@@ -38,6 +38,7 @@ export const Header = ({ className }: HeaderProps): ReactElement => {
               (value) => {
                 Object.keys(headerValues).forEach((key) => {
                   if (key == 'logo') {
+                    headerValues.logo = value.logo?.imgSrc || value.logo;
                     return;
                   }
                   headerValues[key as keyof typeof headerValues] = value[key];

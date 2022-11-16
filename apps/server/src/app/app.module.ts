@@ -4,12 +4,14 @@ import { CakeModule } from '@api/modules/cake/cake.module';
 import { CategoryModule } from '@api/modules/category/category.module';
 import { SecurityModule } from '@api/modules/security/security.module';
 import { getDataSource } from '@api/core/data-source';
+import { QuestionsModule } from './modules/questions/questions.module';
 
 @Module({
   imports: [
     CakeModule,
     CategoryModule,
     SecurityModule,
+    QuestionsModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         return AppModule.getDatabaseConfig();

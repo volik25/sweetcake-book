@@ -4,7 +4,12 @@
  * @class BaseService
  */
 import axios from 'axios';
-import { environment } from '../../environments/environment';
+
+const environment = {
+  production: false,
+  base_url: 'http://localhost:4200/api',
+  tokenKey: '@sweetcake.user.token',
+};
 
 export class BaseService<ItemEntity, UpdateDto> {
   /**

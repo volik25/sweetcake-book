@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
 import {
   createContext,
   PropsWithChildren,
@@ -6,11 +7,9 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
-import { UserService } from '@web/_services/user.service';
-import { ConfigControl } from '@web/utils/admin-config.builder';
-import { UserEntity } from '@interfaces/security/entities/user.entity';
+import { useNavigate } from 'react-router-dom';
+import { ConfigControl } from '../utils/admin-config.builder';
+import { UserService } from '../_services/user.service';
 
 export interface IAuthContext {
   isAdmin: boolean;
@@ -32,7 +31,7 @@ export interface IAuthContext {
 
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
-export const AuthContextProvider = ({ children }: PropsWithChildren<{}>) => {
+export const AuthContextProvider = ({ children }: PropsWithChildren<Record<string,unknown>>) => {
   const authService = useMemo(() => new UserService(), []);
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState<boolean>(false);

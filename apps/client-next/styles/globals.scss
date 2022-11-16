@@ -1,11 +1,13 @@
+@import "~bootstrap/scss/bootstrap";
+
 @font-face {
   font-family: "Raleway";
-  src: url("/public/assets/fonts/Raleway/Raleway-VariableFont_wght.ttf");
+  src: url("/assets/fonts/Raleway/Raleway-VariableFont_wght.ttf");
 }
 
 html {
   min-height: 100%;
-  background: url('/public/assets/images/fon.jpeg');
+  background: url('/assets/images/fon.jpeg');
   background-position: center 0;
   background-attachment: fixed;
   background-size: auto 100%;

@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
 import { UserService } from '@web/_services/user.service';
 import { ConfigControl } from '@web/utils/admin-config.builder';

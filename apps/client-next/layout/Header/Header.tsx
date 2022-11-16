@@ -2,11 +2,10 @@ import React, { ReactElement, useContext } from 'react';
 import styles from './Header.module.scss';
 import cn from 'classnames';
 import { HeaderProps } from './Header.props';
-import logo from '../../public/assets/images/logo.png';
 import { AuthContext } from '../../_contexts/AuthContext';
 
 const headerValues = {
-  logo,
+  logo: '/assets/images/logo.png',
   title: 'Кондитерская «Зерно»',
   product: 'ТОРТЫ И ДЕСЕРТЫ НА ЗАКАЗ',
   description: `Вкуснейшие торты для ваших важных событий 🎂

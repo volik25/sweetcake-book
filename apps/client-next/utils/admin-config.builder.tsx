@@ -1,4 +1,3 @@
-import { ImgInput } from '@web/components/img-input/ImgInput';
 import { ReactElement } from 'react';
 import {
   Control,
@@ -7,6 +6,7 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from 'react-hook-form';
+import { ImgInput } from '../components/img-input/ImgInput';
 
 export class AdminConfigBuilder {
   private controls: ConfigControl[] = [];

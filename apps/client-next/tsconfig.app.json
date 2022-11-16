@@ -1,14 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": true,
+    "declaration": false,
     "outDir": "../../dist/out-tsc",
     "types": ["node"],
     "paths": {
-      "@web/*": ["apps/client-next/*"],
-      "@shared/*": ["apps/client-next/components/*"],
-      "@images/*": ["apps/client-next/public/assets/images/*"],
-      "@fonts/*": ["apps/client-next/public/assets/fonts/*"],
+      // "@images/*": ["./public/assets/images/*"],
+      // "@fonts/*": ["./public/assets/fonts/*"],
+      // "@shared/*": ["./components/*"],
+      // "@web/*": ["./*"],
       "@interfaces/*": ["libs/interfaces/*"],
       "@enums/*": ["libs/enums/*"],
       "@constants/*": ["libs/constants/*"],
@@ -29,5 +29,5 @@
     "**/*.spec.jsx",
     "**/*.test.jsx"
   ],
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
+  "include": ["../../libs/**/*.ts", "**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }

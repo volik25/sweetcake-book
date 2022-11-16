@@ -1,4 +1,3 @@
-
 import { UserEntity } from '@interfaces/security/entities/user.entity';
 import axios from 'axios';
 import { CreateUserDTO } from '@interfaces/security/dtos/create.user.dto';
@@ -6,6 +5,10 @@ import { BaseService } from './_base.service';
 
 export class UserService extends BaseService<UserEntity, any> {
   serviceUrl = '/user';
+
+  constructor(isServer = false) {
+    super(isServer);
+  }
 
   login(userData: CreateUserDTO): Promise<{ user: UserEntity; token: string }> {
     return axios

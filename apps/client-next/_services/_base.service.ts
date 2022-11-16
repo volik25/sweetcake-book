@@ -17,12 +17,16 @@ export class BaseService<ItemEntity, UpdateDto> {
    */
   private _host = environment.base_url;
   private tokenKey = environment.tokenKey;
+  private isServer = false;
 
   protected get host() {
     return this._host;
   }
 
   public get token() {
+    if (this.isServer) {
+      return null;
+    }
     return localStorage.getItem(this.tokenKey);
   }
   /**
@@ -34,11 +38,21 @@ export class BaseService<ItemEntity, UpdateDto> {
     return this.token ? { Authorization: this.token } : {};
   }
 
+  constructor(isServer: boolean) {
+    this.isServer = isServer;
+  }
+
   protected setToken(token: string) {
+    if (!window) {
+      return;
+    }
     localStorage.setItem(this.tokenKey, token);
   }
 
   public removeToken() {
+    if (!window) {
+      return;
+    }
     localStorage.removeItem(this.tokenKey);
   }
 

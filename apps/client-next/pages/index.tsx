@@ -10,6 +10,7 @@ import { Header } from '@web/layout/Header/Header';
 import { Separator } from '@shared/separator/Separator';
 import { PillBtn } from '@shared/pill-btn/PillBtn';
 import Link from 'next/link';
+import { GetStaticProps } from 'next';
 
 const questions = [
   {
@@ -26,15 +27,14 @@ const questions = [
   },
 ];
 
-export default function Home() {
+export default function Home({
+  categories: initCategories,
+}: {
+  categories: CategoryEntity[];
+}) {
   const categoryService = useMemo(() => new CategoryService(), []);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>(initCategories);
   const { openPanel, panelConfig, isAdmin } = useContext(AuthContext);
-  useEffect(() => {
-    categoryService.find().then((res) => {
-      setCategories(res);
-    });
-  }, [categoryService]);
 
   const onCategorySave = async (category: CategoryEntity) => {
     await categoryService.update(category.id, { name: category.name });
@@ -153,29 +153,17 @@ export default function Home() {
             {q.answer}
           </TogglePanel>
         ))}
-
-        {/* <TogglePanel title="Можно ли будет оформить торт по нашему желанию?">
-        Да! Мы с радостью воплотим вашу идею и сделаем торт о котором вы
-        мечтали
-      </TogglePanel>
-      <TogglePanel title="Возможна ли доставка?">
-        Да, мы можем доставить торт в удобное для Вас место! Доставка тортов
-        по городу бесплатна.
-      </TogglePanel>
-      <TogglePanel title="Как сделать заказ?">
-        1.Зайдите в нужный раздел и оформите заказ по кнопке, которая
-        находится под каждой позицией <br />
-        2.Напишите нам в Инстаграмм @bakeryzerno
-        <br />
-        3.Позвоните нам по телефону 48-01-48
-        <br />
-        4.Подойдите в нашу кондитерскую и сделайте заказ на месте
-        <br />
-      </TogglePanel>
-      <TogglePanel title="Как вас найти?">
-        Наш адрес — ул. Карла Маркса 80, кофейня «Зерно»
-      </TogglePanel> */}
       </div>
     </div>
   );
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  const categories = await new CategoryService(true).find();
+
+  return {
+    props: {
+      categories,
+    },
+  };
+};

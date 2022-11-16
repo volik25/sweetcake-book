@@ -3,7 +3,7 @@ import styles from './PillBtn.module.scss';
 import cn from 'classnames';
 import { PillBtnProps } from './PillBtn.props';
 import Image from 'next/image';
-import { PencilFill } from 'react-bootstrap-icons';
+import { PencilFill, Trash3Fill } from 'react-bootstrap-icons';
 
 export const PillBtn = ({
   className,
@@ -13,6 +13,7 @@ export const PillBtn = ({
   showEdit,
   disabled,
   onEdit,
+  onRemove,
   onClick,
 }: PillBtnProps): ReactElement => {
   return (
@@ -32,6 +33,18 @@ export const PillBtn = ({
         />
       )}
       <span className={styles['pill-btn__text']}>{children}</span>
+      {showEdit && onRemove && (
+        <span
+          className={styles['pill-btn__remove']}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onRemove();
+          }}
+        >
+          <Trash3Fill />
+        </span>
+      )}
       {showEdit && onEdit && (
         <span
           className={styles['pill-btn__edit']}

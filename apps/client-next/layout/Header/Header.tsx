@@ -1,23 +1,27 @@
-import React, { ReactElement, useContext, useState } from 'react';
+import React, { ReactElement, useContext, useMemo, useState } from 'react';
 import styles from './Header.module.scss';
 import cn from 'classnames';
 import { HeaderProps } from './Header.props';
 import { AuthContext } from '../../_contexts/AuthContext';
 import { headerConfig } from './header.config';
+import { StaticService } from '@web/_services/static.service';
+import { UpdateHeaderDto } from '@interfaces/static/dtos/update-header.dto';
+import { HeaderDto } from '@interfaces/static/dtos/header.dto';
 
-const headerValuesData = {
-  logo: '/assets/images/logo.png',
-  title: 'Кондитерская «Зерно»',
-  product: 'ТОРТЫ И ДЕСЕРТЫ НА ЗАКАЗ',
-  description: `Вкуснейшие торты для ваших важных событий 🎂
-  ‌Необычные десерты, как дополнение праздничного стола ❤️
-  Яркие эмоции и воспоминания 😍`,
-  delivary: 'БЕСПЛАТНАЯ ДОСТАВКА ТОРТОВ ПО ГОРОДУ!',
-};
-
-export const Header = ({ className }: HeaderProps): ReactElement => {
+export const Header = ({
+  className,
+  headerData,
+}: HeaderProps): ReactElement => {
+  const staticService = useMemo(() => new StaticService(), []);
   const { openPanel, panelConfig } = useContext(AuthContext);
-  const [headerValues, setHeaderValues] = useState(headerValuesData);
+  const [headerValues, setHeaderValues] = useState<HeaderDto>(headerData);
+
+  const onHeaderSave = async (value: UpdateHeaderDto) => {
+    const newHeader = { ...headerValues, ...value, logo: headerValues.logo };
+    await staticService.updateHeader(newHeader);
+    setHeaderValues(newHeader);
+  };
+
   return (
     <header className={cn(className, styles.header)}>
       {!panelConfig && (
@@ -26,15 +30,7 @@ export const Header = ({ className }: HeaderProps): ReactElement => {
           onClick={() =>
             openPanel(
               headerConfig(),
-              async (value) => {
-                Object.keys(headerValues).forEach((key) => {
-                  if (key == 'logo') {
-                    return;
-                  }
-                  headerValues[key as keyof typeof headerValues] = value[key];
-                });
-                setHeaderValues(headerValues);
-              },
+              onHeaderSave,
               (value) => {
                 Object.keys(headerValues).forEach((key) => {
                   if (key == 'logo') {
@@ -45,7 +41,7 @@ export const Header = ({ className }: HeaderProps): ReactElement => {
                 });
                 setHeaderValues({ ...headerValues });
               },
-              headerValues
+              headerValues as any
             )
           }
         >

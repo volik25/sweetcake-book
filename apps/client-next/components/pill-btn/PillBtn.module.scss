@@ -32,16 +32,24 @@
     text-decoration: none;
   }
 
-  &__edit {
+  &__edit,
+  &__remove {
     display: flex;
     align-items: center;
     justify-content: center;
     height: calc(100% - 0.75rem);
-    width: 2rem;
+    width: 1rem;
 
     position: absolute;
-    right: 0.375rem;
     color: black;
+  }
+
+  &__edit {
+    right: 1rem;
+  }
+
+  &__remove {
+    right: 2.5rem;
   }
 
   &_disabled {

@@ -7,4 +7,5 @@ export interface PillBtnProps
   showEdit?: boolean;
   disabled?: boolean;
   onEdit?: () => void;
+  onRemove?: () => void;
 }

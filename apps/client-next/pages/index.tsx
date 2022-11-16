@@ -14,6 +14,8 @@ import { GetStaticProps } from 'next';
 import { PatchPlus } from 'react-bootstrap-icons';
 import { questionConfig } from '@web/utils/questions.config';
 import { linkConfig } from '@web/utils/link.config';
+import { HeaderDto } from '@interfaces/static/dtos/header.dto';
+import { StaticService } from '@web/_services/static.service';
 
 const questionsData = [
   {
@@ -39,8 +41,10 @@ const linksData = [
 
 export default function Home({
   categories: initCategories,
+  headerData,
 }: {
   categories: CategoryEntity[];
+  headerData: HeaderDto;
 }) {
   const categoryService = useMemo(() => new CategoryService(), []);
   const [categories, setCategories] = useState<any[]>(initCategories);
@@ -50,6 +54,14 @@ export default function Home({
 
   const onCategorySave = async (category: CategoryEntity) => {
     await categoryService.update(category.id, { name: category.name });
+  };
+
+  const onCategoryRemove = async (categoryId: number) => {
+    if (!confirm('Уверены, что хотите удалить категорию?')) {
+      return;
+    }
+    await categoryService.deleteById(categoryId);
+    setCategories(categories.filter((c) => c.id !== categoryId));
   };
 
   const onCategoryCreate = async (category: CategoryEntity) => {
@@ -84,7 +96,7 @@ export default function Home({
         <title>Create Next App</title>
       </Head>
       <div className={styles.main__header}>
-        <Header className={styles.header} />
+        <Header headerData={headerData || {}} className={styles.header} />
       </div>
       <Separator img="/assets/images/heart.svg"></Separator>
       <div className={styles.main__body}>
@@ -104,6 +116,7 @@ export default function Home({
               key={c.id}
               img={c.img || 'https://taplink.st/p/c/6/0/5/35279297.jpg?0'}
               showEdit={!panelConfig && isAdmin}
+              onRemove={() => onCategoryRemove(c.id)}
               onEdit={() => {
                 openPanel(
                   categoryConfig(),
@@ -194,11 +207,15 @@ export default function Home({
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const categories = await new CategoryService(true).find();
+  const [categories, headerData] = await Promise.all([
+    new CategoryService(true).find(),
+    new StaticService().getHeader(),
+  ]);
 
   return {
     props: {
       categories,
+      headerData,
     },
   };
 };

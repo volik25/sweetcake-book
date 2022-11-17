@@ -43,14 +43,14 @@ export class BaseService<ItemEntity, UpdateDto> {
   }
 
   protected setToken(token: string) {
-    if (!this.isServer) {
+    if (this.isServer) {
       return;
     }
     localStorage.setItem(this.tokenKey, token);
   }
 
   public removeToken() {
-    if (!this.isServer) {
+    if (this.isServer) {
       return;
     }
     localStorage.removeItem(this.tokenKey);

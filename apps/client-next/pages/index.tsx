@@ -260,7 +260,7 @@ export default function Home({
         )}
       </div>
       <div className={styles.main__footer}>
-        {!panelConfig && (
+        {isAdmin && !panelConfig && (
           <button
             className="btn btn-primary mt-3"
             onClick={() => onCreateQuestionClick()}
@@ -289,7 +289,7 @@ export default function Home({
             onRemove={() => onQuestionRemove(q.id)}
             title={q.question}
             key={q.question}
-            showEdit={!panelConfig}
+            showEdit={isAdmin && !panelConfig}
           >
             {q.answer}
           </TogglePanel>

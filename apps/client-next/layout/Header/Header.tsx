@@ -13,7 +13,7 @@ export const Header = ({
   headerData,
 }: HeaderProps): ReactElement => {
   const staticService = useMemo(() => new StaticService(), []);
-  const { openPanel, panelConfig } = useContext(AuthContext);
+  const { openPanel, panelConfig, isAdmin } = useContext(AuthContext);
   const [headerValues, setHeaderValues] = useState<HeaderDto>(headerData);
 
   const onHeaderSave = async (value: UpdateHeaderDto) => {
@@ -24,7 +24,7 @@ export const Header = ({
 
   return (
     <header className={cn(className, styles.header)}>
-      {!panelConfig && (
+      {isAdmin && !panelConfig && (
         <button
           className="btn btn-primary"
           onClick={() =>

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { path } from 'app-root-path';
-import { ensureDir, writeFile } from 'fs-extra';
+import { ensureDir, remove, writeFile } from 'fs-extra';
 import { nanoid } from 'nanoid';
 
 @Injectable()
@@ -12,5 +12,20 @@ export class FilesService {
     await ensureDir(uploadFolder);
     await writeFile(`${uploadFolder}/${fileName}`, file.buffer);
     return `/static/${fileName}`;
+  }
+
+  async remove(filePath: string): Promise<unknown> {
+    if (!filePath) {
+      return;
+    }
+    return await remove(
+      `${path}/uploads/${filePath.replace('/static/', '')}`,
+      (err) => {
+        if (err) {
+          console.error(err);
+          return err;
+        }
+      }
+    );
   }
 }

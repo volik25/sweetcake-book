@@ -3,12 +3,15 @@ import { CategoryEntity } from '@interfaces/category/entities/category.entity';
 import { baseException } from '@api/core/base-exception';
 import { UpdateCategoryDto } from '@interfaces/category/dtos/update.category.dto';
 import { CreateCategoryDto } from '@interfaces/category/dtos/create.category.dto';
-import { getDataSource } from '@api/core/data-source';
 import { EntityManager } from 'typeorm';
+import { FilesService } from '@api/modules/files/files.service';
 
 @Injectable()
 export class CategoryService {
-  constructor(private manager: EntityManager) {}
+  constructor(
+    private manager: EntityManager,
+    private filesService: FilesService
+  ) {}
 
   async find(): Promise<CategoryEntity[]> {
     try {
@@ -18,11 +21,11 @@ export class CategoryService {
     }
   }
 
-  async findOne(id): Promise<CategoryEntity> {
+  async findOne(id, flat = false): Promise<CategoryEntity> {
     try {
       return await this.manager.findOne(CategoryEntity, {
         where: { id },
-        relations: ['cakes', 'cakes.components'],
+        relations: flat ? [] : ['cakes', 'cakes.components'],
       });
     } catch (error) {
       baseException('[CategoryService] findOneBy: ', error);
@@ -39,6 +42,13 @@ export class CategoryService {
 
   async update(id, body: UpdateCategoryDto) {
     try {
+      const cur = await this.findOne(id);
+      if (!cur) {
+        return;
+      }
+      if (cur.img !== body.img) {
+        await this.filesService.remove(cur.img);
+      }
       await CategoryEntity.update({ id }, body);
       return {};
     } catch (error) {
@@ -48,6 +58,11 @@ export class CategoryService {
 
   async delete(id) {
     try {
+      const cur = await this.findOne(id);
+      if (!cur) {
+        return;
+      }
+      await this.filesService.remove(cur.img);
       await CategoryEntity.delete(id);
       return {};
     } catch (error) {

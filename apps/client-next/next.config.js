@@ -18,6 +18,10 @@ const nextConfig = {
         source: '/api',
         destination: 'http://localhost:3333',
       },
+      {
+        source: '/static',
+        destination: 'http://localhost:3333',
+      },
     ];
   },
   images: {

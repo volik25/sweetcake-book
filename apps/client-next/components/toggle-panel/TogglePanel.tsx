@@ -2,6 +2,7 @@ import { ReactElement, useState } from 'react';
 import { TogglePanelProps } from './TogglePanel.props';
 import styles from './TogglePanel.module.scss';
 import cn from 'classnames';
+import { PencilFill, Trash3Fill } from 'react-bootstrap-icons';
 
 export const TogglePanel = ({
   className,
@@ -9,6 +10,7 @@ export const TogglePanel = ({
   children,
   showEdit,
   onEdit,
+  onRemove,
 }: TogglePanelProps): ReactElement => {
   const [isOpened, setIsOpened] = useState(false);
   return (
@@ -22,17 +24,29 @@ export const TogglePanel = ({
         onClick={() => setIsOpened(!isOpened)}
       >
         <span className={styles['toggle-panel__btn']}></span>
-        <span>{title}</span>
+        <span className='me-2'>{title}</span>
         {showEdit && (
           <button
-            className="btn btn-link py-0"
+            className="btn btn-link py-0 px-1 text-dark"
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
               onEdit && onEdit();
             }}
           >
-            Изменить
+            <PencilFill />
+          </button>
+        )}
+        {showEdit && (
+          <button
+            className="btn btn-link py-0 px-1 text-dark"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              onRemove && onRemove();
+            }}
+          >
+            <Trash3Fill />
           </button>
         )}
       </div>

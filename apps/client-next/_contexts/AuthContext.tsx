@@ -74,6 +74,7 @@ export const AuthContextProvider = ({
   const logout = async () => {
     try {
       await authService.logout();
+      setIsAdmin(false);
       router.replace(`/`);
     } catch (error) {
       console.log(error);

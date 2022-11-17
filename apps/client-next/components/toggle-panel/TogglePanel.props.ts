@@ -5,4 +5,5 @@ export interface TogglePanelProps
   title: string;
   showEdit?: boolean;
   onEdit?: () => void;
+  onRemove?: () => void;
 }

@@ -6,8 +6,14 @@ import { useForm } from 'react-hook-form';
 import { ExclamationCircleFill, GearFill } from 'react-bootstrap-icons';
 
 export const AdminPanel = (): ReactElement => {
-  const { closePanel, isAdmin, panelConfig, isPanelOpened, togglePanel } =
-    useContext(AuthContext);
+  const {
+    closePanel,
+    isAdmin,
+    panelConfig,
+    isPanelOpened,
+    togglePanel,
+    logout,
+  } = useContext(AuthContext);
   const {
     register,
     watch,
@@ -67,7 +73,21 @@ export const AdminPanel = (): ReactElement => {
           {isPanelOpened && (
             <div className="w-100 overflow-hidden">
               <div className={styles.panel__actions}>
-                <button className={cn('btn', 'btn-outline-primary')}>
+                <button
+                  className={cn('btn', 'btn-outline-primary')}
+                  onClick={() => {
+                    if (
+                      isDirty &&
+                      !confirm(
+                        'Есть несохраненные изменения. Вы уверены, что хотите выйти?'
+                      )
+                    ) {
+                      return;
+                    }
+                    onCancel();
+                    logout();
+                  }}
+                >
                   Выйти
                 </button>
                 <div>

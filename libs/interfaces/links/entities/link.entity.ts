@@ -6,12 +6,11 @@ import {
   OneToMany,
   PrimaryColumn,
 } from 'typeorm';
-import { CakeEntity } from '../../cake/entities/cake.entity';
 
-@Entity('category', {
-  schema: 'category',
+@Entity('link', {
+  schema: 'main',
 })
-export class CategoryEntity extends BaseEntity {
+export class LinkEntity extends BaseEntity {
   @Generated('increment')
   @PrimaryColumn({
     type: 'int',
@@ -24,16 +23,19 @@ export class CategoryEntity extends BaseEntity {
 
   @Column('varchar', {
     nullable: true,
-    length: 128,
+    length: 255,
   })
   img: string;
 
   @Column('varchar', {
     nullable: false,
-    length: 128,
+    length: 255,
   })
   name: string;
 
-  @OneToMany(() => CakeEntity, (cake) => cake.category)
-  cakes: CakeEntity[];
+  @Column('varchar', {
+    nullable: false,
+    length: 255,
+  })
+  link: string;
 }

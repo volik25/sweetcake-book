@@ -1,0 +1,40 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "types": [
+      "jest",
+      "node"
+    ],
+    "paths": {
+      "@images/*": ["./public/assets/images/*"],
+      "@fonts/*": ["./public/assets/fonts/*"],
+      "@shared/*": ["apps/client-next/components/*"],
+      "@web/*": ["apps/client-next/*"],
+      "@interfaces/*": ["libs/interfaces/*"],
+      "@enums/*": ["libs/enums/*"],
+      "@constants/*": ["libs/constants/*"],
+    }
+  },
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ],
+  "include": [
+    "next-env.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx"
+  ]
+}

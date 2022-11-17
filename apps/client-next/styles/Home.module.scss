@@ -1,0 +1,14 @@
+.category {
+  display: block;
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}
+
+.main__body {
+  p {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+}

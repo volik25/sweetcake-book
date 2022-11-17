@@ -34,6 +34,8 @@ export class CategoryController {
   @Post()
   @UseGuards(JwtGuard)
   async create(@Body() body: CreateCategoryDto): Promise<CategoryEntity> {
+    console.log(body);
+    
     return await this.categoryService.create(body);
   }
 

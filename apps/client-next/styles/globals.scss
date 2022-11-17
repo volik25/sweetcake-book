@@ -1,0 +1,73 @@
+@import "~bootstrap/scss/bootstrap";
+
+@font-face {
+  font-family: "Raleway";
+  src: url("/assets/fonts/Raleway/Raleway-VariableFont_wght.ttf");
+}
+
+html {
+
+  height: 100%;
+  overflow: hidden;
+  min-height: 100%;
+  background: url('/assets/images/fon.jpeg');
+  background-position: center 0;
+  background-attachment: fixed;
+  background-size: auto 100%;
+}
+
+*,
+*:after,
+*::before {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  margin: 0;
+  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: transparent;
+
+  height: 100%;
+  min-height: 100%;
+
+  background-color: unset;
+  overflow: auto;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.page-container {
+  width: 100%;
+  padding: 0 1rem;
+  margin-right: auto;
+  margin-left: auto;
+
+  @media screen and (min-width: 768px) {
+    max-width: 620px;
+  }
+
+  @media screen and (min-width: 992px) {
+    max-width: 720px;
+  }
+
+  @media screen and (min-width: 1280px) {
+    max-width: 820px;
+  }
+}
+
+
+
+.py-5{
+  padding: 2rem 0;
+}

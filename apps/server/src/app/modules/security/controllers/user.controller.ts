@@ -27,16 +27,28 @@ export class UserController {
     @Inject(REQUEST) private readonly request: ApplicationRequest
   ) {}
 
-  @Get()
+  @Get('check')
+  async check(@Req() req) {
+    return await this.userService.check(req);
+  }
+
   @UseGuards(JwtGuard)
-  async find() {
-    return await this.userService.find();
+  @Get('logout')
+  @HttpCode(HttpStatus.CREATED)
+  async logout(@Req() req: ApplicationRequest) {
+    return await this.userService.logout(req);
   }
 
   @Get(':id')
   @UseGuards(JwtGuard)
   async findOne(@Param('id', ParseIntPipe) id) {
     return await this.userService.findOne(id);
+  }
+
+  @Get()
+  @UseGuards(JwtGuard)
+  async find() {
+    return await this.userService.find();
   }
 
   @Post()
@@ -61,15 +73,12 @@ export class UserController {
     req.user = service.user;
     req.token = service.token;
 
-    req.session.user = await UserEntity.findOne(service.user.id);
+    req.session.user = await UserEntity.findOne({
+      where: service.user.id,
+      relations: ['tokens'],
+    });
     req.session.token = service.token;
     return res.send(service);
-  }
-
-  @Get('check')
-  @UseGuards(JwtGuard)
-  async check(@Req() req) {
-    return await this.userService.check(req);
   }
 
   @Post('check-email')
@@ -89,11 +98,4 @@ export class UserController {
   //     resetData.password
   //   );
   // }
-
-  @UseGuards(JwtGuard)
-  @Get('logout')
-  @HttpCode(HttpStatus.CREATED)
-  async logout(@Req() req: ApplicationRequest) {
-    return await this.userService.logout(req);
-  }
 }

@@ -31,9 +31,7 @@ export class CategoryService {
 
   async create(category: CreateCategoryDto): Promise<CategoryEntity> {
     try {
-      const repo = getDataSource().getRepository(CategoryEntity);
-      const entity = repo.create({ ...category });
-      return await repo.save(entity);
+      return await CategoryEntity.create({ ...category }).save();
     } catch (error) {
       baseException('[CategoryService] create: ', error);
     }

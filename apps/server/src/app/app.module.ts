@@ -6,6 +6,7 @@ import { SecurityModule } from '@api/modules/security/security.module';
 import { getDataSource } from '@api/core/data-source';
 import { QuestionsModule } from './modules/questions/questions.module';
 import { StaticModule } from './modules/static/static.module';
+import { LinksModule } from './modules/links/links.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { StaticModule } from './modules/static/static.module';
     SecurityModule,
     QuestionsModule,
     StaticModule,
+    LinksModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         return AppModule.getDatabaseConfig();

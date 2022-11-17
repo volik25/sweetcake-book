@@ -23,15 +23,7 @@ export const PillBtn = ({
       })}
       onClick={(event) => !disabled && onClick && onClick(event)}
     >
-      {img && (
-        <Image
-          className={cn({ [styles.sm]: smImg })}
-          width={48}
-          height={48}
-          src={img}
-          alt=""
-        />
-      )}
+      {img && <img className={cn({ [styles.sm]: smImg })} src={img} alt="" />}
       <span className={styles['pill-btn__text']}>{children}</span>
       {showEdit && onRemove && (
         <span

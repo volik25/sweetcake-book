@@ -22,11 +22,11 @@ export class CategoryEntity extends BaseEntity {
   })
   id: number;
 
-  // @Column('varchar', {
-  //   nullable: true,
-  //   length: 128,
-  // })
-  // image: string;
+  @Column('varchar', {
+    nullable: true,
+    length: 128,
+  })
+  img: string;
 
   @Column('varchar', {
     nullable: false,

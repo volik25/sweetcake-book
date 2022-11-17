@@ -7,6 +7,7 @@ import { getDataSource } from '@api/core/data-source';
 import { QuestionsModule } from './modules/questions/questions.module';
 import { StaticModule } from './modules/static/static.module';
 import { LinksModule } from './modules/links/links.module';
+import { FilesModule } from './modules/files/files.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { LinksModule } from './modules/links/links.module';
     QuestionsModule,
     StaticModule,
     LinksModule,
+    FilesModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         return AppModule.getDatabaseConfig();

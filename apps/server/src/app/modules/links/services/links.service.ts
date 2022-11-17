@@ -44,6 +44,7 @@ export class LinksService {
   mapToLinkDto(entity: LinkEntity): LinkDto {
     return {
       id: entity.id,
+      img: entity.img,
       name: entity.name,
       link: entity.link,
     };

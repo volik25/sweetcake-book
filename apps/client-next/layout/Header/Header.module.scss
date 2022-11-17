@@ -6,7 +6,10 @@
 
   &__logo {
     height: 4rem;
-    width: auto;
+    width: 4rem;
+    background-position: center;
+    background-size: cover;
+    border-radius: 50%;
   }
 
   p,

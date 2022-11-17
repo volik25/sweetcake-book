@@ -24,6 +24,7 @@ import { LinksService } from '@web/_services/links.service';
 import { LinkDto } from '@interfaces/links/dtos/link.dto';
 import { UpdateLinkDto } from '@interfaces/links/dtos/update-link.dto';
 import { CreateLinkDto } from '@interfaces/links/dtos/create-link.dto';
+import { FilesService } from '@web/_services/files.service';
 
 export default function Home({
   categories: initCategories,
@@ -38,6 +39,7 @@ export default function Home({
 }) {
   const categoryService = useMemo(() => new CategoryService(), []);
   const questionsService = useMemo(() => new QuestionsService(), []);
+  const fileService = useMemo(() => new FilesService(), []);
   const linksService = useMemo(() => new LinksService(), []);
   const [categories, setCategories] = useState<any[]>(initCategories);
   const [questions, setQuestions] = useState<any[]>(questionsData);
@@ -84,7 +86,17 @@ export default function Home({
   };
 
   const onCategorySave = async (category: CategoryEntity) => {
-    await categoryService.update(category.id, { name: category.name });
+    if ((category.img as any).imgFile) {
+      category.img = await fileService.uploadFile(
+        (category.img as any).imgFile
+      );
+    } else {
+      category.img = (category.img as any).imgSrc;
+    }
+    await categoryService.update(category.id, {
+      name: category.name,
+      img: category.img,
+    });
   };
 
   const onCategoryRemove = async (categoryId: number) => {
@@ -96,7 +108,17 @@ export default function Home({
   };
 
   const onCategoryCreate = async (category: CategoryEntity) => {
-    return await categoryService.create({ name: category.name });
+    if ((category.img as any).imgFile) {
+      category.img = await fileService.uploadFile(
+        (category.img as any).imgFile
+      );
+    } else {
+      category.img = (category.img as any).imgSrc;
+    }
+    return await categoryService.create({
+      name: category.name,
+      img: category.img,
+    });
   };
 
   const onCreateCategoryClick = () => {
@@ -107,6 +129,7 @@ export default function Home({
       categoryConfig(),
       async (value) => {
         category.name = value.name;
+        category.img = value.img;
         const { id } = await onCategoryCreate(category as any);
         category.id = id;
       },
@@ -123,6 +146,11 @@ export default function Home({
   };
 
   const onLinkCreate = async (link: CreateLinkDto) => {
+    if ((link.img as any).imgFile) {
+      link.img = await fileService.uploadFile((link.img as any).imgFile);
+    } else {
+      link.img = (link.img as any).imgSrc;
+    }
     return await linksService.create(link);
   };
   const onLinkRemove = async (linkId: number) => {
@@ -133,11 +161,20 @@ export default function Home({
     setLinks(links.filter((c) => c.id !== linkId));
   };
   const onLinkUpdate = async (id: number, link: UpdateLinkDto) => {
-    return await linksService.update(id, { name: link.name, link: link.link });
+    if ((link.img as any).imgFile) {
+      link.img = await fileService.uploadFile((link.img as any).imgFile);
+    } else {
+      link.img = (link.img as any).imgSrc;
+    }
+    return await linksService.update(id, {
+      name: link.name,
+      link: link.link,
+      img: link.img,
+    });
   };
 
   const onCreateLinkClick = () => {
-    const link = { id: links.at(-1)?.id + 1, name: '', link: '' };
+    const link = { id: links.at(-1)?.id + 1, name: '', link: '', img: null };
     links.push(link);
     setLinks([...links]);
     openPanel(
@@ -145,6 +182,7 @@ export default function Home({
       async (value) => {
         link.name = value.name;
         link.link = value.link;
+        link.img = value.img;
         const { id } = await onLinkCreate(link as any);
         link.id = id;
       },
@@ -155,6 +193,7 @@ export default function Home({
         }
         link.name = value.name;
         link.link = value.link;
+        link.img = value.img?.imgSrc;
         setLinks([...links]);
       }
     );
@@ -192,10 +231,11 @@ export default function Home({
                   categoryConfig(),
                   async (value) => {
                     c.name = value.name;
+                    c.img = value.img;
                     await onCategorySave(c);
                   },
                   (value) => {
-                    c.img = value.img?.imgSrc || value.img;
+                    c.img = value.img?.imgSrc;
                     c.name = value.name;
                     setCategories([...categories]);
                   },
@@ -223,7 +263,7 @@ export default function Home({
           <a href={link.link} key={link.name} className={styles.category}>
             <PillBtn
               smImg={true}
-              img="/assets/images/instagram.svg"
+              img={link.img || '/assets/images/instagram.svg'}
               showEdit={!panelConfig && isAdmin}
               onRemove={() => onLinkRemove(link.id)}
               onEdit={() => {
@@ -232,9 +272,11 @@ export default function Home({
                   async (value) => {
                     link.name = value.name;
                     link.link = value.link;
+                    link.img = value.img?.imgSrc;
                     await onLinkUpdate(link.id, value as UpdateLinkDto);
                   },
                   (value) => {
+                    link.img = value.img?.imgSrc;
                     link.name = value.name;
                     link.link = value.link;
                     setLinks([...links]);

@@ -3,6 +3,7 @@ import styles from './Login.module.scss';
 import cn from 'classnames';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from 'apps/client-next/_contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 export default function LoginForm(): ReactElement {
   const {
@@ -11,6 +12,12 @@ export default function LoginForm(): ReactElement {
     formState: { errors },
   } = useForm();
   const { login, logout, isAdmin } = useContext(AuthContext);
+
+  const router = useRouter();
+
+  if (isAdmin) {
+    router.replace('/');
+  }
 
   const onSubmit = (data: any) => {
     isAdmin ? logout() : login(data);

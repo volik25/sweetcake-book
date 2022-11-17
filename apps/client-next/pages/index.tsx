@@ -239,7 +239,7 @@ export default function Home({
                     c.name = value.name;
                     setCategories([...categories]);
                   },
-                  { name: c.name }
+                  { name: c.name, img: c.img }
                 );
               }}
             >

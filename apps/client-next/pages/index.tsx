@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.scss';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { CategoryEntity } from '@interfaces/category/entities/category.entity';
 import { TogglePanel } from '@shared/toggle-panel/TogglePanel';
 import { AuthContext } from '@web/_contexts/AuthContext';
@@ -16,15 +16,12 @@ import { questionConfig } from '@web/utils/questions.config';
 import { linkConfig } from '@web/utils/link.config';
 import { HeaderDto } from '@interfaces/static/dtos/header.dto';
 import { StaticService } from '@web/_services/static.service';
-import { CreateQuestionDto } from '@interfaces/questions/dtos/create-question.dto';
 import { QuestionsService } from '@web/_services/questions.service';
-import { UpdateQuestionDto } from '@interfaces/questions/dtos/update-question.dto';
 import { QuestionDto } from '@interfaces/questions/dtos/question.dto';
 import { LinksService } from '@web/_services/links.service';
 import { LinkDto } from '@interfaces/links/dtos/link.dto';
-import { UpdateLinkDto } from '@interfaces/links/dtos/update-link.dto';
-import { CreateLinkDto } from '@interfaces/links/dtos/create-link.dto';
-import { FilesService } from '@web/_services/files.service';
+import { useListWithImg } from '@web/hooks/useListWithImg';
+import { useList } from '@web/hooks/useList';
 
 export default function Home({
   categories: initCategories,
@@ -39,165 +36,32 @@ export default function Home({
 }) {
   const categoryService = useMemo(() => new CategoryService(), []);
   const questionsService = useMemo(() => new QuestionsService(), []);
-  const fileService = useMemo(() => new FilesService(), []);
   const linksService = useMemo(() => new LinksService(), []);
-  const [categories, setCategories] = useState<any[]>(initCategories);
-  const [questions, setQuestions] = useState<any[]>(questionsData);
-  const [links, setLinks] = useState<any[]>(linksData);
-  const { openPanel, panelConfig, isAdmin } = useContext(AuthContext);
-
-  const onQuestionCreate = async (question: CreateQuestionDto) => {
-    return await questionsService.create(question);
-  };
-  const onQuestionUpdate = async (id: number, question: UpdateQuestionDto) => {
-    return await questionsService.update(id, question);
-  };
-
-  const onCreateQuestionClick = () => {
-    const question = { id: questions.at(-1)?.id + 1, question: '', answer: '' };
-    questions.push(question);
-    setQuestions([...questions]);
-    openPanel(
-      questionConfig(),
-      async (value) => {
-        question.question = value.question;
-        question.answer = value.answer;
-        const { id } = await onQuestionCreate(question);
-        question.id = id;
-      },
-      (value, isCanceled) => {
-        if (isCanceled) {
-          setQuestions([...questions.filter((c) => c.id !== question.id)]);
-          return;
-        }
-        question.question = value.question;
-        question.answer = value.answer;
-        setQuestions([...questions]);
-      }
+  const [categories, onCategoryCreate, onCategoryEdit, onCategoryRemove] =
+    useListWithImg(
+      initCategories,
+      categoryConfig,
+      categoryService.create.bind(categoryService),
+      categoryService.update.bind(categoryService),
+      categoryService.deleteById.bind(categoryService)
     );
-  };
-
-  const onQuestionRemove = async (questionId: number) => {
-    if (!confirm('Уверены, что хотите удалить вопрос?')) {
-      return;
-    }
-    await questionsService.deleteById(questionId);
-    setQuestions(questions.filter((c) => c.id !== questionId));
-  };
-
-  const onCategorySave = async (category: CategoryEntity) => {
-    if ((category.img as any).imgFile) {
-      category.img = await fileService.uploadFile(
-        (category.img as any).imgFile
-      );
-    } else {
-      category.img = (category.img as any).imgSrc;
-    }
-    await categoryService.update(category.id, {
-      name: category.name,
-      img: category.img,
-    });
-  };
-
-  const onCategoryRemove = async (categoryId: number) => {
-    if (!confirm('Уверены, что хотите удалить категорию?')) {
-      return;
-    }
-    await categoryService.deleteById(categoryId);
-    setCategories(categories.filter((c) => c.id !== categoryId));
-  };
-
-  const onCategoryCreate = async (category: CategoryEntity) => {
-    if ((category.img as any).imgFile) {
-      category.img = await fileService.uploadFile(
-        (category.img as any).imgFile
-      );
-    } else {
-      category.img = (category.img as any).imgSrc;
-    }
-    return await categoryService.create({
-      name: category.name,
-      img: category.img,
-    });
-  };
-
-  const onCreateCategoryClick = () => {
-    const category = { id: categories.at(-1)?.id + 1, name: '', img: '' };
-    categories.push(category);
-    setCategories([...categories]);
-    openPanel(
-      categoryConfig(),
-      async (value) => {
-        category.name = value.name;
-        category.img = value.img;
-        const { id } = await onCategoryCreate(category as any);
-        category.id = id;
-      },
-      (value, isCanceled) => {
-        if (isCanceled) {
-          setCategories([...categories.filter((c) => c.id !== category.id)]);
-          return;
-        }
-        category.img = value.img?.imgSrc;
-        category.name = value.name;
-        setCategories([...categories]);
-      }
+  const [questions, onQuestionCreate, onQuestionEdit, onQuestionRemove] =
+    useList(
+      questionsData,
+      questionConfig,
+      questionsService.create.bind(questionsService),
+      questionsService.update.bind(questionsService),
+      questionsService.deleteById.bind(questionsService)
     );
-  };
 
-  const onLinkCreate = async (link: CreateLinkDto) => {
-    if ((link.img as any).imgFile) {
-      link.img = await fileService.uploadFile((link.img as any).imgFile);
-    } else {
-      link.img = (link.img as any).imgSrc;
-    }
-    return await linksService.create(link);
-  };
-  const onLinkRemove = async (linkId: number) => {
-    if (!confirm('Уверены, что хотите удалить ссылку?')) {
-      return;
-    }
-    await linksService.deleteById(linkId);
-    setLinks(links.filter((c) => c.id !== linkId));
-  };
-  const onLinkUpdate = async (id: number, link: UpdateLinkDto) => {
-    if ((link.img as any).imgFile) {
-      link.img = await fileService.uploadFile((link.img as any).imgFile);
-    } else {
-      link.img = (link.img as any).imgSrc;
-    }
-    return await linksService.update(id, {
-      name: link.name,
-      link: link.link,
-      img: link.img,
-    });
-  };
-
-  const onCreateLinkClick = () => {
-    const link = { id: links.at(-1)?.id + 1, name: '', link: '', img: null };
-    links.push(link);
-    setLinks([...links]);
-    openPanel(
-      linkConfig(),
-      async (value) => {
-        link.name = value.name;
-        link.link = value.link;
-        link.img = value.img;
-        const { id } = await onLinkCreate(link as any);
-        link.id = id;
-      },
-      (value, isCanceled) => {
-        if (isCanceled) {
-          setLinks([...links.filter((c) => c.id !== link.id)]);
-          return;
-        }
-        link.name = value.name;
-        link.link = value.link;
-        link.img = value.img?.imgSrc;
-        setLinks([...links]);
-      }
-    );
-  };
+  const [links, onLinkCreate, onLinkEdit, onLinkRemove] = useListWithImg(
+    linksData,
+    linkConfig,
+    linksService.create.bind(linksService),
+    linksService.update.bind(linksService),
+    linksService.deleteById.bind(linksService)
+  );
+  const { panelConfig, isAdmin } = useContext(AuthContext);
 
   return (
     <div className="page-container py-5">
@@ -223,25 +87,10 @@ export default function Home({
           >
             <PillBtn
               key={c.id}
-              img={c.img || 'https://taplink.st/p/c/6/0/5/35279297.jpg?0'}
+              img={c.img}
               showEdit={!panelConfig && isAdmin}
               onRemove={() => onCategoryRemove(c.id)}
-              onEdit={() => {
-                openPanel(
-                  categoryConfig(),
-                  async (value) => {
-                    c.name = value.name;
-                    c.img = value.img;
-                    await onCategorySave(c);
-                  },
-                  (value) => {
-                    c.img = value.img?.imgSrc;
-                    c.name = value.name;
-                    setCategories([...categories]);
-                  },
-                  { name: c.name, img: c.img }
-                );
-              }}
+              onEdit={() => onCategoryEdit(c)}
             >
               {c.name}
             </PillBtn>
@@ -252,7 +101,7 @@ export default function Home({
             disabled={!!panelConfig}
             onClick={(event) => {
               event.preventDefault();
-              onCreateCategoryClick();
+              onCategoryCreate();
             }}
           >
             <PatchPlus className="me-2" /> Добавить категорию
@@ -260,29 +109,14 @@ export default function Home({
         )}
         <Separator img="/assets/images/heart.svg" hasFading></Separator>
         {links.map((link) => (
-          <a href={link.link} key={link.name} className={styles.category}>
+          <a href={link.link} key={link.id} className={styles.category}>
             <PillBtn
               smImg={true}
-              img={link.img || '/assets/images/instagram.svg'}
+              img={link.img}
               showEdit={!panelConfig && isAdmin}
               onRemove={() => onLinkRemove(link.id)}
               onEdit={() => {
-                openPanel(
-                  linkConfig(),
-                  async (value) => {
-                    link.name = value.name;
-                    link.link = value.link;
-                    link.img = value.img?.imgSrc;
-                    await onLinkUpdate(link.id, value as UpdateLinkDto);
-                  },
-                  (value) => {
-                    link.img = value.img?.imgSrc;
-                    link.name = value.name;
-                    link.link = value.link;
-                    setLinks([...links]);
-                  },
-                  link
-                );
+                onLinkEdit(link);
               }}
             >
               {link.name}
@@ -294,7 +128,7 @@ export default function Home({
             disabled={!!panelConfig}
             onClick={(event) => {
               event.preventDefault();
-              onCreateLinkClick();
+              onLinkCreate();
             }}
           >
             <PatchPlus className="me-2" /> Добавить ссылку
@@ -305,32 +139,17 @@ export default function Home({
         {isAdmin && !panelConfig && (
           <button
             className="btn btn-primary mt-3"
-            onClick={() => onCreateQuestionClick()}
+            onClick={() => onQuestionCreate()}
           >
             Добавить вопрос
           </button>
         )}
         {questions.map((q) => (
           <TogglePanel
-            onEdit={() =>
-              openPanel(
-                questionConfig(),
-                async (value) => {
-                  q.question = value.question;
-                  q.answer = value.answer;
-                  await onQuestionUpdate(q.id, value as UpdateQuestionDto);
-                },
-                (value) => {
-                  q.question = value.question;
-                  q.answer = value.answer;
-                  setQuestions([...questions]);
-                },
-                q
-              )
-            }
+            onEdit={() => onQuestionEdit(q)}
             onRemove={() => onQuestionRemove(q.id)}
             title={q.question}
-            key={q.question}
+            key={q.id}
             showEdit={isAdmin && !panelConfig}
           >
             {q.answer}

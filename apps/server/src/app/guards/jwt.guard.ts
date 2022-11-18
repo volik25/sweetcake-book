@@ -1,4 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { environment } from '../../environments/environment';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
@@ -9,12 +11,11 @@ export class JwtGuard implements CanActivate {
       return false;
     }
     const accessToken = request.headers.authorization || request.query.token;
-    if (
-      request.session &&
-      request.session.token === accessToken &&
-      request.session.user
-    ) {
-      return true;
+    try {
+      jwt.verify(accessToken, environment.jwtKey);
+    } catch {
+      return false;
     }
+    return true;
   }
 }

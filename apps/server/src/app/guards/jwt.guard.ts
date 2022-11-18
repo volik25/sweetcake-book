@@ -1,7 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import jwt = require('jsonwebtoken');
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
+  private key = environment.jwtKey;
   canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
 

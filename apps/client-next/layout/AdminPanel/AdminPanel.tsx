@@ -71,7 +71,7 @@ export const AdminPanel = (): ReactElement => {
             </div>
           )}
           {isPanelOpened && (
-            <div className="w-100 overflow-hidden">
+            <div className="w-100 h-100 overflow-hidden">
               <div className={styles.panel__actions}>
                 <button
                   className={cn('btn', 'btn-outline-primary')}

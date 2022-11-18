@@ -28,4 +28,7 @@ export class CakeComponentEntity extends BaseEntity {
     nullable: false,
   })
   name: string;
+
+  @ManyToMany(() => CakeEntity, (cake) => cake.components)
+  cakes: CakeEntity[];
 }

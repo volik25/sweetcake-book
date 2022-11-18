@@ -6,5 +6,11 @@ export class UpdateCakeDto {
   name: string;
 
   @IsDefined(baseDtoMessage)
-  price: string;
+  price: number;
+
+  @IsDefined(baseDtoMessage)
+  img: string;
+
+  @IsDefined(baseDtoMessage)
+  weight: number;
 }

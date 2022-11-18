@@ -26,10 +26,11 @@ export class CakeEntity extends BaseEntity {
   })
   id: number;
 
-  // @Column('varchar', {
-  //   nullable: true,
-  // })
-  // image: string;
+  @Column('varchar', {
+    nullable: true,
+    length: 128,
+  })
+  img: string;
 
   @Column('varchar', {
     nullable: false,
@@ -54,7 +55,11 @@ export class CakeEntity extends BaseEntity {
   })
   category: CategoryEntity;
 
-  @ManyToMany(() => CakeComponentEntity, { cascade: true })
+  @ManyToMany(() => CakeComponentEntity, (component) => component.cakes, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinTable({
     name: 'cake_components',
   })

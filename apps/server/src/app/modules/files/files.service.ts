@@ -18,7 +18,7 @@ export class FilesService {
     if (!filePath) {
       return;
     }
-    return await remove(
+    return remove(
       `${path}/uploads/${filePath.replace('/static/', '')}`,
       (err) => {
         if (err) {

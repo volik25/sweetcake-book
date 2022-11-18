@@ -175,5 +175,6 @@ export const getStaticProps: GetStaticProps = async () => {
       questionsData,
       linksData,
     },
+    revalidate: 5,
   };
 };

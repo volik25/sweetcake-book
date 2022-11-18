@@ -61,7 +61,7 @@ export const Header = ({
       )}
       <div
         className={cn(styles.header__logo, 'mb-2')}
-        style={{ backgroundImage: `url(${process.env.NEXT_PUBLIC_DOMAIN}${headerValues.logo})` }}
+        style={{ backgroundImage: `url(${headerValues.logo})` }}
       ></div>
       <p>{headerValues.title}</p>
       <p>{headerValues.product}</p>

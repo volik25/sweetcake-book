@@ -47,16 +47,9 @@ export const ImgInput = ({
 
     fileInput.click();
   };
-
-  const getImgSrc = (src: string) => {
-    if (src.startsWith('/')) {
-      return `${process.env.NEXT_PUBLIC_DOMAIN}${src}`;
-    }
-    return src;
-  };
   return (
     <div ref={inputEl} className={cn(className, styles['img-input'])}>
-      {imgSrc && <img className="mr-3" src={getImgSrc(imgSrc)} />}
+      {imgSrc && <img className="mr-3" src={imgSrc} />}
       <button
         onClick={uploadImg}
         className={cn('btn btn-link', {

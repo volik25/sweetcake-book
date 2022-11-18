@@ -7,7 +7,8 @@ import { nanoid } from 'nanoid';
 export class FilesService {
   async upload(file: Express.Multer.File): Promise<string> {
     const uploadFolder = `${path}/uploads`;
-    const ext = file.originalname.split('.').at(-1);
+    const splitted = file.originalname.split('.');
+    const ext = splitted[splitted.length - 1];
     const fileName = `${nanoid()}.${ext}`;
     await ensureDir(uploadFolder);
     await writeFile(`${uploadFolder}/${fileName}`, file.buffer);

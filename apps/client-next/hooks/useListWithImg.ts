@@ -15,7 +15,7 @@ export function useListWithImg<
   createHandler: (item: CreateDto) => Promise<Item>,
   updateHandler: (id: number, item: UpdateDto) => Promise<unknown>,
   deleteHandler: (id: number) => Promise<unknown>
-): UseListEditResult<Item> {
+): UseListResult<Item, CreateDto> {
   const fileService = useMemo(() => new FilesService(), []);
   const [items, setItems] = useState(itemsData || []);
   const { openPanel } = useContext(AuthContext);
@@ -51,14 +51,15 @@ export function useListWithImg<
     return await updateHandler(id, item);
   };
 
-  const onCreateClick = () => {
-    const item = { id: (items.at(-1)?.id || 1) + 1 };
-    items.push(item as Item);
+  const onCreateClick = (newItem?: Partial<CreateDto>) => {
+    const item = { id: (items.at(-1)?.id || 1) + 1, ...(newItem || {}) };
+    items.push(item as unknown as Item);
     setItems([...items]);
     openPanel(
       config(),
       async (value) => {
-        const { id } = await onCreate(value as any);
+        mapFields(item, value);
+        const { id } = await onCreate(item as any);
         item.id = id;
       },
       (value, isCanceled) => {
@@ -99,9 +100,9 @@ function mapFields(item: any, value: any, handleLink?: boolean) {
   });
 }
 
-export type UseListEditResult<Item> = [
+export type UseListResult<Item, CreateDto> = [
   Item[],
-  () => void,
+  (initData?: Partial<CreateDto>) => void,
   (item: Item) => void,
   (id: number) => void
 ];

@@ -18,13 +18,15 @@ export const Header = ({
   const { openPanel, panelConfig, isAdmin } = useContext(AuthContext);
   const [headerValues, setHeaderValues] = useState<HeaderDto>(headerData);
 
-  const onHeaderSave = async (value: UpdateHeaderDto) => {
+  const onHeaderSave = async (value: any) => {
     const newHeader = { ...headerValues, ...value };
 
-    if (typeof newHeader.logo !== 'string') {
+    if (newHeader.logo?.imgFile) {
       newHeader.logo = await fileService.uploadFile(
         (newHeader.logo as any).imgFile
       );
+    } else {
+      newHeader.logo = newHeader.logo?.imgSrc;
     }
 
     await staticService.updateHeader(newHeader);

@@ -20,10 +20,11 @@ import { AccessTokenEntity } from '@interfaces/security/entities/access.token.en
 import { baseException } from '@api/core/base-exception';
 import { ResetTokenEntity } from '@interfaces/security/entities/reset.token.entity';
 import path = require('path');
+import { environment } from '../../../../environments/environment';
 
 @Injectable()
 export class UserService {
-  private key = '@sweetcake';
+  private key = environment.jwtKey;
 
   constructor(@Inject(REQUEST) private readonly request: ApplicationRequest) {}
 

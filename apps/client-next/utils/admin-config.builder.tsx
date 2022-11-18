@@ -6,12 +6,22 @@ import {
   FieldValues,
   UseFormRegister,
 } from 'react-hook-form';
+import { CakeComponentEntity } from '@interfaces/cake/entities/component.entity';
+import { ReactSelect } from '@shared/react-select/React-select';
+
+enum ControlType {
+  Text = 'text',
+  Img = 'img',
+  Textarea = 'textarea',
+  Select = 'select',
+  MultiSelect = 'multiselect',
+}
 
 export class AdminConfigBuilder {
   private controls: ConfigControl[] = [];
 
   public addTextControl(name: string, displayName: string): AdminConfigBuilder {
-    this.controls.push(new ConfigControl(name, displayName, 'text'));
+    this.controls.push(new ConfigControl(name, displayName, ControlType.Text));
 
     return this;
   }
@@ -20,13 +30,45 @@ export class AdminConfigBuilder {
     name: string,
     displayName: string
   ): AdminConfigBuilder {
-    this.controls.push(new ConfigControl(name, displayName, 'textarea'));
+    this.controls.push(
+      new ConfigControl(name, displayName, ControlType.Textarea)
+    );
 
     return this;
   }
 
   public addImgControl(name: string, displayName: string): AdminConfigBuilder {
-    this.controls.push(new ConfigControl(name, displayName, 'img'));
+    this.controls.push(new ConfigControl(name, displayName, ControlType.Img));
+
+    return this;
+  }
+
+  public addMultiSelectControl(
+    name: string,
+    displayName: string,
+    values: any[]
+  ): AdminConfigBuilder {
+    this.controls.push(
+      new ConfigControl(
+        name,
+        displayName,
+        ControlType.MultiSelect,
+        values,
+        true
+      )
+    );
+
+    return this;
+  }
+
+  public addSelectControl(
+    name: string,
+    displayName: string,
+    values: any[]
+  ): AdminConfigBuilder {
+    this.controls.push(
+      new ConfigControl(name, displayName, ControlType.Select, values, false)
+    );
 
     return this;
   }
@@ -42,7 +84,9 @@ export class ConfigControl {
   constructor(
     public name: string,
     public displayName: string,
-    private type: 'text' | 'img' | 'textarea'
+    private type: ControlType,
+    public options?: CakeComponentEntity[],
+    private multi: boolean = false
   ) {}
 
   public getControl(
@@ -50,7 +94,7 @@ export class ConfigControl {
     control: Control<FieldValues, any>
   ): ReactElement {
     switch (this.type) {
-      case 'text': {
+      case ControlType.Text: {
         return (
           <input
             defaultValue={this.value}
@@ -60,7 +104,7 @@ export class ConfigControl {
           />
         );
       }
-      case 'textarea': {
+      case ControlType.Textarea: {
         return (
           <textarea
             defaultValue={this.value}
@@ -70,7 +114,7 @@ export class ConfigControl {
           ></textarea>
         );
       }
-      case 'img': {
+      case ControlType.Img: {
         return (
           <Controller
             control={control}
@@ -86,8 +130,29 @@ export class ConfigControl {
           />
         );
       }
+      case ControlType.MultiSelect: {
+        return (
+          <Controller
+            control={control}
+            name={this.name}
+            defaultValue={this.options?.filter((option) =>
+              (this.value as unknown as any[]).find(
+                (value) => value.id === option.id
+              )
+            )}
+            render={({ field: { onChange, value } }) => (
+              <ReactSelect
+                defaultOptions={this.options || []}
+                defaultValue={value}
+                isMulti={this.multi}
+                onChange={onChange}
+              />
+            )}
+          />
+        );
+      }
       default: {
-        console.error('Uknown field type');
+        console.error('Unknown field type');
 
         return <></>;
       }

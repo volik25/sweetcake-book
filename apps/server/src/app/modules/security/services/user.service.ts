@@ -20,7 +20,7 @@ import { AccessTokenEntity } from '@interfaces/security/entities/access.token.en
 import { baseException } from '@api/core/base-exception';
 import { ResetTokenEntity } from '@interfaces/security/entities/reset.token.entity';
 import path = require('path');
-import { environment } from '../../../../environments/environment';
+import { environment } from 'apps/server/src/environments/environment';
 
 @Injectable()
 export class UserService {

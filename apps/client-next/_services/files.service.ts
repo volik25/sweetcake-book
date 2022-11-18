@@ -13,7 +13,7 @@ export class FilesService extends BaseService<any, any> {
     formData.append('file', file);
     return axios
       .post<string>(this.host + this.serviceUrl + '/upload', formData, {
-        withCredentials: true,
+       
         headers: this.headers,
       })
       .then(({ data }) => data);

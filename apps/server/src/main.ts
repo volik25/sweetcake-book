@@ -10,7 +10,18 @@ import { AppModule } from './app/app.module';
 import session = require('express-session');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: {
+      origin: 'http://localhost:3000',
+      methods: ['POST', 'GET', 'PUT', 'PATCH', 'OPTIONS', 'DELETE'],
+      allowedHeaders: [
+        'Origin',
+        'Content-Type',
+        'X-Auth-Token',
+        'Authorization',
+      ],
+    },
+  });
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3333;

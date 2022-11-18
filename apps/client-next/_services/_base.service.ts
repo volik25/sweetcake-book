@@ -6,8 +6,6 @@
 import axios from 'axios';
 
 const environment = {
-  production: false,
-  base_url: 'http://localhost:4200/api',
   tokenKey: '@sweetcake.user.token',
 };
 
@@ -15,7 +13,7 @@ export class BaseService<ItemEntity, UpdateDto> {
   /**
    * Базовый url сервиса
    */
-  private _host = environment.base_url;
+  private _host = process.env.NEXT_PUBLIC_BASE_URL;
   private tokenKey = environment.tokenKey;
   private isServer = false;
 
@@ -72,7 +70,7 @@ export class BaseService<ItemEntity, UpdateDto> {
     return axios
       .get<ItemEntity[]>(this.host + this.serviceUrl, {
         params,
-        withCredentials: true,
+       
         headers: this.headers,
       })
       .then(({ data }) => data);
@@ -86,7 +84,7 @@ export class BaseService<ItemEntity, UpdateDto> {
   public findById(id: number): Promise<ItemEntity> {
     return axios
       .get<ItemEntity>(this.host + this.serviceUrl + '/' + id, {
-        withCredentials: true,
+       
         headers: this.headers,
       })
       .then(({ data }) => data);
@@ -100,7 +98,7 @@ export class BaseService<ItemEntity, UpdateDto> {
   create(model: any): Promise<ItemEntity> {
     return axios
       .post<ItemEntity>(this.host + this.serviceUrl, model, {
-        withCredentials: true,
+       
         headers: this.headers,
       })
       .then(({ data }) => data);
@@ -114,7 +112,7 @@ export class BaseService<ItemEntity, UpdateDto> {
   update(id: number, model: UpdateDto): Promise<unknown> {
     return axios
       .put<ItemEntity>(this.host + this.serviceUrl + '/' + id, model, {
-        withCredentials: true,
+       
         headers: this.headers,
       })
       .then(({ data }) => data);
@@ -128,7 +126,7 @@ export class BaseService<ItemEntity, UpdateDto> {
   deleteById(id: number): Promise<ItemEntity> {
     return axios
       .delete<ItemEntity>(this.host + this.serviceUrl + '/' + id, {
-        withCredentials: true,
+       
         headers: this.headers,
       })
       .then(({ data }) => data);

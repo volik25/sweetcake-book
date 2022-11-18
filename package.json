@@ -7,7 +7,7 @@
     "start-client": "nx run client-next:serve:development",
     "start-api": "nx run server:serve",
     "start": "npm run start-api && npm run start-client",
-    "start:parallel": "nx run-many --parallel --target=serve --projects=server,client",
+    "start:parallel": "nx run-many --parallel --target=serve --projects=server,client-next",
     "build": "nx build",
     "test": "nx test"
   },

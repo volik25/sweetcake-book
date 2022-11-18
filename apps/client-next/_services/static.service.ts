@@ -19,7 +19,7 @@ export class StaticService extends BaseService<HeaderDto, UpdateHeaderDto> {
   public updateHeader(model: UpdateHeaderDto): Promise<unknown> {
     return axios
       .put<unknown>(this.host + this.serviceUrl + '/header', model, {
-        withCredentials: true,
+       
         headers: this.headers,
       })
       .then(({ data }) => data);

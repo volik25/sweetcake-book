@@ -2,6 +2,7 @@
 import { ConfigControl } from '@web/utils/admin-config.builder';
 import { AuthContext } from '@web/_contexts/AuthContext';
 import { useContext, useState } from 'react';
+import { UseListResult } from './useListWithImg';
 
 export function useList<Item extends { id: number }, CreateDto, UpdateDto>(
   itemsData: Item[],
@@ -9,7 +10,7 @@ export function useList<Item extends { id: number }, CreateDto, UpdateDto>(
   createHandler: (item: CreateDto) => Promise<Item>,
   updateHandler: (id: number, item: UpdateDto) => Promise<unknown>,
   deleteHandler: (id: number) => Promise<unknown>
-): UseListEditResult<Item> {
+): UseListResult<Item, CreateDto> {
   const [items, setItems] = useState(itemsData || []);
   const { openPanel } = useContext(AuthContext);
 
@@ -29,14 +30,15 @@ export function useList<Item extends { id: number }, CreateDto, UpdateDto>(
     return await updateHandler(id, item);
   };
 
-  const onCreateClick = () => {
-    const item = { id: (items.at(-1)?.id || 1) + 1 };
+  const onCreateClick = (newItem?: Partial<CreateDto>) => {
+    const item = { id: (items.at(-1)?.id || 1) + 1, ...(newItem || {}) };
     items.push(item as Item);
     setItems([...items]);
     openPanel(
       config(),
       async (value) => {
-        const { id } = await onCreate(value as any);
+        mapFields(item, value);
+        const { id } = await onCreate(item as any);
         item.id = id;
       },
       (value, isCanceled) => {
@@ -56,7 +58,7 @@ export function useList<Item extends { id: number }, CreateDto, UpdateDto>(
       async (value) => {
         await onUpdate(item.id, value as UpdateDto);
       },
-      (value, isCanceled) => {
+      (value) => {
         mapFields(item, value);
         setItems([...items]);
       },
@@ -72,10 +74,3 @@ function mapFields(item: any, value: any) {
     item[key] = value[key];
   });
 }
-
-export type UseListEditResult<Item> = [
-  Item[],
-  () => void,
-  (item: Item) => void,
-  (id: number) => void
-];

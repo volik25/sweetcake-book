@@ -6,8 +6,8 @@ import {
   FieldValues,
   UseFormRegister,
 } from 'react-hook-form';
-import { CakeComponentEntity } from '@interfaces/cake/entities/component.entity';
 import { ReactSelect } from '@shared/react-select/React-select';
+import { ReactSelectOption } from '@shared/react-select/React-select.interface';
 
 enum ControlType {
   Text = 'text',
@@ -85,7 +85,7 @@ export class ConfigControl {
     public name: string,
     public displayName: string,
     private type: ControlType,
-    public options?: CakeComponentEntity[],
+    public options?: ReactSelectOption[],
     private multi: boolean = false
   ) {}
 
@@ -136,7 +136,7 @@ export class ConfigControl {
             control={control}
             name={this.name}
             defaultValue={this.options?.filter((option) =>
-              (this.value as unknown as any[]).find(
+              (this.value as unknown as any[])?.find(
                 (value) => value.id === option.id
               )
             )}

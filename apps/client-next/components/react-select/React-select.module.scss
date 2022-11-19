@@ -1,0 +1,27 @@
+.option {
+  margin: 10px 0;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  &:hover {
+    background-color: rgba(79, 140, 226, 0.6);
+    cursor: pointer;
+  }
+  &__action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__edit,
+  &__remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 0.75rem);
+    width: 1rem;
+    color: black;
+  }
+  &__remove {
+    margin-left: 1rem;
+  }
+}

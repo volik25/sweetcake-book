@@ -67,6 +67,8 @@ export class BaseService<ItemEntity, UpdateDto> {
         params[o[0]] = o[1];
       });
     }
+    console.log(this.host + this.serviceUrl);
+    
     return axios
       .get<ItemEntity[]>(this.host + this.serviceUrl, {
         params,

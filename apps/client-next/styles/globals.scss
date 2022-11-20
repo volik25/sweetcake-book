@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: "Raleway";
-  src: url("/assets/fonts/Raleway/Raleway-VariableFont_wght.ttf");
+  src: url("/static/assets/fonts/Raleway/Raleway-VariableFont_wght.ttf");
 }
 
 html {
@@ -10,7 +10,7 @@ html {
   height: 100%;
   overflow: hidden;
   min-height: 100%;
-  background: url('/assets/images/fon.jpeg');
+  background: url('/static/assets/images/fon.jpeg');
   background-position: center 0;
   background-attachment: fixed;
   background-size: auto 100%;

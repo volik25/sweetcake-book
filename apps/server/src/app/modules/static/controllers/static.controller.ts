@@ -10,7 +10,7 @@ import { StaticService } from '../services/static.service';
 import { HeaderDto } from '@interfaces/static/dtos/header.dto';
 import { UpdateHeaderDto } from '@interfaces/static/dtos/update-header.dto';
 
-@Controller('static')
+@Controller('api/static')
 export class StaticController {
   constructor(private questionsService: StaticService) {}
 

@@ -14,14 +14,14 @@ const nextConfig = {
   },
   rewrites: async () => {
     return [
-      {
-        source: '/api',
-        destination: 'http://localhost:3333',
-      },
-      {
-        source: '/static',
-        destination: 'http://localhost:3333',
-      },
+      // {
+      //   source: '/api',
+      //   destination: 'http://localhost:3333',
+      // },
+      // {
+      //   source: '/static',
+      //   destination: 'http://localhost:3333',
+      // },
     ];
   },
   images: {

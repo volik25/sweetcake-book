@@ -71,7 +71,7 @@ export default function Home({
       <div className={styles.main__header}>
         <Header headerData={headerData || {}} className={styles.header} />
       </div>
-      <Separator img="/assets/images/heart.svg"></Separator>
+      <Separator img="/static/assets/images/heart.svg"></Separator>
       <div className={styles.main__body}>
         <p>Наш ассортимент 👇🏻</p>
         {categories.map((c, index) => (
@@ -107,7 +107,7 @@ export default function Home({
             <PatchPlus className="me-2" /> Добавить категорию
           </PillBtn>
         )}
-        <Separator img="/assets/images/heart.svg" hasFading></Separator>
+        <Separator img="/static/assets/images/heart.svg" hasFading></Separator>
         {links.map((link) => (
           <a href={link.link} key={link.id} className={styles.category}>
             <PillBtn

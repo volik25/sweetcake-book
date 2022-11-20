@@ -11,7 +11,7 @@ import { FilesService } from './files.service';
 import { Multer } from 'multer'; // нужен чтобы не было ошибки типа Express.Multer.File
 import { Express } from 'express';
 
-@Controller('files')
+@Controller('api/files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 

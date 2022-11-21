@@ -51,7 +51,7 @@ export const TogglePanel = ({
         )}
       </div>
       <div
-        style={{ whiteSpace: 'pre' }}
+        style={{ whiteSpace: 'pre-wrap' }}
         className={styles['toggle-panel__content']}
       >
         {children}

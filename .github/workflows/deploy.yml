@@ -25,6 +25,7 @@ jobs:
       - run: npm ci
       - run: npm run build-prod
 
+      # Deploy flowervalley - название проекта
       - run: cd dist/apps/server && rsync -e "ssh -i $HOME/.ssh/secret_key -o StrictHostKeyChecking=no" --archive --compress --delete . nomokoiw@nomokoiw.beget.tech:/home/n/nomokoiw/stand1/SweetCake/server # полный путь до папки, куда нужно скопировать файлы
       - run: cd dist/apps/client-next && rsync -e "ssh -i $HOME/.ssh/secret_key -o StrictHostKeyChecking=no" --archive --compress --delete . nomokoiw@nomokoiw.beget.tech:/home/n/nomokoiw/stand1/SweetCake/client-next # полный путь до папки, куда нужно скопировать файлы
 

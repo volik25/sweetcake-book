@@ -1,0 +1,34 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.14.2] #версия node.js на которой разарабатывался проект
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      # Setup keyy
+      - run: set -eu
+      - run: mkdir "$HOME/.ssh"
+      - run: echo "${{ secrets.secret_key }}" > "$HOME/.ssh/secret_key" # secret_key - название секрета
+      - run: chmod 600 "$HOME/.ssh/secret_key"
+      # Build
+      - run: npm ci
+      - run: npm run build-prod
+
+      # Deploy flowervalley - название проекта
+      - run: cd dist/apps/server && rsync -e "ssh -i $HOME/.ssh/secret_key -o StrictHostKeyChecking=no" --archive --compress --delete . nomokoiw@nomokoiw.beget.tech:/home/n/nomokoiw/stand1/SweetCake/server # полный путь до папки, куда нужно скопировать файлы
+      - run: cd dist/apps/client-next && rsync -e "ssh -i $HOME/.ssh/secret_key -o StrictHostKeyChecking=no" --archive --compress --delete . nomokoiw@nomokoiw.beget.tech:/home/n/nomokoiw/stand1/SweetCake/client-next # полный путь до папки, куда нужно скопировать файлы
+
+      - run: ssh nomokoiw@nomokoiw.beget.tech
+      - run: cd ~/stand1/SweetCake
+      - run: touch tmp/restart.txt

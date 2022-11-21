@@ -19,13 +19,16 @@ export const AdminPanel = (): ReactElement => {
     watch,
     reset,
     getValues,
+    setValue,
     formState: { isDirty },
     control: formControl,
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
     reset();
-    const subscription = watch((value) => {
+    const subscription = watch((value, { name }) => {
+      console.log(name);
+
       panelConfig?.handler && panelConfig.handler(value);
     });
     return () => subscription.unsubscribe();
@@ -109,7 +112,7 @@ export const AdminPanel = (): ReactElement => {
                 {panelConfig?.controls.map((control) => (
                   <div className="mb-3" key={control.name}>
                     <label>{control.displayName}</label>
-                    {control.getControl(register, formControl)}
+                    {control.getControl(register, formControl, setValue)}
                   </div>
                 ))}
               </div>

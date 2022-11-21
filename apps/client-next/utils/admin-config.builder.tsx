@@ -5,6 +5,7 @@ import {
   Controller,
   FieldValues,
   UseFormRegister,
+  UseFormSetValue,
 } from 'react-hook-form';
 import { CakeComponentEntity } from '@interfaces/cake/entities/component.entity';
 import { ReactSelect } from '@shared/react-select/React-select';
@@ -20,8 +21,21 @@ enum ControlType {
 export class AdminConfigBuilder {
   private controls: ConfigControl[] = [];
 
-  public addTextControl(name: string, displayName: string): AdminConfigBuilder {
-    this.controls.push(new ConfigControl(name, displayName, ControlType.Text));
+  public addTextControl(
+    name: string,
+    displayName: string,
+    onChange?: (value: any, setValue: UseFormSetValue<any>) => void
+  ): AdminConfigBuilder {
+    this.controls.push(
+      new ConfigControl(
+        name,
+        displayName,
+        ControlType.Text,
+        null,
+        false,
+        onChange
+      )
+    );
 
     return this;
   }
@@ -86,20 +100,27 @@ export class ConfigControl {
     public displayName: string,
     private type: ControlType,
     public options?: CakeComponentEntity[],
-    private multi: boolean = false
+    private multi: boolean = false,
+    private onChange?: (value: any, setValue: UseFormSetValue<any>) => void
   ) {}
 
   public getControl(
     register: UseFormRegister<FieldValues>,
-    control: Control<FieldValues, any>
+    control: Control<FieldValues, any>,
+    setValue: UseFormSetValue<any>
   ): ReactElement {
+    const { onChange, ...reg } = register(this.name);
     switch (this.type) {
       case ControlType.Text: {
         return (
           <input
             defaultValue={this.value}
             className="form-control"
-            {...register(this.name)}
+            {...reg}
+            onChange={(event) => {
+              onChange(event);
+              this.onChange && this.onChange(event.target.value, setValue);
+            }}
             type="text"
           />
         );

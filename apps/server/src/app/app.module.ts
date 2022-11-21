@@ -13,6 +13,7 @@ import Next from 'next';
 
 import { path } from 'app-root-path';
 import { AppController } from './app.controller';
+import { environment } from '../environments/environment';
 
 @Module({
   imports: [
@@ -24,7 +25,10 @@ import { AppController } from './app.controller';
     LinksModule,
     FilesModule,
     RenderModule.forRootAsync(
-      Next({ dev: process.env.NODE_ENV !== 'production', dir: `${path}/apps/client-next` }),
+      Next({
+        dev: process.env.NODE_ENV !== 'production',
+        dir: `${path}${environment.pagesDir}`,
+      }),
       { viewsDir: null }
     ),
     TypeOrmModule.forRootAsync({

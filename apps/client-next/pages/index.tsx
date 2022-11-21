@@ -73,7 +73,7 @@ export default function Home({
       </div>
       <Separator img="/static/assets/images/heart.svg"></Separator>
       <div className={styles.main__body}>
-        <p>Наш ассортимент 👇🏻 sdfsfsdfsdfsd</p>
+        <p>Наш ассортимент 👇🏻</p>
         {categories.map((c, index) => (
           <Link
             className={styles.category}

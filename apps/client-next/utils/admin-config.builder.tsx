@@ -1,9 +1,10 @@
 import { ImgInput } from '@shared/img-input/ImgInput';
-import { ReactElement } from 'react';
+import { ReactElement, Ref, RefObject, useRef } from 'react';
 import {
   Control,
   Controller,
   FieldValues,
+  RefCallBack,
   UseFormRegister,
   UseFormSetValue,
 } from 'react-hook-form';
@@ -24,14 +25,19 @@ export class AdminConfigBuilder {
   public addTextControl(
     name: string,
     displayName: string,
-    onChange?: (value: any, setValue: UseFormSetValue<any>) => void
+    onChange?: (
+      value: any,
+      setValue: UseFormSetValue<any>,
+      allFields: ConfigControl[]
+    ) => void
   ): AdminConfigBuilder {
     this.controls.push(
       new ConfigControl(
         name,
         displayName,
         ControlType.Text,
-        null,
+        this.controls,
+        undefined,
         false,
         onChange
       )
@@ -45,14 +51,16 @@ export class AdminConfigBuilder {
     displayName: string
   ): AdminConfigBuilder {
     this.controls.push(
-      new ConfigControl(name, displayName, ControlType.Textarea)
+      new ConfigControl(name, displayName, ControlType.Textarea, this.controls)
     );
 
     return this;
   }
 
   public addImgControl(name: string, displayName: string): AdminConfigBuilder {
-    this.controls.push(new ConfigControl(name, displayName, ControlType.Img));
+    this.controls.push(
+      new ConfigControl(name, displayName, ControlType.Img, this.controls)
+    );
 
     return this;
   }
@@ -67,6 +75,7 @@ export class AdminConfigBuilder {
         name,
         displayName,
         ControlType.MultiSelect,
+        this.controls,
         values,
         true
       )
@@ -81,7 +90,14 @@ export class AdminConfigBuilder {
     values: any[]
   ): AdminConfigBuilder {
     this.controls.push(
-      new ConfigControl(name, displayName, ControlType.Select, values, false)
+      new ConfigControl(
+        name,
+        displayName,
+        ControlType.Select,
+        this.controls,
+        values,
+        false
+      )
     );
 
     return this;
@@ -94,14 +110,20 @@ export class AdminConfigBuilder {
 
 export class ConfigControl {
   public value: string;
+  public ref: any;
 
   constructor(
     public name: string,
     public displayName: string,
     private type: ControlType,
+    private allFields: ConfigControl[],
     public options?: CakeComponentEntity[],
     private multi: boolean = false,
-    private onChange?: (value: any, setValue: UseFormSetValue<any>) => void
+    private onChange?: (
+      value: any,
+      setValue: UseFormSetValue<any>,
+      allFields: ConfigControl[]
+    ) => void
   ) {}
 
   public getControl(
@@ -109,17 +131,22 @@ export class ConfigControl {
     control: Control<FieldValues, any>,
     setValue: UseFormSetValue<any>
   ): ReactElement {
-    const { onChange, ...reg } = register(this.name);
+    const { onChange, ref, ...reg } = register(this.name);
     switch (this.type) {
       case ControlType.Text: {
         return (
           <input
             defaultValue={this.value}
             className="form-control"
+            ref={(instance) => {
+              ref(instance);
+              this.ref = instance;
+            }}
             {...reg}
             onChange={(event) => {
               onChange(event);
-              this.onChange && this.onChange(event.target.value, setValue);
+              this.onChange &&
+                this.onChange(event.target.value, setValue, this.allFields);
             }}
             type="text"
           />

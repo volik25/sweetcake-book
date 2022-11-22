@@ -26,9 +26,7 @@ export const AdminPanel = (): ReactElement => {
 
   useEffect(() => {
     reset();
-    const subscription = watch((value, { name }) => {
-      console.log(name);
-
+    const subscription = watch((value) => {
       panelConfig?.handler && panelConfig.handler(value);
     });
     return () => subscription.unsubscribe();

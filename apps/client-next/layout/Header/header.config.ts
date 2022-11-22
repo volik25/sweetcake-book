@@ -13,7 +13,7 @@ export const headerConfig = () =>
         if (!ref) {
           return;
         }
-        ref.style.display = 'none';
+        ref.current.style.display = 'none';
       }
     )
     .addTextControl('product', 'Заголовок')

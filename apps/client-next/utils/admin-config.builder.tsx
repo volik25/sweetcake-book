@@ -1,5 +1,5 @@
 import { ImgInput } from '@shared/img-input/ImgInput';
-import { ReactElement, Ref, RefObject, useRef } from 'react';
+import React, { ReactElement, Ref, RefObject, useRef } from 'react';
 import {
   Control,
   Controller,
@@ -110,7 +110,7 @@ export class AdminConfigBuilder {
 
 export class ConfigControl {
   public value: string;
-  public ref: any;
+  public ref: RefObject<any> = React.createRef();
 
   constructor(
     public name: string,
@@ -131,17 +131,13 @@ export class ConfigControl {
     control: Control<FieldValues, any>,
     setValue: UseFormSetValue<any>
   ): ReactElement {
-    const { onChange, ref, ...reg } = register(this.name);
+    const { onChange, ...reg } = register(this.name);
     switch (this.type) {
       case ControlType.Text: {
         return (
           <input
             defaultValue={this.value}
             className="form-control"
-            ref={(instance) => {
-              ref(instance);
-              this.ref = instance;
-            }}
             {...reg}
             onChange={(event) => {
               onChange(event);

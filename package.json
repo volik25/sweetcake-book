@@ -9,6 +9,7 @@
     "start": "npm run start-api && npm run start-client",
     "start:parallel": "nx run-many --parallel --target=serve --projects=server,client-next",
     "build": "nx build",
+    "build-prod": "nx run server:build:production && nx build client-next",
     "test": "nx test"
   },
   "private": true,
@@ -33,6 +34,7 @@
     "moment": "^2.29.4",
     "mysql2": "^2.3.3",
     "nanoid": "^3.3.4",
+    "nest-next": "^10.0.0",
     "next": "13.0.0",
     "react": "18.2.0",
     "react-bootstrap": "^2.6.0",

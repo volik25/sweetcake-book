@@ -15,7 +15,7 @@ import { LinksService } from '../services/links.service';
 import { CreateLinkDto } from '@interfaces/links/dtos/create-link.dto';
 import { UpdateLinkDto } from '@interfaces/links/dtos/update-link.dto';
 
-@Controller('links')
+@Controller('api/links')
 export class LinksController {
   constructor(private linksService: LinksService) {}
 

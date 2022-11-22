@@ -15,7 +15,7 @@ import { CreateCategoryDto } from '@interfaces/category/dtos/create.category.dto
 import { UpdateCategoryDto } from '@interfaces/category/dtos/update.category.dto';
 import { JwtGuard } from '@api/guards/jwt.guard';
 
-@Controller('category')
+@Controller('api/category')
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
 

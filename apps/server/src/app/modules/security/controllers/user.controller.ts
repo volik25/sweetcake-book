@@ -20,7 +20,7 @@ import { CreateUserDTO } from '@interfaces/security/dtos/create.user.dto';
 import { ApplicationRequest } from '@api/core/request';
 import { UserEntity } from '@interfaces/security/entities/user.entity';
 
-@Controller('user')
+@Controller('api/user')
 export class UserController {
   constructor(
     private readonly userService: UserService,

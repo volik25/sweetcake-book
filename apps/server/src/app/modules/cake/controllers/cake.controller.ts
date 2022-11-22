@@ -18,7 +18,7 @@ import { CakeComponentService } from '@api/modules/cake/services/cake-component.
 import { CakeComponentEntity } from '@interfaces/cake/entities/component.entity';
 import { CreateComponentDto } from '@interfaces/cake/dtos/create.component.dto';
 
-@Controller('cake')
+@Controller('api/cake')
 export class CakeController {
   constructor(
     private cakeService: CakeService,

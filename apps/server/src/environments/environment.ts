@@ -1,5 +1,5 @@
 export const environment = {
   jwtKey: '@sweetcake',
   production: false,
-  jwtKey: '@sweetcake',
+  pagesDir: '/apps/client-next',
 };

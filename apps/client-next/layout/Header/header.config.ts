@@ -1,22 +1,11 @@
+import { HeaderDto } from '@interfaces/static/dtos/header.dto';
 import { AdminConfigBuilder } from '@web/utils/admin-config.builder';
-import React from 'react';
 
-export const headerConfig = () =>
+export const headerConfig = (value?: HeaderDto) =>
   new AdminConfigBuilder()
-    .addImgControl('logo', 'Логотип')
-    .addTextControl(
-      'title',
-      'Название компании',
-      (value, setValue, allFields) => {
-        setValue('product', value);
-        const ref = allFields.find((f) => f.name === 'product')?.ref;
-        if (!ref) {
-          return;
-        }
-        ref.current.style.display = 'none';
-      }
-    )
-    .addTextControl('product', 'Заголовок')
-    .addTextAreaControl('description', 'Описание')
-    .addTextControl('delivary', 'Доставка')
+    .addImgControl('logo', 'Логотип', value && { imgSrc: value.logo })
+    .addTextControl('title', 'Название компании', value?.title)
+    .addTextControl('product', 'Заголовок', value?.product)
+    .addTextAreaControl('description', 'Описание', value?.description)
+    .addTextControl('delivary', 'Доставка', value?.delivary)
     .getResut();

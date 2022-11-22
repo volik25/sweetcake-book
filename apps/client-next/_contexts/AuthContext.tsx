@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
-import { ConfigControl } from '@web/utils/admin-config.builder';
+import { IConfigControl } from '@web/utils/admin-config.builder';
 import { UserService } from '@web/_services/user.service';
 import { useRouter } from 'next/router';
 import {
@@ -15,15 +15,14 @@ export interface IAuthContext {
   isAdmin: boolean;
   isPanelOpened: boolean;
   panelConfig: {
-    controls: ConfigControl[];
+    controls: IConfigControl[];
     submitHandler: (value: { [key: string]: any }) => Promise<void>;
     handler?: (value: { [key: string]: any }, isCanceled?: boolean) => void;
   } | null;
   openPanel: (
-    config: ConfigControl[],
+    config: IConfigControl[],
     submitHandler: (value: { [key: string]: any }) => Promise<void>,
-    handler?: (value: { [key: string]: any }, isCanceled?: boolean) => void,
-    values?: { [key: string]: string }
+    handler?: (value: { [key: string]: any }, isCanceled?: boolean) => void
   ) => void;
   closePanel: () => void;
   login: (data: UserLoginDTO) => void;
@@ -41,7 +40,7 @@ export const AuthContextProvider = ({
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isPanelOpened, setIsPanelOpened] = useState<boolean>(false);
   const [panelConfig, setConfig] = useState<{
-    controls: ConfigControl[];
+    controls: IConfigControl[];
     submitHandler: (value: { [key: string]: any }) => Promise<void>;
     handler?: (value: { [key: string]: any }, isCanceled?: boolean) => void;
   } | null>(null);
@@ -82,17 +81,10 @@ export const AuthContextProvider = ({
   };
 
   const openPanel = (
-    config: ConfigControl[],
+    config: IConfigControl[],
     submitHandler: (value: { [key: string]: string }) => Promise<void>,
-    handler?: (value: { [key: string]: string }, isCanceled?: boolean) => void,
-    values?: { [key: string]: string }
+    handler?: (value: { [key: string]: string }, isCanceled?: boolean) => void
   ) => {
-    if (values) {
-      config.forEach((field) => {
-        field.value = values[field.name];
-      });
-    }
-
     setConfig({ controls: config, handler, submitHandler });
     setIsPanelOpened(true);
   };

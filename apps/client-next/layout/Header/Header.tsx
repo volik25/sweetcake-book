@@ -5,7 +5,6 @@ import { HeaderProps } from './Header.props';
 import { AuthContext } from '../../_contexts/AuthContext';
 import { headerConfig } from './header.config';
 import { StaticService } from '@web/_services/static.service';
-import { UpdateHeaderDto } from '@interfaces/static/dtos/update-header.dto';
 import { HeaderDto } from '@interfaces/static/dtos/header.dto';
 import { FilesService } from '@web/_services/files.service';
 
@@ -20,7 +19,6 @@ export const Header = ({
 
   const onHeaderSave = async (value: any) => {
     const newHeader = { ...headerValues, ...value };
-
     if (newHeader.logo?.imgFile) {
       newHeader.logo = await fileService.uploadFile(
         (newHeader.logo as any).imgFile
@@ -39,21 +37,16 @@ export const Header = ({
         <button
           className="btn btn-primary"
           onClick={() =>
-            openPanel(
-              headerConfig(),
-              onHeaderSave,
-              (value) => {
-                Object.keys(headerValues).forEach((key) => {
-                  if (key == 'logo') {
-                    headerValues.logo = value.logo?.imgSrc || value.logo;
-                    return;
-                  }
-                  headerValues[key as keyof typeof headerValues] = value[key];
-                });
-                setHeaderValues({ ...headerValues });
-              },
-              headerValues as any
-            )
+            openPanel(headerConfig(headerData), onHeaderSave, (value) => {
+              Object.keys(headerValues).forEach((key) => {
+                if (key == 'logo') {
+                  headerValues.logo = value.logo?.imgSrc || value.logo;
+                  return;
+                }
+                headerValues[key as keyof typeof headerValues] = value[key];
+              });
+              setHeaderValues({ ...headerValues });
+            })
           }
         >
           Изменить шапку

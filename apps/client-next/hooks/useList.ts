@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ConfigControl } from '@web/utils/admin-config.builder';
+import { IConfigControl } from '@web/utils/admin-config.builder';
 import { AuthContext } from '@web/_contexts/AuthContext';
 import { useContext, useState } from 'react';
 import { UseListResult } from './useListWithImg';
 
 export function useList<Item extends { id: number }, CreateDto, UpdateDto>(
   itemsData: Item[],
-  config: () => ConfigControl[],
+  config: () => IConfigControl[],
   createHandler: (item: CreateDto) => Promise<Item>,
   updateHandler: (id: number, item: UpdateDto) => Promise<unknown>,
   deleteHandler: (id: number) => Promise<unknown>
@@ -61,8 +61,7 @@ export function useList<Item extends { id: number }, CreateDto, UpdateDto>(
       (value) => {
         mapFields(item, value);
         setItems([...items]);
-      },
-      item as any
+      }
     );
   };
 

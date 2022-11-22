@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { UploadedFile } from '@shared/img-input/ImgInput.props';
-import { ConfigControl } from '@web/utils/admin-config.builder';
+import { IConfigControl } from '@web/utils/admin-config.builder';
 import { AuthContext } from '@web/_contexts/AuthContext';
 import { FilesService } from '@web/_services/files.service';
 import { useContext, useMemo, useState } from 'react';
@@ -11,7 +11,7 @@ export function useListWithImg<
   UpdateDto extends { img?: string | UploadedFile }
 >(
   itemsData: Item[],
-  config: () => ConfigControl[],
+  config: (value?: Item) => IConfigControl[],
   createHandler: (item: CreateDto) => Promise<Item>,
   updateHandler: (id: number, item: UpdateDto) => Promise<unknown>,
   deleteHandler: (id: number) => Promise<unknown>
@@ -75,15 +75,14 @@ export function useListWithImg<
 
   const onEditClick = (item: Item) => {
     openPanel(
-      config(),
+      config(item),
       async (value) => {
         await onUpdate(item.id, value as UpdateDto);
       },
       (value, isCanceled) => {
         mapFields(item, value, !isCanceled);
         setItems([...items]);
-      },
-      item as any
+      }
     );
   };
 

@@ -110,7 +110,11 @@ export const AdminPanel = (): ReactElement => {
                 {panelConfig?.controls.map((control) => (
                   <div className="mb-3" key={control.name} ref={control.ref}>
                     <label>{control.displayName}</label>
-                    {control.getControl(register, formControl, setValue)}
+                    {control.getControl({
+                      register,
+                      control: formControl,
+                      setValue,
+                    })}
                   </div>
                 ))}
               </div>

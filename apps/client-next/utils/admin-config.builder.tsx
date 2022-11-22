@@ -1,46 +1,27 @@
 import { ImgInput } from '@shared/img-input/ImgInput';
-import React, { ReactElement, Ref, RefObject, useRef } from 'react';
+import React, { ReactElement, RefObject } from 'react';
 import {
   Control,
   Controller,
   FieldValues,
-  RefCallBack,
   UseFormRegister,
   UseFormSetValue,
 } from 'react-hook-form';
 import { ReactSelect } from '@shared/react-select/React-select';
 import { ReactSelectOption } from '@shared/react-select/React-select.interface';
-
-enum ControlType {
-  Text = 'text',
-  Img = 'img',
-  Textarea = 'textarea',
-  Select = 'select',
-  MultiSelect = 'multiselect',
-}
+import { UploadedFile } from '@shared/img-input/ImgInput.props';
 
 export class AdminConfigBuilder {
-  private controls: ConfigControl[] = [];
+  private controls: IConfigControl[] = [];
 
   public addTextControl(
     name: string,
     displayName: string,
-    onChange?: (
-      value: any,
-      setValue: UseFormSetValue<any>,
-      allFields: ConfigControl[]
-    ) => void
+    value?: string,
+    onChange?: (props: OnChangeControlProps<string>) => void
   ): AdminConfigBuilder {
     this.controls.push(
-      new ConfigControl(
-        name,
-        displayName,
-        ControlType.Text,
-        this.controls,
-        undefined,
-        false,
-        onChange
-      )
+      new ConfigTextControl(name, displayName, this.controls, value, onChange)
     );
 
     return this;
@@ -48,18 +29,31 @@ export class AdminConfigBuilder {
 
   public addTextAreaControl(
     name: string,
-    displayName: string
+    displayName: string,
+    value?: string,
+    onChange?: (props: OnChangeControlProps<string>) => void
   ): AdminConfigBuilder {
     this.controls.push(
-      new ConfigControl(name, displayName, ControlType.Textarea, this.controls)
+      new ConfigTextAreaControl(
+        name,
+        displayName,
+        this.controls,
+        value,
+        onChange
+      )
     );
 
     return this;
   }
 
-  public addImgControl(name: string, displayName: string): AdminConfigBuilder {
+  public addImgControl(
+    name: string,
+    displayName: string,
+    value?: UploadedFile,
+    onChange?: (props: OnChangeControlProps<UploadedFile>) => void
+  ): AdminConfigBuilder {
     this.controls.push(
-      new ConfigControl(name, displayName, ControlType.Img, this.controls)
+      new ConfigImgControl(name, displayName, this.controls, value, onChange)
     );
 
     return this;
@@ -68,16 +62,18 @@ export class AdminConfigBuilder {
   public addMultiSelectControl(
     name: string,
     displayName: string,
-    values: any[]
+    options: ReactSelectOption[],
+    value?: ReactSelectOption[],
+    onChange?: (props: OnChangeControlProps<ReactSelectOption[]>) => void
   ): AdminConfigBuilder {
     this.controls.push(
-      new ConfigControl(
+      new ConfigMultiSelectControl(
         name,
         displayName,
-        ControlType.MultiSelect,
+        options,
         this.controls,
-        values,
-        true
+        value,
+        onChange
       )
     );
 
@@ -87,119 +83,227 @@ export class AdminConfigBuilder {
   public addSelectControl(
     name: string,
     displayName: string,
-    values: any[]
+    options: ReactSelectOption[],
+    value: ReactSelectOption,
+    onChange?: (props: OnChangeControlProps<ReactSelectOption>) => void
   ): AdminConfigBuilder {
     this.controls.push(
-      new ConfigControl(
+      new ConfigSelectControl(
         name,
         displayName,
-        ControlType.Select,
+        options,
         this.controls,
-        values,
-        false
+        value,
+        onChange
       )
     );
 
     return this;
   }
 
-  public getResut(): ConfigControl[] {
+  public getResut(): IConfigControl[] {
     return this.controls;
   }
 }
 
-export class ConfigControl {
-  public value: string;
-  public ref: RefObject<any> = React.createRef();
+export interface GetControlProps {
+  setValue: UseFormSetValue<any>;
+  register?: UseFormRegister<FieldValues>;
+  control?: Control<FieldValues, any>;
+}
+
+export interface OnChangeControlProps<ValueType> {
+  value: ValueType;
+  setValue: UseFormSetValue<any>;
+  allFields: IConfigControl[];
+}
+
+export interface IConfigControl {
+  name: string;
+  displayName: string;
+  ref: RefObject<HTMLDivElement>;
+  value?: any;
+  getControl: (props: GetControlProps) => ReactElement;
+}
+
+export abstract class ConfigControl<ValueType> implements IConfigControl {
+  public ref: RefObject<HTMLDivElement> = React.createRef();
 
   constructor(
     public name: string,
     public displayName: string,
-    private type: ControlType,
-    private allFields: ConfigControl[],
-    public options?: ReactSelectOption[],
-    private multi: boolean = false,
-    private onChange?: (
-      value: any,
-      setValue: UseFormSetValue<any>,
-      allFields: ConfigControl[]
-    ) => void
+    protected allFields: IConfigControl[],
+    public value?: ValueType,
+    protected onChange?: (pros: OnChangeControlProps<ValueType>) => void
   ) {}
 
-  public getControl(
-    register: UseFormRegister<FieldValues>,
-    control: Control<FieldValues, any>,
-    setValue: UseFormSetValue<any>
-  ): ReactElement {
-    const { onChange, ...reg } = register(this.name);
-    switch (this.type) {
-      case ControlType.Text: {
-        return (
-          <input
-            defaultValue={this.value}
-            className="form-control"
-            {...reg}
-            onChange={(event) => {
-              onChange(event);
-              this.onChange &&
-                this.onChange(event.target.value, setValue, this.allFields);
-            }}
-            type="text"
-          />
-        );
-      }
-      case ControlType.Textarea: {
-        return (
-          <textarea
-            defaultValue={this.value}
-            className="form-control"
-            {...register(this.name)}
-            rows={3}
-          ></textarea>
-        );
-      }
-      case ControlType.Img: {
-        return (
-          <Controller
-            control={control}
-            name={this.name}
-            defaultValue={{ imgSrc: this.value }}
-            render={({ field: { onChange, value } }) => (
-              <ImgInput
-                className="mb-3"
-                onChange={onChange}
-                imgSrc={value?.imgSrc}
-              />
-            )}
-          />
-        );
-      }
-      case ControlType.MultiSelect: {
-        return (
-          <Controller
-            control={control}
-            name={this.name}
-            defaultValue={this.options?.filter((option) =>
-              (this.value as unknown as any[])?.find(
-                (value) => value.id === option.id
-              )
-            )}
-            render={({ field: { onChange, value } }) => (
-              <ReactSelect
-                defaultOptions={this.options || []}
-                defaultValue={value}
-                isMulti={this.multi}
-                onChange={onChange}
-              />
-            )}
-          />
-        );
-      }
-      default: {
-        console.error('Unknown field type');
+  public abstract getControl(props: GetControlProps): ReactElement;
+}
 
-        return <></>;
-      }
+export class ConfigTextControl extends ConfigControl<string> {
+  public getControl({ setValue, register }: GetControlProps): ReactElement {
+    if (!register) {
+      return <></>;
     }
+    const { onChange, ...reg } = register(this.name);
+    return (
+      <input
+        defaultValue={this.value}
+        className="form-control"
+        {...reg}
+        onChange={(event) => {
+          onChange(event);
+          this.onChange &&
+            this.onChange({
+              value: event.target.value,
+              setValue,
+              allFields: this.allFields,
+            });
+        }}
+        type="text"
+      />
+    );
+  }
+}
+
+export class ConfigTextAreaControl extends ConfigControl<string> {
+  public getControl({ setValue, register }: GetControlProps): ReactElement {
+    if (!register) {
+      return <></>;
+    }
+    const { onChange, ...reg } = register(this.name);
+    return (
+      <textarea
+        defaultValue={this.value}
+        className="form-control"
+        {...reg}
+        onChange={(event) => {
+          onChange(event);
+          this.onChange &&
+            this.onChange({
+              value: event.target.value,
+              setValue,
+              allFields: this.allFields,
+            });
+        }}
+        rows={3}
+      ></textarea>
+    );
+  }
+}
+
+export class ConfigImgControl extends ConfigControl<UploadedFile> {
+  public getControl({ setValue, control }: GetControlProps): ReactElement {
+    if (!control) {
+      return <></>;
+    }
+    return (
+      <Controller
+        control={control}
+        name={this.name}
+        defaultValue={this.value}
+        render={({ field: { onChange, value } }) => (
+          <ImgInput
+            className="mb-3"
+            onChange={(value) => {
+              onChange(value);
+              this.onChange &&
+                this.onChange({
+                  value,
+                  setValue,
+                  allFields: this.allFields,
+                });
+            }}
+            imgSrc={value?.imgSrc}
+          />
+        )}
+      />
+    );
+  }
+}
+
+export class ConfigSelectControl extends ConfigControl<ReactSelectOption> {
+  constructor(
+    public name: string,
+    public displayName: string,
+    public options: ReactSelectOption[],
+    protected allFields: IConfigControl[],
+    public value?: ReactSelectOption,
+    protected onChange?: (
+      props: OnChangeControlProps<ReactSelectOption>
+    ) => void
+  ) {
+    super(name, displayName, allFields, value, onChange);
+  }
+
+  public getControl({ setValue, control }: GetControlProps): ReactElement {
+    if (!control) {
+      return <></>;
+    }
+    return (
+      <Controller
+        control={control}
+        name={this.name}
+        defaultValue={this.options?.find(
+          (option) => this.value?.id === option.id
+        )}
+        render={({ field: { onChange, value } }) => (
+          <ReactSelect
+            defaultOptions={this.options || []}
+            defaultValue={value}
+            isMulti={false}
+            onChange={(value) => {
+              onChange(value);
+              this.onChange &&
+                this.onChange({ value, setValue, allFields: this.allFields });
+            }}
+          />
+        )}
+      />
+    );
+  }
+}
+
+export class ConfigMultiSelectControl extends ConfigControl<
+  ReactSelectOption[]
+> {
+  constructor(
+    public name: string,
+    public displayName: string,
+    public options: ReactSelectOption[],
+    protected allFields: IConfigControl[],
+    public value?: ReactSelectOption[],
+    protected onChange?: (
+      props: OnChangeControlProps<ReactSelectOption[]>
+    ) => void
+  ) {
+    super(name, displayName, allFields, value, onChange);
+  }
+
+  public getControl({ setValue, control }: GetControlProps): ReactElement {
+    if (!control) {
+      return <></>;
+    }
+    return (
+      <Controller
+        control={control}
+        name={this.name}
+        defaultValue={this.options?.filter((option) =>
+          this.value?.find((value) => value.id === option.id)
+        )}
+        render={({ field: { onChange, value } }) => (
+          <ReactSelect
+            defaultOptions={this.options || []}
+            defaultValue={value}
+            isMulti={true}
+            onChange={(value) => {
+              onChange(value);
+              this.onChange &&
+                this.onChange({ value, setValue, allFields: this.allFields });
+            }}
+          />
+        )}
+      />
+    );
   }
 }

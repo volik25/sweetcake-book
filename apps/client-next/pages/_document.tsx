@@ -19,6 +19,7 @@ class MyDocument extends Document {
     return (
       <Html lang="ru">
         <Head>
+          <meta name="robots" content="noindex" />
           <meta property="og:title" content="ТОРТЫ И ДЕСЕРТЫ НА ЗАКАЗ" />
           <meta
             property="og:image"

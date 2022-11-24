@@ -12,7 +12,7 @@ import session = require('express-session');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
-      origin: 'http://localhost:3000',
+      origin: 'http://localhost:3333',
       methods: ['POST', 'GET', 'PUT', 'PATCH', 'OPTIONS', 'DELETE'],
       allowedHeaders: [
         'Origin',

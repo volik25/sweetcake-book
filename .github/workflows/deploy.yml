@@ -37,13 +37,12 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Check dependencies
-        if: steps.cache-npm.outputs.cache-hit == 'true'
-        run: npm list
-
       - name: Install dependencies
         if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm ci
+
+      - name: Check dependencies
+        run: npm list
 
       - run: npm run build-prod
 

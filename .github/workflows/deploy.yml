@@ -22,7 +22,9 @@ jobs:
       - run: echo "${{ secrets.secret_key }}" > "$HOME/.ssh/secret_key" # secret_key - название секрета
       - run: chmod 600 "$HOME/.ssh/secret_key"
       - run: echo -e "Host dev\n\tUser nomokoiw\n\tHostname nomokoiw.beget.tech\n\tIdentityFile $HOME/.ssh/secret_key\n\tStrictHostKeyChecking No" > "$HOME/.ssh/config"
-      
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: echo "::set-output name=dir::$(npm config get cache)"
       - name: Cache node modules
         id: cache-npm
         uses: actions/cache@v3
@@ -30,7 +32,7 @@ jobs:
           cache-name: cache-node-modules
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -39,7 +41,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm install
+        run: npm ci
 
       - name: Check dependencies
         run: npm list

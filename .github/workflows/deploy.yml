@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.14.2] #версия node.js на которой разарабатывался проект
+        node-version: [16.14.2] #версия node.js на которой разарабатывался проек2
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3

@@ -14,6 +14,7 @@ import { JwtGuard } from '@api/guards/jwt.guard';
 import { QuestionsService } from '../services/questions.service';
 import { CreateQuestionDto } from '@interfaces/questions/dtos/create-question.dto';
 import { UpdateQuestionDto } from '@interfaces/questions/dtos/update-question.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('api/questions')
 export class QuestionsController {
@@ -25,6 +26,7 @@ export class QuestionsController {
   }
 
   @Post()
+  @ApiBearerAuth('JWT')
   async create(@Body() body: CreateQuestionDto): Promise<QuestionDto> {
     console.log(body);
 
@@ -32,6 +34,7 @@ export class QuestionsController {
   }
 
   @Put(':id')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -41,6 +44,7 @@ export class QuestionsController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async delete(@Param('id', ParseIntPipe) id: number): Promise<unknown> {
     return await this.questionsService.delete(id);

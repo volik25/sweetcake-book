@@ -17,6 +17,7 @@ import { UpdateCakeDto } from '@interfaces/cake/dtos/update.cake.dto';
 import { CakeComponentService } from '@api/modules/cake/services/cake-component.service';
 import { CakeComponentEntity } from '@interfaces/cake/entities/component.entity';
 import { CreateComponentDto } from '@interfaces/cake/dtos/create.component.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('api/cake')
 export class CakeController {
@@ -36,6 +37,7 @@ export class CakeController {
   }
 
   @Post('components')
+  @ApiBearerAuth('JWT')
   async createComponent(
     @Body() body: CreateComponentDto
   ): Promise<CakeComponentEntity> {
@@ -43,12 +45,14 @@ export class CakeController {
   }
 
   @Post()
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async create(@Body() body: CreateCakeDto): Promise<CakeEntity> {
     return await this.cakeService.create(body);
   }
 
   @Put(':id')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -58,6 +62,7 @@ export class CakeController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async delete(@Param('id', ParseIntPipe) id: number): Promise<unknown> {
     return await this.cakeService.delete(id);

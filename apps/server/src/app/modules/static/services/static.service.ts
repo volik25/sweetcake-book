@@ -7,7 +7,7 @@ import { FilesService } from '@api/modules/files/files.service';
 @Injectable()
 export class StaticService {
   constructor(private filesService: FilesService) {}
-  async getHeader(): Promise<Partial<HeaderDto>> {
+  async getHeader(): Promise<HeaderDto> {
     try {
       return this.mapToHeaderDto(await StaticEntity.find());
     } catch (error) {
@@ -38,10 +38,10 @@ export class StaticService {
     }
   }
 
-  mapToHeaderDto(entities: StaticEntity[]): Partial<HeaderDto> {
+  mapToHeaderDto(entities: StaticEntity[]): HeaderDto {
     return entities.reduce((prev, cur) => {
       prev[cur.name] = cur.value;
       return prev;
-    }, {});
+    }, {}) as HeaderDto;
   }
 }

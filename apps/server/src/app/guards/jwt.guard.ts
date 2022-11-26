@@ -7,12 +7,14 @@ export class JwtGuard implements CanActivate {
   canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
 
-    if (!request.headers.authorization && !request.query.token) {
+    const accessToken = request.headers.authorization || request.query.token;
+
+    if (!accessToken) {
       return false;
     }
-    const accessToken = request.headers.authorization || request.query.token;
+    
     try {
-      jwt.verify(accessToken, environment.jwtKey);
+      jwt.verify(accessToken.replace('Bearer ', ''), environment.jwtKey);
     } catch {
       return false;
     }

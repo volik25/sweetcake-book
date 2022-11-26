@@ -14,6 +14,7 @@ import { LinkDto } from '@interfaces/links/dtos/link.dto';
 import { LinksService } from '../services/links.service';
 import { CreateLinkDto } from '@interfaces/links/dtos/create-link.dto';
 import { UpdateLinkDto } from '@interfaces/links/dtos/update-link.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('api/links')
 export class LinksController {
@@ -25,11 +26,13 @@ export class LinksController {
   }
 
   @Post()
+  @ApiBearerAuth('JWT')
   async create(@Body() body: CreateLinkDto): Promise<LinkDto> {
     return await this.linksService.create(body);
   }
 
   @Put(':id')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -39,6 +42,7 @@ export class LinksController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async delete(@Param('id', ParseIntPipe) id: number): Promise<unknown> {
     return await this.linksService.delete(id);

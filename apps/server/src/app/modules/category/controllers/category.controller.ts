@@ -14,6 +14,7 @@ import { CategoryEntity } from '@interfaces/category/entities/category.entity';
 import { CreateCategoryDto } from '@interfaces/category/dtos/create.category.dto';
 import { UpdateCategoryDto } from '@interfaces/category/dtos/update.category.dto';
 import { JwtGuard } from '@api/guards/jwt.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('api/category')
 export class CategoryController {
@@ -32,6 +33,7 @@ export class CategoryController {
   }
 
   @Post()
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async create(@Body() body: CreateCategoryDto): Promise<CategoryEntity> {
     console.log(body);
@@ -40,6 +42,7 @@ export class CategoryController {
   }
 
   @Put(':id')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -49,6 +52,7 @@ export class CategoryController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async delete(@Param('id', ParseIntPipe) id: number): Promise<unknown> {
     return await this.categoryService.delete(id);

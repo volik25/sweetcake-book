@@ -19,6 +19,7 @@ import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
 import { CreateUserDTO } from '@interfaces/security/dtos/create.user.dto';
 import { ApplicationRequest } from '@api/core/request';
 import { UserEntity } from '@interfaces/security/entities/user.entity';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('api/user')
 export class UserController {
@@ -34,24 +35,28 @@ export class UserController {
 
   @UseGuards(JwtGuard)
   @Get('logout')
+  @ApiBearerAuth('JWT')
   @HttpCode(HttpStatus.CREATED)
   async logout(@Req() req: ApplicationRequest) {
     return await this.userService.logout(req);
   }
 
   @Get(':id')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async findOne(@Param('id', ParseIntPipe) id) {
     return await this.userService.findOne(id);
   }
 
   @Get()
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async find() {
     return await this.userService.find();
   }
 
   @Post()
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async create(@Body() user: CreateUserDTO) {
     return this.userService.create(user);

@@ -1,4 +1,4 @@
-export interface HeaderDto {
+export class HeaderDto {
   logo: string;
   title: string;
   product: string;

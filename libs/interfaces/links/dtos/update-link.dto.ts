@@ -1,3 +1,3 @@
 import { CreateLinkDto } from './create-link.dto';
 
-export interface UpdateLinkDto extends CreateLinkDto {}
+export class UpdateLinkDto extends CreateLinkDto {}

@@ -3,9 +3,10 @@ import { JwtGuard } from '@api/guards/jwt.guard';
 import { StaticService } from '../services/static.service';
 import { HeaderDto } from '@interfaces/static/dtos/header.dto';
 import { UpdateHeaderDto } from '@interfaces/static/dtos/update-header.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('api/static')
+@ApiTags('static')
 export class StaticController {
   constructor(private questionsService: StaticService) {}
 

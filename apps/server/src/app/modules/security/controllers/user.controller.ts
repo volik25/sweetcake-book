@@ -19,9 +19,10 @@ import { UserLoginDTO } from '@interfaces/security/dtos/login.user.dto';
 import { CreateUserDTO } from '@interfaces/security/dtos/create.user.dto';
 import { ApplicationRequest } from '@api/core/request';
 import { UserEntity } from '@interfaces/security/entities/user.entity';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('api/user')
+@ApiTags('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,

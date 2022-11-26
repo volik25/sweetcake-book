@@ -17,9 +17,10 @@ import { UpdateCakeDto } from '@interfaces/cake/dtos/update.cake.dto';
 import { CakeComponentService } from '@api/modules/cake/services/cake-component.service';
 import { CakeComponentEntity } from '@interfaces/cake/entities/component.entity';
 import { CreateComponentDto } from '@interfaces/cake/dtos/create.component.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('api/cake')
+@ApiTags('cake')
 export class CakeController {
   constructor(
     private cakeService: CakeService,

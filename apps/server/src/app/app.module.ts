@@ -14,6 +14,7 @@ import Next from 'next';
 import { path } from 'app-root-path';
 import { AppController } from './app.controller';
 import { environment } from '../environments/environment';
+import { TelegramModule } from './modules/telegram/telegram.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { environment } from '../environments/environment';
     StaticModule,
     LinksModule,
     FilesModule,
+    TelegramModule,
     RenderModule.forRootAsync(
       Next({
         dev: process.env.NODE_ENV !== 'production',

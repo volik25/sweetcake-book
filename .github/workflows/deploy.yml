@@ -39,6 +39,7 @@ jobs:
       - name: Install dependencies
         if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm ci
+      - run: npm list
 
       - run: npm run build-prod
 

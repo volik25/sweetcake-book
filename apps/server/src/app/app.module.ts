@@ -15,6 +15,7 @@ import { path } from 'app-root-path';
 import { AppController } from './app.controller';
 import { environment } from '../environments/environment';
 import { TelegramModule } from './modules/telegram/telegram.module';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TelegramModule } from './modules/telegram/telegram.module';
     StaticModule,
     LinksModule,
     FilesModule,
+    OrderModule,
     TelegramModule,
     RenderModule.forRootAsync(
       Next({

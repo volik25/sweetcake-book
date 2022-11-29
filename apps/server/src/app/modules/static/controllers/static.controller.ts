@@ -4,14 +4,10 @@ import { StaticService } from '../services/static.service';
 import { HeaderDto } from '@interfaces/static/dtos/header.dto';
 import { UpdateHeaderDto } from '@interfaces/static/dtos/update-header.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { TelegramService } from '@api/modules/telegram/telegram.service';
 
 @Controller('api/static')
 export class StaticController {
-  constructor(
-    private questionsService: StaticService,
-    private telegramService: TelegramService
-  ) {}
+  constructor(private questionsService: StaticService) {}
 
   @Get('header')
   async getHeader(): Promise<HeaderDto> {
@@ -22,7 +18,6 @@ export class StaticController {
   @ApiBearerAuth('JWT')
   @UseGuards(JwtGuard)
   async updateHeader(@Body() body: UpdateHeaderDto): Promise<unknown> {
-    await this.telegramService.sendMessage(JSON.stringify(body));
     return await this.questionsService.updateHeader(body);
   }
 }

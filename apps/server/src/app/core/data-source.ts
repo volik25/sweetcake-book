@@ -1,5 +1,4 @@
 import { DataSource, getMetadataArgsStorage } from 'typeorm';
-import { QueryLogger } from '@interfaces/logger/query.logger';
 
 let dataSource = null;
 
@@ -12,8 +11,6 @@ export const getDataSource = (): DataSource => {
     entities: getMetadataArgsStorage()
       .tables // .filter((table) => !!table.schema)
       .map((tbl) => tbl.target),
-    logging: true,
-    logger: new QueryLogger(),
     host: 'nomokoiw.beget.tech',
     // port: 3306,
     username: 'nomokoiw_cakes',

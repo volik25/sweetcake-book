@@ -16,11 +16,10 @@ export class TelegramService {
     });
     this.bot.on('sticker', (ctx) => ctx.reply('👍'));
     this.bot.hears('hi', (ctx) => ctx.reply('Hey there'));
-    try {
-      this.bot.launch();
-    } catch (error) {
-      console.log(error);
+    if (environment.production) {
+      return;
     }
+    this.bot.launch();
   }
 
   public async sendMessage(message: string, chatId = '-1001801516827') {

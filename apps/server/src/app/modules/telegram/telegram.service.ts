@@ -1,16 +1,10 @@
-import {
-  Injectable,
-  OnApplicationShutdown,
-  OnModuleDestroy,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { environment } from 'apps/server/src/environments/environment';
 import { Telegraf } from 'telegraf';
 
 @Injectable()
-export class TelegramService
-  implements OnApplicationShutdown, OnModuleInit, OnModuleDestroy
-{
-  private bot: Telegraf;
+export class TelegramService {
+  public bot: Telegraf;
 
   constructor() {
     this.bot = new Telegraf('5631309058:AAEUOI7UI5Ir5keYZHLbLBdVE4IvqzU0wJY');
@@ -22,21 +16,16 @@ export class TelegramService
     });
     this.bot.on('sticker', (ctx) => ctx.reply('👍'));
     this.bot.hears('hi', (ctx) => ctx.reply('Hey there'));
-    this.bot.launch();
-  }
+    if (!environment.production) {
+      this.bot.launch();
+      return;
+    }
 
-  public onModuleDestroy() {
-    console.log(222);
-  }
-
-  public onModuleInit() {
-    console.log(333);
-  }
-
-  public onApplicationShutdown() {
-    console.log(111);
-
-    // await this.bot.stop();
+    this.bot.launch({
+      webhook: {
+        domain: 'stand1.progoff.ru',
+      },
+    });
   }
 
   public async sendMessage(message: string, chatId = '-1001801516827') {

@@ -43,10 +43,10 @@ async function bootstrap() {
     )
     .build();
 
-  if (environment.production) {
-    const service = app.get(TelegramService);
-    app.use(service.bot.webhookCallback());
-  }
+  // if (environment.production) {
+  //   const service = app.get(TelegramService);
+  //   app.use(service.bot.webhookCallback());
+  // }
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

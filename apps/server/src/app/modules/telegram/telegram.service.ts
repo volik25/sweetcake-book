@@ -16,16 +16,7 @@ export class TelegramService {
     });
     this.bot.on('sticker', (ctx) => ctx.reply('👍'));
     this.bot.hears('hi', (ctx) => ctx.reply('Hey there'));
-    if (!environment.production) {
-      this.bot.launch();
-      return;
-    }
-
-    this.bot.launch({
-      webhook: {
-        domain: 'stand1.progoff.ru',
-      },
-    });
+    this.bot.launch();
   }
 
   public async sendMessage(message: string, chatId = '-1001801516827') {

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { environment } from 'apps/server/src/environments/environment';
 import { Telegraf } from 'telegraf';
+import { FmtString } from 'telegraf/typings/format';
 
 @Injectable()
 export class TelegramService {
@@ -22,7 +23,7 @@ export class TelegramService {
     this.bot.launch();
   }
 
-  public async sendMessage(message: string, chatId = '-1001801516827') {
+  public async sendMessage(message: string | FmtString, chatId = '-1001801516827') {
     try {
       await this.bot.telegram.sendMessage(chatId, message);
     } catch (error) {

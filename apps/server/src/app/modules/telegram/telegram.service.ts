@@ -15,8 +15,11 @@ export class TelegramService {
       ctx.reply(JSON.stringify(cakes));
     });
     this.bot.command('done', async (ctx) => {
+      if (ctx.message.chat.id.toString() !== '-1001820181405') {
+        return;
+      }
       const cakeId = (ctx.update.message.reply_to_message['text'] as string)
-        .match(/Id тортика: \d/)[0]
+        .match(/Id тортика: \d+/)[0]
         ?.replace('Id тортика: ', '');
 
       ctx.reply(`Ура тортик (Id: ${cakeId}) готов!`);

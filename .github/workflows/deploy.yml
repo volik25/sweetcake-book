@@ -29,7 +29,7 @@ jobs:
           cache-name: cache-node-modules
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: '/home/runner/work/sweetcake-book/sweetcake-book'
+          path: '/home/runner/work/sweetcake-book/sweetcake-book/node_modules'
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies and copy them to server
@@ -37,7 +37,6 @@ jobs:
         run: npm ci && cd node_modules && rsync -e "ssh -i $HOME/.ssh/secret_key -o StrictHostKeyChecking=no" --archive --compress --delete . nomokoiw@nomokoiw.beget.tech:/home/n/nomokoiw/stand1/SweetCake/node_modules
 
       - run: npm run build-prod
-      - run: cat dist/apps/server/main.js
 
       - run: cd dist/apps/server && rsync -e "ssh -i $HOME/.ssh/secret_key -o StrictHostKeyChecking=no" --archive --compress --delete . nomokoiw@nomokoiw.beget.tech:/home/n/nomokoiw/stand1/SweetCake/server # полный путь до папки, куда нужно скопировать файлы
       - run: cd dist/apps/client-next && rsync -e "ssh -i $HOME/.ssh/secret_key -o StrictHostKeyChecking=no" --archive --compress --delete . nomokoiw@nomokoiw.beget.tech:/home/n/nomokoiw/stand1/SweetCake/client-next # полный путь до папки, куда нужно скопировать файлы

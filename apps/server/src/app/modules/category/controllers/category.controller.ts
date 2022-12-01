@@ -14,9 +14,10 @@ import { CategoryEntity } from '@interfaces/category/entities/category.entity';
 import { CreateCategoryDto } from '@interfaces/category/dtos/create.category.dto';
 import { UpdateCategoryDto } from '@interfaces/category/dtos/update.category.dto';
 import { JwtGuard } from '@api/guards/jwt.guard';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('api/category')
+@ApiTags('Category')
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
 

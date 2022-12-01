@@ -14,9 +14,10 @@ import { LinkDto } from '@interfaces/links/dtos/link.dto';
 import { LinksService } from '../services/links.service';
 import { CreateLinkDto } from '@interfaces/links/dtos/create-link.dto';
 import { UpdateLinkDto } from '@interfaces/links/dtos/update-link.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('api/links')
+@ApiTags('Link')
 export class LinksController {
   constructor(private linksService: LinksService) {}
 

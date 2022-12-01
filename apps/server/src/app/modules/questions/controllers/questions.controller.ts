@@ -14,9 +14,10 @@ import { JwtGuard } from '@api/guards/jwt.guard';
 import { QuestionsService } from '../services/questions.service';
 import { CreateQuestionDto } from '@interfaces/questions/dtos/create-question.dto';
 import { UpdateQuestionDto } from '@interfaces/questions/dtos/update-question.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('api/questions')
+@ApiTags('Question')
 export class QuestionsController {
   constructor(private questionsService: QuestionsService) {}
 

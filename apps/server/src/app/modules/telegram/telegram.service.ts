@@ -7,6 +7,7 @@ import { CakeService } from '../cake/services/cake.service';
 @Injectable()
 export class TelegramService {
   public bot: Telegraf;
+  private isLaunched = false;
 
   constructor(private cakesService: CakeService) {
     this.bot = new Telegraf('5631309058:AAEUOI7UI5Ir5keYZHLbLBdVE4IvqzU0wJY');
@@ -28,6 +29,23 @@ export class TelegramService {
       return;
     }
     this.bot.launch();
+    this.isLaunched = true;
+  }
+
+  public async start(): Promise<void> {
+    if (this.isLaunched) {
+      return;
+    }
+    this.bot.launch();
+    this.isLaunched = false;
+  }
+
+  public async stop(): Promise<void> {
+    if (!this.isLaunched) {
+      return;
+    }
+    await this.bot.stop();
+    this.isLaunched = false;
   }
 
   public async sendMessage(

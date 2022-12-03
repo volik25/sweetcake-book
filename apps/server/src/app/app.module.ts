@@ -16,6 +16,7 @@ import { AppController } from './app.controller';
 import { environment } from '../environments/environment';
 import { TelegramModule } from './modules/telegram/telegram.module';
 import { OrderModule } from './modules/order/order.module';
+import { ChatModule } from './modules/chat/chat.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { OrderModule } from './modules/order/order.module';
     FilesModule,
     OrderModule,
     TelegramModule,
+    ChatModule,
     RenderModule.forRootAsync(
       Next({
         dev: process.env.NODE_ENV !== 'production',

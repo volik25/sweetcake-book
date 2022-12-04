@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { environment } from 'apps/server/src/environments/environment';
+import { Subject } from 'rxjs';
 import { Telegraf } from 'telegraf';
 import { FmtString } from 'telegraf/typings/format';
 import { CakeService } from '../cake/services/cake.service';
@@ -7,6 +8,8 @@ import { CakeService } from '../cake/services/cake.service';
 @Injectable()
 export class TelegramService {
   public bot: Telegraf;
+  public sendMessage$: Subject<{ socketId: string; message: string }> =
+    new Subject();
   private isLaunched = false;
 
   constructor(private cakesService: CakeService) {
@@ -24,6 +27,26 @@ export class TelegramService {
         ?.replace('Id тортика: ', '');
 
       ctx.reply(`Ура тортик (Id: ${cakeId}) готов!`);
+    });
+    this.bot.on('message', (ctx) => {
+      if (ctx.message.chat.id.toString() !== '-1001820181405') {
+        return;
+      }
+      const replyMessage = (ctx.update.message as any).reply_to_message;
+      if (!replyMessage) {
+        return;
+      }
+
+      const socketId = (replyMessage['text'] as string)
+        .match(/Id клиента: .+\n/)[0]
+        ?.replace('Id клиента: ', '')
+        ?.replace('\n', '');
+
+      if (!socketId) {
+        return;
+      }
+
+      this.sendMessage$.next({ socketId, message: ctx.update.message['text'] });
     });
     if (environment.production) {
       return;

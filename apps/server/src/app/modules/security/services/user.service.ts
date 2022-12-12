@@ -126,18 +126,12 @@ export class UserService {
     t.expires = tokenData.exp;
     t.user = user;
     logger.info(t.token);
-    await AccessTokenEntity.create(t).save();
 
     return { user, token: result.token };
   }
 
   async logout(req: ApplicationRequest) {
     try {
-      await AccessTokenEntity.delete({
-        user: { id: +req.session.user.id },
-        token: req.session.token,
-      }).catch(console.error);
-
       req.session.destroy((err) => {
         if (err) {
           console.log(err);
@@ -152,52 +146,10 @@ export class UserService {
 
   async check(req) {
     const accessToken = req.headers.authorization;
-    if (req.session && req.session.token === accessToken && req.session.user) {
-      logger.verbose('User ' + req.session.user.name + ' has session');
-
-      try {
-        jwt.verify(accessToken, this.key);
-
-        logger.verbose(
-          'Authorized by session (login.check): ' + req.session.user.name
-        );
-
-        return await Promise.resolve(req.session.user);
-      } catch (err) {
-        throw new ForbiddenException({ message: 'Token expired' });
-      }
-    } else {
-      logger.verbose('User has no session');
-
-      try {
-        jwt.verify(accessToken, this.key);
-      } catch (err) {
-        const token = await AccessTokenEntity.findOne({
-          where: { token: accessToken },
-        });
-        if (token) await AccessTokenEntity.delete({ id: token.id });
-        throw new ForbiddenException({ message: 'Token expired' });
-      }
-
-      const token = await AccessTokenEntity.findOne({
-        where: { token: accessToken },
-        relations: ['user'],
-      });
-
-      if (token && token.user) {
-        const user = await UserEntity.findOneBy({ id: token.user.id });
-
-        req.user = user;
-
-        req.session.user = user;
-        req.session.token = token.token;
-
-        logger.verbose('Authorized by token');
-
-        return user;
-      } else {
-        throw new ForbiddenException({ message: 'Token not found' });
-      }
+    try {
+      jwt.verify(accessToken, this.key);
+    } catch {
+      throw new UnauthorizedException();
     }
   }
 

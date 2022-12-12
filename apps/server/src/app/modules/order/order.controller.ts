@@ -20,6 +20,8 @@ ${bold`👉 Новый заказ!`}
 
 ${bold`🎂 Id тортика:`} ${order.cakeId}
 ${bold`💌 Email:`} ${order.email}
+${bold`💌 ФИО:`} ${order.userName}
+${bold`💌 Дата доставки:`} ${order.deliveryDate.toLocaleDateString()}
     `;
   }
 }

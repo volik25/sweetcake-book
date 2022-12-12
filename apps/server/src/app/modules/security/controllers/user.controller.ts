@@ -89,10 +89,10 @@ export class UserController {
       req.session.token = service.token;
       return res.send(service);
     } catch (error) {
-      logger.error(error);
+      logger.error(JSON.stringify(error));
       console.log(error);
 
-      return null;
+      return res.send(null);
     }
   }
 

@@ -21,6 +21,8 @@ import { ApplicationRequest } from '@api/core/request';
 import { UserEntity } from '@interfaces/security/entities/user.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+import { logger } from '@interfaces/logger/logger';
+
 @Controller('api/user')
 @ApiTags('User')
 export class UserController {
@@ -75,16 +77,23 @@ export class UserController {
     @Req() req,
     @Res() res
   ): Promise<{ user: UserEntity; token: string }> {
-    const service = await this.userService.login(login);
-    req.user = service.user;
-    req.token = service.token;
+    try {
+      const service = await this.userService.login(login);
+      req.user = service.user;
+      req.token = service.token;
 
-    req.session.user = await UserEntity.findOne({
-      where: service.user.id,
-      relations: ['tokens'],
-    });
-    req.session.token = service.token;
-    return res.send(service);
+      req.session.user = await UserEntity.findOne({
+        where: service.user.id,
+        relations: ['tokens'],
+      });
+      req.session.token = service.token;
+      return res.send(service);
+    } catch (error) {
+      logger.error(error);
+      console.log(error);
+
+      return null;
+    }
   }
 
   @Post('check-email')

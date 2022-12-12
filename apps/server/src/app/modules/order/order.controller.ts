@@ -10,7 +10,12 @@ export class OrderController {
   constructor(private telegramService: TelegramService) {}
   @Post()
   async addOrder(@Body() body: CreateOrderDto): Promise<unknown> {
-    await this.telegramService.sendMessage(this.getMessage(body));
+    try {
+      await this.telegramService.sendMessage(this.getMessage(body));
+    } catch (e) {
+      console.log(e);
+    }
+
     return true;
   }
 
@@ -21,7 +26,7 @@ ${bold`👉 Новый заказ!`}
 ${bold`🎂 Id тортика:`} ${order.cakeId}
 ${bold`💌 Email:`} ${order.email}
 ${bold`💌 ФИО:`} ${order.userName}
-${bold`💌 Дата доставки:`} ${order.deliveryDate.toLocaleDateString()}
+${bold`💌 Дата доставки:`} ${new Date(order.deliveryDate).toLocaleDateString()}
     `;
   }
 }

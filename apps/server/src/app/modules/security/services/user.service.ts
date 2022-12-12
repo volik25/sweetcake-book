@@ -124,10 +124,9 @@ export class UserService {
 
     t.token = result.token;
     t.expires = tokenData.exp;
-    t.created = new Date();
     t.user = user;
     logger.info(t.token);
-    await AccessTokenEntity.save(t);
+    await AccessTokenEntity.create(t).save();
 
     return { user, token: result.token };
   }

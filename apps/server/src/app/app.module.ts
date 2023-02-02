@@ -16,6 +16,7 @@ import { AppController } from './app.controller';
 import { environment } from '../environments/environment';
 import { TelegramModule } from './modules/telegram/telegram.module';
 import { OrderModule } from './modules/order/order.module';
+import { ExchangeModule } from './modules/exchange/exchange.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { OrderModule } from './modules/order/order.module';
     StaticModule,
     LinksModule,
     FilesModule,
+    ExchangeModule,
     OrderModule,
     TelegramModule,
     RenderModule.forRootAsync(

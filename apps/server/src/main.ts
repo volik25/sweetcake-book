@@ -16,7 +16,7 @@ import { environment } from './environments/environment';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
-      origin: 'http://localhost:3333',
+      origin: true,
       methods: ['POST', 'GET', 'PUT', 'PATCH', 'OPTIONS', 'DELETE'],
       allowedHeaders: [
         'Origin',

@@ -19,6 +19,7 @@ export const AdminPanel = (): ReactElement => {
     watch,
     reset,
     getValues,
+    setValue,
     formState: { isDirty },
     control: formControl,
   } = useForm({ mode: 'onChange' });
@@ -107,9 +108,9 @@ export const AdminPanel = (): ReactElement => {
               </div>
               <div className={styles.panel__form}>
                 {panelConfig?.controls.map((control) => (
-                  <div className="mb-3" key={control.name}>
+                  <div className="mb-3" key={control.name} ref={control.ref}>
                     <label>{control.displayName}</label>
-                    {control.getControl(register, formControl)}
+                    {control.getControl(register, formControl, setValue)}
                   </div>
                 ))}
               </div>
